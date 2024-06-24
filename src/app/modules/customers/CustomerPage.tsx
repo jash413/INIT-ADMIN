@@ -3,12 +3,12 @@ import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {Overview} from './components/Overview'
 import {Settings} from './components/settings/Settings'
-import {AccountHeader} from './AccountHeader'
+import {CustomerHeader} from './CustomerHeader'
 
-const accountBreadCrumbs: Array<PageLink> = [
+const customerBreadCrumbs: Array<PageLink> = [
   {
-    title: 'Account',
-    path: '/crafted/account/overview',
+    title: 'Customer',
+    path: '/customer/overview',
     isSeparator: false,
     isActive: false,
   },
@@ -20,13 +20,13 @@ const accountBreadCrumbs: Array<PageLink> = [
   },
 ]
 
-const AccountPage: React.FC = () => {
+const CustomerPage: React.FC = () => {
   return (
     <Routes>
       <Route
         element={
           <>
-            <AccountHeader />
+            <CustomerHeader />
             <Outlet />
           </>
         }
@@ -35,7 +35,7 @@ const AccountPage: React.FC = () => {
           path='overview'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Overview</PageTitle>
+              <PageTitle breadcrumbs={customerBreadCrumbs}>Overview</PageTitle>
               <Overview />
             </>
           }
@@ -44,15 +44,15 @@ const AccountPage: React.FC = () => {
           path='settings'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Settings</PageTitle>
+              <PageTitle breadcrumbs={customerBreadCrumbs}>Settings</PageTitle>
               <Settings />
             </>
           }
         />
-        <Route index element={<Navigate to='/crafted/account/overview' />} />
+        <Route index element={<Navigate to='/customer/overview' />} />
       </Route>
     </Routes>
   )
 }
 
-export default AccountPage
+export default CustomerPage

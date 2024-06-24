@@ -19,13 +19,13 @@ const SidebarMenuMain = () => {
       </div>
 
       <SidebarMenuItem
-        to="/crafted/account/overview"
+        to="/customer/overview"
         title="Customers"
         icon="profile-circle"
         fontIcon="bi-person"
       />
       <SidebarMenuItem
-        to="/crafted/account/settings"
+        to="/customer/settings"
         title="Subscriptions"
         icon="plus-circle"
         fontIcon="bi-person"

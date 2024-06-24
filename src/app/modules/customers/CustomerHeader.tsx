@@ -6,7 +6,7 @@ import {useLocation} from 'react-router'
 import { ToolbarWrapper } from '../../../_metronic/layout/components/toolbar'
 import { Content } from '../../../_metronic/layout/components/content'
 
-const AccountHeader: FC = () => {
+const CustomerHeader: FC = () => {
   const location = useLocation()
 
   return (
@@ -155,9 +155,9 @@ const AccountHeader: FC = () => {
                   <Link
                     className={
                       `nav-link text-active-primary me-6 ` +
-                      (location.pathname === '/crafted/account/overview' && 'active')
+                      (location.pathname === '/customer/overview' && 'active')
                     }
-                    to='/crafted/account/overview'
+                    to='/customer/overview'
                   >
                     Overview
                   </Link>
@@ -166,9 +166,9 @@ const AccountHeader: FC = () => {
                   <Link
                     className={
                       `nav-link text-active-primary me-6 ` +
-                      (location.pathname === '/crafted/account/settings' && 'active')
+                      (location.pathname === '/customer/settings' && 'active')
                     }
-                    to='/crafted/account/settings'
+                    to='/customer/settings'
                   >
                     Settings
                   </Link>
@@ -182,4 +182,4 @@ const AccountHeader: FC = () => {
   )
 }
 
-export {AccountHeader}
+export {CustomerHeader}
