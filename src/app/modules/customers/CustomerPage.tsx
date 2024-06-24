@@ -3,7 +3,7 @@ import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {Overview} from './components/Overview'
 import {Settings} from './components/settings/Settings'
-import {CustomerHeader} from './CustomerHeader'
+import { ToolbarWrapper } from '../../../_metronic/layout/components/toolbar'
 
 const customerBreadCrumbs: Array<PageLink> = [
   {
@@ -26,7 +26,7 @@ const CustomerPage: React.FC = () => {
       <Route
         element={
           <>
-            <CustomerHeader />
+            <ToolbarWrapper />
             <Outlet />
           </>
         }
