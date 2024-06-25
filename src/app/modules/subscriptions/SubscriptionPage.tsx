@@ -4,10 +4,10 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {Overview} from './components/Overview'
 import { ToolbarWrapper } from '../../../_metronic/layout/components/toolbar'
 
-const customerBreadCrumbs: Array<PageLink> = [
+const subscriptionBreadCrumbs: Array<PageLink> = [
   {
-    title: 'Customer',
-    path: '/customer/overview',
+    title: 'Subscription',
+    path: '/subscription/overview',
     isSeparator: false,
     isActive: false,
   },
@@ -19,7 +19,7 @@ const customerBreadCrumbs: Array<PageLink> = [
   },
 ]
 
-const CustomerPage: React.FC = () => {
+const SubscriptionPage: React.FC = () => {
   return (
     <Routes>
       <Route
@@ -34,15 +34,15 @@ const CustomerPage: React.FC = () => {
           path='overview'
           element={
             <>
-              <PageTitle breadcrumbs={customerBreadCrumbs}>Overview</PageTitle>
+              <PageTitle breadcrumbs={subscriptionBreadCrumbs}>Overview</PageTitle>
               <Overview />
             </>
           }
         />
-        <Route index element={<Navigate to='/customer/overview' />} />
+        <Route index element={<Navigate to='/subscription/overview' />} />
       </Route>
     </Routes>
   )
 }
 
-export default CustomerPage
+export default SubscriptionPage

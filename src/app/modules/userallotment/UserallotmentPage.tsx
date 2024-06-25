@@ -4,10 +4,10 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {Overview} from './components/Overview'
 import { ToolbarWrapper } from '../../../_metronic/layout/components/toolbar'
 
-const customerBreadCrumbs: Array<PageLink> = [
+const userallotmentBreadCrumbs: Array<PageLink> = [
   {
-    title: 'Customer',
-    path: '/customer/overview',
+    title: 'User Allotment',
+    path: '/userallotment/overview',
     isSeparator: false,
     isActive: false,
   },
@@ -19,7 +19,7 @@ const customerBreadCrumbs: Array<PageLink> = [
   },
 ]
 
-const CustomerPage: React.FC = () => {
+const UserallotmentPage: React.FC = () => {
   return (
     <Routes>
       <Route
@@ -34,15 +34,15 @@ const CustomerPage: React.FC = () => {
           path='overview'
           element={
             <>
-              <PageTitle breadcrumbs={customerBreadCrumbs}>Overview</PageTitle>
+              <PageTitle breadcrumbs={userallotmentBreadCrumbs}>Overview</PageTitle>
               <Overview />
             </>
           }
         />
-        <Route index element={<Navigate to='/customer/overview' />} />
+        <Route index element={<Navigate to='/userallotment/overview' />} />
       </Route>
     </Routes>
   )
 }
 
-export default CustomerPage
+export default UserallotmentPage
