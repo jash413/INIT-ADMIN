@@ -3,8 +3,8 @@ import { ID, Response } from "../../../../../../_metronic/helpers";
 import { User, UsersQueryResponse } from "./_models";
 
 const API_URL = import.meta.env.VITE_APP_THEME_API_URL;
-const USER_URL = `${API_URL}/user`;
-const GET_USERS_URL = `${API_URL}/users/query`;
+const USER_URL = `${API_URL}/api/customers`;
+const GET_USERS_URL = `${API_URL}/api/customers`;
 
 const getUsers = (query: string): Promise<UsersQueryResponse> => {
   return axios
@@ -28,7 +28,7 @@ const createUser = (user: User): Promise<User | undefined> => {
 
 const updateUser = (user: User): Promise<User | undefined> => {
   return axios
-    .post(`${USER_URL}/${user.id}`, user)
+    .post(`${USER_URL}/${user.CUS_CODE}`, user)
     .then((response: AxiosResponse<Response<User>>) => response.data)
     .then((response: Response<User>) => response.data);
 };

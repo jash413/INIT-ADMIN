@@ -1,27 +1,32 @@
 import {ID, Response} from '../../../../../../_metronic/helpers'
 export type User = {
-  id?: ID
-  name?: string
-  avatar?: string
-  email?: string
-  position?: string
-  role?: string
-  last_login?: string
-  two_steps?: boolean
-  joined_day?: string
-  online?: boolean
-  initials?: {
-    label: string
-    state: string
-  }
+  CUS_CODE?: ID,
+  CUS_NAME?: string,
+  INS_DATE?: string,
+  DUE_DAYS?: number,
+  EXP_DATE?: string,
+  USR_NUMBER?: string,
+  SYN_DATE?: string,
+  POS_SYNC?: string,
+  CUS_PASS?: string,
+  CUS_MAIL?: string,
+  LOG_INDT?: string,
+  CUS_MESG?: string,
+  MSG_EXDT?: string,
+  CON_PERS?: string,
+  CUS_ADDR?: string,
+  PHO_NMBR?: string,
+  CUS_REFB?: string,
+  GRP_CODE?: string,
+  INS_USER?: string,
+  BUS_CODE?: string,
+  CMP_VERS?: string,
+  client_id?: string,
+  client_secret?: string,
+  database_name?: string,
+  is_active?: boolean,
+  app_key?: string,
+  reg_type_id?: string,
 }
 
 export type UsersQueryResponse = Response<Array<User>>
-
-export const initialUser: User = {
-  avatar: 'avatars/300-6.jpg',
-  position: 'Art Director',
-  role: 'Administrator',
-  name: '',
-  email: '',
-}
