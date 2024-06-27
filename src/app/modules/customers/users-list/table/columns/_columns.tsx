@@ -5,6 +5,7 @@ import {UserSelectionCell} from './UserSelectionCell'
 import {UserCustomHeader} from './UserCustomHeader'
 import {UserSelectionHeader} from './UserSelectionHeader'
 import {User} from '../../core/_models'
+import moment from 'moment'
 
 const usersColumns: ReadonlyArray<Column<User>> = [
   {
@@ -13,21 +14,31 @@ const usersColumns: ReadonlyArray<Column<User>> = [
     Cell: ({...props}) => <UserSelectionCell id={props.data[props.row.index].CUS_CODE} />,
   },
   {
-    Header: 'Name',
-    accessor: 'CUS_NAME',
+    Header: 'Customer Code',
+    accessor: 'CUS_CODE',
     Cell: ({...props}) => <UserInfoCell user={props.data[props.row.index]} />,
   },
   {
-    Header: 'Email',
-    accessor: 'CUS_MAIL',
+    Header: 'Customer Name',
+    accessor: 'CUS_NAME',
   },
   {
     Header: 'Phone',
     accessor: 'PHO_NMBR',
   },
   {
-    Header: 'Company',
-    accessor: 'CUS_ADDR',
+    Header: 'Sync Date',
+    accessor: 'SYN_DATE',
+    Cell:  ({value}) => moment(value).format('DD/MM/YYYY'),
+  },
+  {
+    Header: 'Contact Person',
+    accessor: 'CON_PERS',
+  },
+  {
+    Header: 'Last Login',
+    accessor: 'LOG_INDT',
+    Cell:  ({value}) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
   },
   {
     Header: 'Status',
