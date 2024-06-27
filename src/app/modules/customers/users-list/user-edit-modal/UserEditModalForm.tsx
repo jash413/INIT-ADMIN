@@ -29,12 +29,14 @@ const editUserSchema = Yup.object().shape({
   PHO_NMBR: Yup.string().required("Phone Number is required"),
   USR_NMBR: Yup.string().required("Number of Users is required"),
   CUS_PASS: Yup.string().required("Password is required"),
+  is_active: Yup.boolean().required("Active status is required"),
 });
 
 const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
 
+  console.log("UserEditModalForm", user);
   const [userForEdit] = useState<User>({
     ...user,
     CUS_NAME: user.CUS_NAME,
@@ -44,6 +46,9 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
     PHO_NMBR: user.PHO_NMBR,
     USR_NMBR: user.USR_NMBR,
     CUS_PASS: user.CUS_PASS,
+    is_active: user.is_active,
+    CUS_MESG: user.CUS_MESG,
+    CUS_REFB: user.CUS_REFB,
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -77,28 +82,46 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
     label: string,
     name: keyof User,
     type = "text",
-    isRequired = true
+    isRequired = true,
+    isToggleBtn = false
   ) => (
     <div className="fv-row mb-7">
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
         {label}
       </label>
-      <input
-        placeholder={label}
-        {...formik.getFieldProps(name)}
-        type={type}
-        className={clsx(
-          "form-control form-control-solid mb-3 mb-lg-0",
-          { "is-invalid": formik.touched[name] && formik.errors[name] },
-          { "is-valid": formik.touched[name] && !formik.errors[name] }
-        )}
-        autoComplete="off"
-        disabled={formik.isSubmitting || isUserLoading}
-      />
-      {formik.touched[name] && formik.errors[name] && (
-        <div className="fv-plugins-message-container">
-          <span role="alert">{formik.errors[name]}</span>
+      {isToggleBtn ? (
+        <div className="form-check form-switch">
+          <input
+            {...formik.getFieldProps(name)}
+            type="checkbox"
+            className={clsx(
+              "form-check-input",
+              { "is-invalid": formik.touched[name] && formik.errors[name] },
+              { "is-valid": formik.touched[name] && !formik.errors[name] }
+            )}
+            disabled={formik.isSubmitting || isUserLoading}
+            checked={formik.values[name] as boolean}
+            onChange={() => formik.setFieldValue(name, !formik.values[name])}
+          />
+          {formik.touched[name] && formik.errors[name] && (
+            <div className="fv-plugins-message-container">
+              <span role="alert">{formik.errors[name]}</span>
+            </div>
+          )}
         </div>
+      ) : (
+        <input
+          placeholder={label}
+          {...formik.getFieldProps(name)}
+          type={type}
+          className={clsx(
+            "form-control form-control-solid mb-3 mb-lg-0",
+            { "is-invalid": formik.touched[name] && formik.errors[name] },
+            { "is-valid": formik.touched[name] && !formik.errors[name] }
+          )}
+          autoComplete="off"
+          disabled={formik.isSubmitting || isUserLoading}
+        />
       )}
     </div>
   );
@@ -121,13 +144,16 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
           data-kt-scroll-wrappers="#kt_modal_add_user_scroll"
           data-kt-scroll-offset="300px"
         >
-          {renderField("Full Name", "CUS_NAME")}
+          {renderField("Customer Name", "CUS_NAME")}
           {renderField("Address", "CUS_ADDR")}
           {renderField("Email", "CUS_MAIL", "email")}
           {renderField("Contact Person", "CON_PERS")}
           {renderField("Mobile/Phone Nos", "PHO_NMBR")}
           {renderField("No Of Users", "USR_NMBR")}
+          {renderField("Message", "CUS_MESG")}
+          {renderField("Ref By", "CUS_REFB")}
           {renderField("Login Password", "CUS_PASS", "password")}
+          {renderField("Is Active?", "is_active", "checkbox", true, true)}
         </div>
         <div className="text-center pt-15">
           <button
