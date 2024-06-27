@@ -10,7 +10,7 @@ import {WithChildren} from '../../_metronic/helpers'
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
-  const CustomerPage = lazy(() => import('../modules/customers/CustomerPage'))
+  const CustomerPage = lazy(() => import('../modules/customers/UsersPage'))
   const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
   const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
   const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
@@ -51,7 +51,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='customer/*'
+          path='customer-management/*'
           element={
             <SuspensedView>
               <CustomerPage />

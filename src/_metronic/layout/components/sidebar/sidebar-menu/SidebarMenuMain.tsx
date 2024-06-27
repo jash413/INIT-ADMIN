@@ -19,7 +19,7 @@ const SidebarMenuMain = () => {
       </div>
 
       <SidebarMenuItem
-        to="/customer/overview"
+        to="/customer-management/customers"
         title="Customers"
         icon="profile-circle"
         fontIcon="bi-person"
