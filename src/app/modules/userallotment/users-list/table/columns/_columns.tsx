@@ -29,7 +29,7 @@ const usersColumns: ReadonlyArray<Column<User>> = [
   {
     Header: 'Sync Date',
     accessor: 'SYN_DATE',
-    Cell:  ({value}) => ( value ? moment(value).format('DD/MM/YYYY') : "Yet to Sync" ),
+    Cell:  ({value}) => moment(value).format('DD/MM/YYYY'),
   },
   {
     Header: 'Contact Person',
@@ -38,7 +38,7 @@ const usersColumns: ReadonlyArray<Column<User>> = [
   {
     Header: 'Last Login',
     accessor: 'LOG_INDT',
-    Cell:  ({value}) => ( value ? moment(value).format('DD/MM/YYYY HH:mm:ss') : "Never Logged In" ),
+    Cell:  ({value}) => moment(value).format('DD/MM/YYYY HH:mm:ss'),
   },
   {
     Header: 'Status',

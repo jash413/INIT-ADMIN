@@ -14,8 +14,8 @@ const PrivateRoutes = () => {
   const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
   const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
   const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
-  const SubscriptionPage = lazy(() => import('../modules/subscriptions/SubscriptionPage'))
-  const UserallotmentPage = lazy(() => import('../modules/userallotment/UserallotmentPage'))
+  const SubscriptionPage = lazy(() => import('../modules/subscriptions/SubscriptionsPage'))
+  const UserallotmentPage = lazy(() => import('../modules/userallotment/UsersPage'))
 
   return (
     <Routes>
@@ -59,7 +59,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='subscription/*'
+          path='subscription-management/*'
           element={
             <SuspensedView>
               <SubscriptionPage />
@@ -67,7 +67,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='userallotment/*'
+          path='user-allotment/*'
           element={
             <SuspensedView>
               <UserallotmentPage />

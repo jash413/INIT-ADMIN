@@ -25,13 +25,13 @@ const SidebarMenuMain = () => {
         fontIcon="bi-person"
       />
       <SidebarMenuItem
-        to="/subscription/overview"
+        to="/subscription-management/subscriptions"
         title="Subscriptions"
         icon="plus-circle"
         fontIcon="bi-person"
       />
       <SidebarMenuItem
-        to="/userallotment/overview"
+        to="/user-allotment/users"
         title="User Allotment"
         fontIcon="bi-sticky"
         icon="user-tick"
