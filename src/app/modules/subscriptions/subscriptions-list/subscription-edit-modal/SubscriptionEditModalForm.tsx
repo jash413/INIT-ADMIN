@@ -13,6 +13,7 @@ import {
   fetchPlans,
 } from "../core/_requests";
 import { useQueryResponse } from "../core/QueryResponseProvider";
+import moment from "moment";
 
 type Props = {
   isSubscriptionLoading: boolean;
@@ -39,8 +40,8 @@ const SubscriptionEditModalForm: FC<Props> = ({
 
   const [subscriptionForEdit] = useState<Subscription>({
     ...subscription,
-    SUB_STDT: subscription.SUB_STDT,
-    SUB_ENDT: subscription.SUB_ENDT,
+    SUB_STDT: moment(subscription.SUB_STDT).format("YYYY-MM-DD"),
+    SUB_ENDT: moment(subscription.SUB_ENDT).format("YYYY-MM-DD"),
     PLA_CODE: subscription.PLA_CODE,
     LIC_USER: subscription.LIC_USER,
     SUB_ORDN: subscription.SUB_ORDN,

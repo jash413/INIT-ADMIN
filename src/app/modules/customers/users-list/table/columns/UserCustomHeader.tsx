@@ -18,7 +18,7 @@ const UserCustomHeader: FC<Props> = ({className, title, tableProps}) => {
     return state.sort && state.sort === id
   }, [state, id])
   const order: 'asc' | 'desc' | undefined = useMemo(() => state.order, [state])
-
+  console.log('UserCustomHeader', {id, isSelectedForSorting, order})
   const sortColumn = () => {
     // avoid sorting for these columns
     if (id === 'actions' || id === 'selection') {

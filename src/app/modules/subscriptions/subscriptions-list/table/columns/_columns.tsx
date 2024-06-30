@@ -1,5 +1,4 @@
 import {Column} from 'react-table'
-import {SubscriptionInfoCell} from './SubscriptionInfoCell'
 import {SubscriptionActionsCell} from './SubscriptionActionsCell'
 import {SubscriptionSelectionCell} from './SubscriptionSelectionCell'
 import {SubscriptionCustomHeader} from './SubscriptionCustomHeader'
@@ -14,38 +13,33 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
     Cell: ({...props}) => <SubscriptionSelectionCell id={props.data[props.row.index].SUB_CODE} />,
   },
   {
-    Header: 'Subscription Code',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='Subscription Code' />,
     accessor: 'SUB_CODE',
   },
   {
-    Header: 'Customer Code',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='Customer Code' />,
     accessor: 'CUS_CODE',
   },
   {
-    Header: 'Plan Code',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='Plan Code' />,
     accessor: 'PLA_CODE',
   },
   {
-    Header: 'License User',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='License User' />,
     accessor: 'LIC_USER',
   },
   {
-    Header: 'Start Date',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='Start Date' />,
     accessor: 'SUB_STDT',
     Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
   },
   {
-    Header: 'End Date',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='End Date' />,
     accessor: 'SUB_ENDT',
     Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
   },
   {
-    Header: 'Payment Date',
-    accessor: 'SUB_PDAT',
-    Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
-  },
-  {
-    Header: 'Status',
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='Status' />,
     accessor: 'status',
     Cell: ({value}) => (
       <span className={`badge badge-light-${value === 1 ? 'success' : 'danger'}`}>{value === 1 ? 'Active' : 'Inactive'}</span>
