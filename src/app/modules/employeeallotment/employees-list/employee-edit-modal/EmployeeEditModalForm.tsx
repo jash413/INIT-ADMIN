@@ -65,6 +65,26 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     fetchData();
   }, []);
 
+  const formik = useFormik({
+    initialValues: employeeForEdit,
+    validationSchema: editEmployeeSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      try {
+        if (isNotEmpty(values.EMP_CODE)) {
+          await updateEmployee(values);
+        } else {
+          await createEmployee(values);
+        }
+      } catch (ex) {
+        console.error(ex);
+      } finally {
+        setSubmitting(false);
+        cancel(true);
+      }
+    },
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,7 +105,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
       }
     };
     fetchData();
-  }, [employeeForEdit.CUS_CODE]);
+  }, [formik.values.CUS_CODE]);
 
   const cancel = (withRefresh?: boolean) => {
     if (withRefresh) {
@@ -93,26 +113,6 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     }
     setItemIdForUpdate(undefined);
   };
-
-  const formik = useFormik({
-    initialValues: employeeForEdit,
-    validationSchema: editEmployeeSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      setSubmitting(true);
-      try {
-        if (isNotEmpty(values.EMP_CODE)) {
-          await updateEmployee(values);
-        } else {
-          await createEmployee(values);
-        }
-      } catch (ex) {
-        console.error(ex);
-      } finally {
-        setSubmitting(false);
-        cancel(true);
-      }
-    },
-  });
 
   const renderField = (
     label: string,

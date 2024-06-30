@@ -13,7 +13,7 @@ const EmployeesListGrouping = () => {
     // 💡 response of the mutation is passed to onSuccess
     onSuccess: () => {
       // ✅ update detail view directly
-      queryClient.invalidateQueries([`${QUERIES.USERS_LIST}-${query}`])
+      queryClient.invalidateQueries([`${QUERIES.EMPLOYEES_LIST}-${query}`])
       clearSelected()
     },
   })
