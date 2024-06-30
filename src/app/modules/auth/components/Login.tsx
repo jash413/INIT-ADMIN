@@ -194,13 +194,6 @@ export function Login() {
         </div>
       )}
 
-      <div className='d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8'>
-        <div />
-        <Link to='/auth/forgot-password' className='link-primary'>
-          Forgot Password ?
-        </Link>
-      </div>
-
       <div className='d-grid mb-10'>
         <button
           type='submit'

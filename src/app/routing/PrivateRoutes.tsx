@@ -15,7 +15,7 @@ const PrivateRoutes = () => {
   const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
   const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
   const SubscriptionPage = lazy(() => import('../modules/subscriptions/SubscriptionsPage'))
-  const UserallotmentPage = lazy(() => import('../modules/userallotment/UsersPage'))
+  const EmployeeallotmentPage = lazy(() => import('../modules/employeeallotment/EmployeesPage'))
 
   return (
     <Routes>
@@ -67,10 +67,10 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='user-allotment/*'
+          path='employee-allotment/*'
           element={
             <SuspensedView>
-              <UserallotmentPage />
+              <EmployeeallotmentPage />
             </SuspensedView>
           }
         />

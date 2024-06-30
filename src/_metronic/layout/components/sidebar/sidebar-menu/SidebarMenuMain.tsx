@@ -31,48 +31,11 @@ const SidebarMenuMain = () => {
         fontIcon="bi-person"
       />
       <SidebarMenuItem
-        to="/user-allotment/users"
-        title="User Allotment"
+        to="/employee-allotment/employees"
+        title="Employee Allotment"
         fontIcon="bi-sticky"
         icon="user-tick"
       />
-      <SidebarMenuItemWithSub
-        to="/crafted/widgets"
-        title="Widgets"
-        icon="element-7"
-        fontIcon="bi-layers"
-      >
-        <SidebarMenuItem
-          to="/crafted/widgets/lists"
-          title="Lists"
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/crafted/widgets/statistics"
-          title="Statistics"
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/crafted/widgets/charts"
-          title="Charts"
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/crafted/widgets/mixed"
-          title="Mixed"
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/crafted/widgets/tables"
-          title="Tables"
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/crafted/widgets/feeds"
-          title="Feeds"
-          hasBullet={true}
-        />
-      </SidebarMenuItemWithSub>
     </>
   );
 };

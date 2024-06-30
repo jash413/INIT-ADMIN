@@ -3,14 +3,14 @@ import {FC, PropsWithChildren, useMemo} from 'react'
 import {HeaderProps} from 'react-table'
 import {initialQueryState} from '../../../../../../_metronic/helpers'
 import {useQueryRequest} from '../../core/QueryRequestProvider'
-import {User} from '../../core/_models'
+import {Employee} from '../../core/_models'
 
 type Props = {
   className?: string
   title?: string
-  tableProps: PropsWithChildren<HeaderProps<User>>
+  tableProps: PropsWithChildren<HeaderProps<Employee>>
 }
-const UserCustomHeader: FC<Props> = ({className, title, tableProps}) => {
+const EmployeeCustomHeader: FC<Props> = ({className, title, tableProps}) => {
   const id = tableProps.column.id
   const {state, updateState} = useQueryRequest()
 
@@ -18,6 +18,7 @@ const UserCustomHeader: FC<Props> = ({className, title, tableProps}) => {
     return state.sort && state.sort === id
   }, [state, id])
   const order: 'asc' | 'desc' | undefined = useMemo(() => state.order, [state])
+
   const sortColumn = () => {
     // avoid sorting for these columns
     if (id === 'actions' || id === 'selection') {
@@ -57,4 +58,4 @@ const UserCustomHeader: FC<Props> = ({className, title, tableProps}) => {
   )
 }
 
-export {UserCustomHeader}
+export {EmployeeCustomHeader}
