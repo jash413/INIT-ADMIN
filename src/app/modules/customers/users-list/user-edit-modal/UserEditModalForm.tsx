@@ -38,7 +38,6 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
 
-  console.log("UserEditModalForm", user);
   const [userForEdit] = useState<User>({
     ...user,
     CUS_NAME: user.CUS_NAME,

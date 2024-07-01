@@ -1,8 +1,6 @@
-
-import clsx from 'clsx'
 import {FC} from 'react'
-import {toAbsoluteUrl} from '../../../../../../_metronic/helpers'
 import {User} from '../../core/_models'
+import { Link } from 'react-router-dom'
 
 type Props = {
   user: User
@@ -12,9 +10,9 @@ const UserInfoCell: FC<Props> = ({user}) => (
   <div className='d-flex align-items-center'>
     {/* begin:: Avatar */}
     <div className='d-flex flex-column'>
-      <a href='#' className='text-gray-800 text-hover-primary mb-1'>
+      <Link to={`/customer-profile/${user.CUS_CODE}/`} className='text-gray-800 text-hover-primary mb-1'>
         {user.CUS_CODE}
-      </a>
+      </Link>
     </div>
   </div>
 )
