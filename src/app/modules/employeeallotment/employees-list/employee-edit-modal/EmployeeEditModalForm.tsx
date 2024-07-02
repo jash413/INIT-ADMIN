@@ -27,8 +27,6 @@ const editEmployeeSchema = Yup.object().shape({
   EMP_PASS: Yup.string().required("Employee Password is required"),
   EMP_IMEI: Yup.string().required("IMEI Number is required"),
   MOB_NMBR: Yup.string().required("Mobile Number is required"),
-  SUB_STDT: Yup.string().required("Subscription Start Date is required"),
-  SUB_ENDT: Yup.string().required("Subscription End Date is required"),
 });
 
 const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
