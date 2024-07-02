@@ -44,8 +44,6 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     EMP_IMEI: employee.EMP_IMEI,
     MOB_NMBR: employee.MOB_NMBR,
     USR_TYPE: employee.USR_TYPE,
-    SUB_STDT: moment(employee.SUB_STDT).format("YYYY-MM-DD"),
-    SUB_ENDT: moment(employee.SUB_ENDT).format("YYYY-MM-DD"),
   });
 
   useEffect(() => {
@@ -55,7 +53,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
         setCustomers(
           customersData?.data?.map((customer: any) => ({
             value: customer.CUS_CODE,
-            label: customer.CUS_NAME,
+            label: `${customer.CUS_CODE}: ${customer.CUS_NAME}`,
           }))
         );
       } catch (error) {
@@ -97,7 +95,11 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
         setSubscriptions(
           subscriptionsData?.data?.map((subscription: any) => ({
             value: subscription.SUB_CODE,
-            label: subscription.SUB_CODE,
+            label: `${subscription.SUB_CODE}: ${moment(
+              subscription.SUB_STDT
+            ).format("DD/MM/YYYY")} - ${moment(subscription.SUB_ENDT).format(
+              "DD/MM/YYYY"
+            )}`,
           }))
         );
       } catch (error) {
@@ -217,11 +219,9 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           {renderSelectField("Select Customer", "CUS_CODE", customers)}
           {renderSelectField("Select Subscription", "SUB_CODE", subscriptions)}
           {renderField("Employee Name", "EMP_NAME")}
-          {renderField("Employee Password", "EMP_PASS")}
+          {renderField("Employee Password", "EMP_PASS", "password")}
           {renderField("IMEI Number", "EMP_IMEI")}
           {renderField("Mobile Number", "MOB_NMBR")}
-          {renderField("Subscription Start Date", "SUB_STDT", "date")}
-          {renderField("Subscription End Date", "SUB_ENDT", "date")}
           {renderField("Is Admin?", "USR_TYPE", "checkbox", false, true)}
         </div>
         <div className="text-center pt-15">
