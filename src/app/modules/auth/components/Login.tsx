@@ -306,7 +306,11 @@ export function Login() {
         >
           {!loading && (
             <span className="indicator-label">
-              {authMethod === "email" ? "Continue" : otpSent ? "Verify OTP" : "Send OTP"}
+              {authMethod === "email"
+                ? "Continue"
+                : otpSent
+                ? "Verify OTP"
+                : "Send OTP"}
             </span>
           )}
           {loading && (
