@@ -38,8 +38,6 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
   const [employeeForEdit] = useState<Employee>({
     ...employee,
     EMP_NAME: employee.EMP_NAME,
-    EMP_PASS: employee.EMP_PASS,
-    EMP_IMEI: employee.EMP_IMEI,
     MOB_NMBR: employee.MOB_NMBR,
     USR_TYPE: employee.USR_TYPE,
   });
@@ -217,8 +215,6 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           {renderSelectField("Select Customer", "CUS_CODE", customers)}
           {renderSelectField("Select Subscription", "SUB_CODE", subscriptions)}
           {renderField("Employee Name", "EMP_NAME")}
-          {renderField("Employee Password", "EMP_PASS", "password")}
-          {renderField("IMEI Number", "EMP_IMEI")}
           {renderField("Mobile Number", "MOB_NMBR")}
           {renderField("Is Admin?", "USR_TYPE", "checkbox", false, true)}
         </div>

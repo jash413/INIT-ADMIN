@@ -40,8 +40,6 @@ const SubscriptionEditModalForm: FC<Props> = ({
 
   const [subscriptionForEdit] = useState<Subscription>({
     ...subscription,
-    SUB_STDT: moment(subscription.SUB_STDT).format("YYYY-MM-DD"),
-    SUB_ENDT: moment(subscription.SUB_ENDT).format("YYYY-MM-DD"),
     PLA_CODE: subscription.PLA_CODE,
     LIC_USER: subscription.LIC_USER,
     SUB_ORDN: subscription.SUB_ORDN,
@@ -206,8 +204,6 @@ const SubscriptionEditModalForm: FC<Props> = ({
           data-kt-scroll-offset="300px"
         >
           {renderSelectField("Select Customer", "CUS_CODE", customers)}
-          {renderField("Start Date", "SUB_STDT", "date")}
-          {renderField("End Date", "SUB_ENDT", "date")}
           {renderSelectField("Select Plan", "PLA_CODE", plans)}
           {renderField("License Users", "LIC_USER")}
           {renderField("Invoice No.", "SUB_ORDN")}

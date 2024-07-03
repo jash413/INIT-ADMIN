@@ -45,11 +45,8 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
     CUS_MAIL: user.CUS_MAIL,
     CON_PERS: user.CON_PERS,
     PHO_NMBR: user.PHO_NMBR,
-    USR_NMBR: user.USR_NMBR,
     CUS_PASS: user.CUS_PASS,
     is_active: user.is_active,
-    CUS_MESG: user.CUS_MESG,
-    CUS_REFB: user.CUS_REFB,
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -150,9 +147,6 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
           {renderField("Email", "CUS_MAIL", "email")}
           {renderField("Contact Person", "CON_PERS")}
           {renderField("Mobile/Phone Nos", "PHO_NMBR")}
-          {renderField("No Of Users", "USR_NMBR")}
-          {renderField("Message", "CUS_MESG")}
-          {renderField("Ref By", "CUS_REFB")}
           {renderField("Login Password", "CUS_PASS", "password")}
           {renderField("Is Active?", "is_active", "checkbox", true, true)}
         </div>

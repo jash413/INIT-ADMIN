@@ -1,122 +1,144 @@
-import {useEffect, useState} from 'react'
-import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
-import {initialQueryState, KTIcon} from '../../../../../../_metronic/helpers'
-import {useQueryRequest} from '../../core/QueryRequestProvider'
-import {useQueryResponse} from '../../core/QueryResponseProvider'
+import { useEffect, useState } from "react";
+import { MenuComponent } from "../../../../../../_metronic/assets/ts/components";
+import { initialQueryState, KTIcon } from "../../../../../../_metronic/helpers";
+import { useQueryRequest } from "../../core/QueryRequestProvider";
+import { useQueryResponse } from "../../core/QueryResponseProvider";
+import { getAdmins } from "../../../../customers/users-list/core/_requests";
 
 const SubscriptionsListFilter = () => {
-  const {updateState} = useQueryRequest()
-  const {isLoading} = useQueryResponse()
-  const [role, setRole] = useState<string | undefined>()
-  const [lastLogin, setLastLogin] = useState<string | undefined>()
+  const { updateState } = useQueryRequest();
+  const { isLoading } = useQueryResponse();
+  const [from, setFrom] = useState<string | undefined>();
+  const [to, setTo] = useState<string | undefined>();
+  const [admin, setAdmin] = useState<string | undefined>();
+  const [admins, setAdmins] = useState<any[]>();
 
   useEffect(() => {
-    MenuComponent.reinitialization()
-  }, [])
+    MenuComponent.reinitialization();
+  }, []);
+
+  useEffect(() => {
+    getAdmins().then((data) => {
+      setAdmins(data.data);
+    });
+  }, []);
 
   const resetData = () => {
-    updateState({filter: undefined, ...initialQueryState})
-  }
+    updateState({ filter: undefined, ...initialQueryState });
+  };
 
   const filterData = () => {
     updateState({
-      filter: {role, last_login: lastLogin},
+      filter: {
+        ad_id: admin,
+        from,
+        to,
+      },
       ...initialQueryState,
-    })
-  }
+    });
+  };
 
   return (
     <>
       {/* begin::Filter Button */}
       <button
         disabled={isLoading}
-        type='button'
-        className='btn btn-light-primary me-3'
-        data-kt-menu-trigger='click'
-        data-kt-menu-placement='bottom-end'
+        type="button"
+        className="btn btn-light-primary me-3"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
       >
-        <KTIcon iconName='filter' className='fs-2' />
+        <KTIcon iconName="filter" className="fs-2" />
         Filter
       </button>
       {/* end::Filter Button */}
       {/* begin::SubMenu */}
-      <div className='menu menu-sub menu-sub-dropdown w-300px w-md-325px' data-kt-menu='true'>
+      <div
+        className="menu menu-sub menu-sub-dropdown w-300px w-md-325px"
+        data-kt-menu="true"
+      >
         {/* begin::Header */}
-        <div className='px-7 py-5'>
-          <div className='fs-5 text-gray-900 fw-bolder'>Filter Options</div>
+        <div className="px-7 py-5">
+          <div className="fs-5 text-gray-900 fw-bolder">Filter Options</div>
         </div>
         {/* end::Header */}
 
         {/* begin::Separator */}
-        <div className='separator border-gray-200'></div>
+        <div className="separator border-gray-200"></div>
         {/* end::Separator */}
 
         {/* begin::Content */}
-        <div className='px-7 py-5' data-kt-user-table-filter='form'>
+        <div className="px-7 py-5" data-kt-user-table-filter="form">
           {/* begin::Input group */}
-          <div className='mb-10'>
-            <label className='form-label fs-6 fw-bold'>Role:</label>
+          <div className="mb-10">
+            <label className="form-label fs-6 fw-bold">Admin</label>
             <select
-              className='form-select form-select-solid fw-bolder'
-              data-kt-select2='true'
-              data-placeholder='Select option'
-              data-allow-clear='true'
-              data-kt-user-table-filter='role'
-              data-hide-search='true'
-              onChange={(e) => setRole(e.target.value)}
-              value={role}
+              className="form-select form-select-solid"
+              name="admin"
+              disabled={isLoading}
+              onChange={(e) => {
+                setAdmin(e.target.value);
+              }}
             >
-              <option value=''></option>
-              <option value='Administrator'>Administrator</option>
-              <option value='Analyst'>Analyst</option>
-              <option value='Developer'>Developer</option>
-              <option value='Support'>Support</option>
-              <option value='Trial'>Trial</option>
+              <option value="">Select Admin</option>
+              {admins?.map((admin) => (
+                <option key={admin.ad_name} value={admin.ad_id}>
+                  {admin.ad_name}
+                </option>
+              ))}
             </select>
+          </div>
+
+          {/* begin::Input group */}
+          <div className="mb-10">
+            <label className="form-label fs-6 fw-bold">From</label>
+            <input
+              type="date"
+              className="form-control form-control-solid"
+              name="from"
+              placeholder="From date"
+              disabled={isLoading}
+              onChange={(e) => {
+                setFrom(e.target.value);
+              }}
+            />
           </div>
           {/* end::Input group */}
 
           {/* begin::Input group */}
-          <div className='mb-10'>
-            <label className='form-label fs-6 fw-bold'>Last login:</label>
-            <select
-              className='form-select form-select-solid fw-bolder'
-              data-kt-select2='true'
-              data-placeholder='Select option'
-              data-allow-clear='true'
-              data-kt-user-table-filter='two-step'
-              data-hide-search='true'
-              onChange={(e) => setLastLogin(e.target.value)}
-              value={lastLogin}
-            >
-              <option value=''></option>
-              <option value='Yesterday'>Yesterday</option>
-              <option value='20 mins ago'>20 mins ago</option>
-              <option value='5 hours ago'>5 hours ago</option>
-              <option value='2 days ago'>2 days ago</option>
-            </select>
+          <div className="mb-10">
+            <label className="form-label fs-6 fw-bold">To</label>
+            <input
+              type="date"
+              className="form-control form-control-solid"
+              name="to"
+              placeholder="To date"
+              disabled={isLoading}
+              onChange={(e) => {
+                setTo(e.target.value);
+              }}
+            />
           </div>
-          {/* end::Input group */}
 
           {/* begin::Actions */}
-          <div className='d-flex justify-content-end'>
+          <div className="d-flex justify-content-end">
             <button
-              type='button'
+              type="button"
               disabled={isLoading}
-              onClick={filterData}
-              className='btn btn-light btn-active-light-primary fw-bold me-2 px-6'
-              data-kt-menu-dismiss='true'
-              data-kt-user-table-filter='reset'
+              onClick={resetData}
+              className="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
+              data-kt-menu-dismiss="true"
+              data-kt-user-table-filter="reset"
             >
               Reset
             </button>
             <button
               disabled={isLoading}
-              type='button'
-              onClick={resetData}
-              className='btn btn-primary fw-bold px-6'
-              data-kt-menu-dismiss='true'
-              data-kt-user-table-filter='filter'
+              type="button"
+              onClick={filterData}
+              className="btn btn-primary fw-bold px-6"
+              data-kt-menu-dismiss="true"
+              data-kt-user-table-filter="filter"
             >
               Apply
             </button>
@@ -127,7 +149,7 @@ const SubscriptionsListFilter = () => {
       </div>
       {/* end::SubMenu */}
     </>
-  )
-}
+  );
+};
 
-export {SubscriptionsListFilter}
+export { SubscriptionsListFilter };

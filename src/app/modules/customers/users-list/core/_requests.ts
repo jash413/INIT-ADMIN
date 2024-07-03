@@ -5,6 +5,11 @@ import { User, UsersQueryResponse } from "./_models";
 const API_URL = import.meta.env.VITE_APP_THEME_API_URL;
 const USER_URL = `${API_URL}/api/customers`;
 const GET_USERS_URL = `${API_URL}/api/customers`;
+const GET_ADMINS_URL = `${API_URL}/api/admins`;
+
+const getAdmins = (): Promise<any> => {
+  return axios.get(GET_ADMINS_URL).then((d: AxiosResponse<any>) => d.data);
+};
 
 const getUsers = (query: string): Promise<UsersQueryResponse> => {
   return axios
@@ -49,4 +54,5 @@ export {
   getUserById,
   createUser,
   updateUser,
+  getAdmins,
 };
