@@ -70,7 +70,7 @@ const EmployeesListToolbar: FC = () => {
         onClick={openAddEmployeeModal}
       >
         <KTIcon iconName="plus" className="fs-2" />
-        Add Customer
+        Add Employee
       </button>
       {/* end::Add user */}
     </div>

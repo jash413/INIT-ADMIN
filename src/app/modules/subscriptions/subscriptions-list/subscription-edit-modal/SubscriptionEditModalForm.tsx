@@ -22,8 +22,6 @@ type Props = {
 
 const editSubscriptionSchema = Yup.object().shape({
   CUS_CODE: Yup.string().required("Customer Code is required"),
-  SUB_STDT: Yup.string().required("Start Date is required"),
-  SUB_ENDT: Yup.string().required("End Date is required"),
   PLA_CODE: Yup.string().required("Plan Code is required"),
   LIC_USER: Yup.number().required("License User is required"),
   SUB_ORDN: Yup.string().required("Order Number is required"),

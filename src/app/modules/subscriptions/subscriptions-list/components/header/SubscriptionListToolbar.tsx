@@ -70,7 +70,7 @@ const SubscriptionsListToolbar: FC = () => {
         onClick={openAddSubscriptionModal}
       >
         <KTIcon iconName="plus" className="fs-2" />
-        Add Customer
+        Add Subscription
       </button>
       {/* end::Add user */}
     </div>

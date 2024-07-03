@@ -24,8 +24,6 @@ const editEmployeeSchema = Yup.object().shape({
   CUS_CODE: Yup.string().required("Customer Code is required"),
   SUB_CODE: Yup.string().required("Subscription Code is required"),
   EMP_NAME: Yup.string().required("Employee Name is required"),
-  EMP_PASS: Yup.string().required("Employee Password is required"),
-  EMP_IMEI: Yup.string().required("IMEI Number is required"),
   MOB_NMBR: Yup.string().required("Mobile Number is required"),
 });
 

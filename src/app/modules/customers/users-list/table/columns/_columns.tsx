@@ -76,6 +76,7 @@ const usersColumns: ReadonlyArray<Column<User>> = [
       useEffect(() => {
         getAdminById(value).then((data) => {
           setAdmin(data.data.ad_name);
+          console.log(data);
         });
       }, []);
       return admin;
