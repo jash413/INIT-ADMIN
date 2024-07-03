@@ -11,6 +11,8 @@ export type Subscription = {
   SUB_ORDN?: string,
   status?: number,
   ORD_REQD?: number,
+  CREATED_AT?: string,
+  ad_id?: string,
 }
 
 export type SubscriptionsQueryResponse = Response<Array<Subscription>>

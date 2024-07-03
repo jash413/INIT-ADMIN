@@ -11,6 +11,10 @@ const getAdmins = (): Promise<any> => {
   return axios.get(GET_ADMINS_URL).then((d: AxiosResponse<any>) => d.data);
 };
 
+const getAdminById = (id: ID): Promise<any> => {
+  return axios.get(`${GET_ADMINS_URL}/${id}`).then((d: AxiosResponse<any>) => d.data);
+}
+
 const getUsers = (query: string): Promise<UsersQueryResponse> => {
   return axios
     .get(`${GET_USERS_URL}?${query}`)
@@ -55,4 +59,5 @@ export {
   createUser,
   updateUser,
   getAdmins,
+  getAdminById,
 };

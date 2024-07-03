@@ -27,6 +27,8 @@ export type User = {
   is_active?: boolean,
   app_key?: string,
   reg_type_id?: string,
+  ad_id?: string,
+  CREATED_AT?: string,
 }
 
 export type UsersQueryResponse = Response<Array<User>>

@@ -19,6 +19,8 @@ export type Employee = {
   STATUS?: boolean,
   SALE_OS_ACTIVE?: boolean,
   PUR_OS_ACTIVE?: boolean,
+  CREATED_AT?: string,
+  ad_id?: string,
 }
 
 export type EmployeesQueryResponse = Response<Array<Employee>>
