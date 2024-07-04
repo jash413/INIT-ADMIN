@@ -41,6 +41,11 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
     Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
   },
   {
+    Header: (props) => <SubscriptionCustomHeader tableProps={props} title='Invoice Date' />,
+    accessor: 'INV_DATE',
+    Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
+  },
+  {
     Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Created At" />
     ),

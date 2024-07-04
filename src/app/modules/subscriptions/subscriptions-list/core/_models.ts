@@ -10,9 +10,10 @@ export type Subscription = {
   SUB_PDAT?: string,
   SUB_ORDN?: string,
   status?: number,
-  ORD_REQD?: number,
+  ORD_REQD?: string,
   CREATED_AT?: string,
   ad_id?: string,
+  INV_DATE?: string,
 }
 
 export type SubscriptionsQueryResponse = Response<Array<Subscription>>

@@ -25,8 +25,7 @@ const editSubscriptionSchema = Yup.object().shape({
   PLA_CODE: Yup.string().required("Plan Code is required"),
   LIC_USER: Yup.number().required("License User is required"),
   SUB_ORDN: Yup.string().required("Order Number is required"),
-  ORD_REQD: Yup.number().required("Order Required is required"),
-  status: Yup.number().required("Status is required"),
+  INV_DATE: Yup.string().required("Invoice Date is required"),
 });
 
 const SubscriptionEditModalForm: FC<Props> = ({
@@ -43,6 +42,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
     SUB_ORDN: subscription.SUB_ORDN,
     ORD_REQD: subscription.ORD_REQD,
     status: subscription.status,
+    INV_DATE: moment(subscription.INV_DATE).format("YYYY-MM-DD"),
   });
 
   const [customers, setCustomers] = useState([]);
@@ -121,9 +121,9 @@ const SubscriptionEditModalForm: FC<Props> = ({
               { "is-valid": formik.touched[name] && !formik.errors[name] }
             )}
             disabled={formik.isSubmitting || isSubscriptionLoading}
-            checked={formik.values[name] === 1}
-            onChange={() =>
-              formik.setFieldValue(name, formik.values[name] === 1 ? 0 : 1)
+            checked={formik.values[name] === 1 || formik.values[name] === "1"}
+            onChange={(e) =>
+              formik.setFieldValue(name, e.target.checked ? 1 : 0)
             }
           />
           {formik.touched[name] && formik.errors[name] && (
@@ -205,6 +205,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
           {renderSelectField("Select Plan", "PLA_CODE", plans)}
           {renderField("License Users", "LIC_USER")}
           {renderField("Invoice No.", "SUB_ORDN")}
+          {renderField("Invoice Date", "INV_DATE", "date")}
           {renderField(
             "Order Entry Required",
             "ORD_REQD",
