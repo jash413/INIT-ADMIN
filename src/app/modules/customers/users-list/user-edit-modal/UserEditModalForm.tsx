@@ -28,7 +28,6 @@ const editUserSchema = Yup.object().shape({
   CON_PERS: Yup.string().required("Contact Person is required"),
   PHO_NMBR: Yup.string().required("Phone Number is required"),
   CUS_PASS: Yup.string().required("Password is required"),
-  is_active: Yup.boolean().required("Active status is required"),
 });
 
 const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
