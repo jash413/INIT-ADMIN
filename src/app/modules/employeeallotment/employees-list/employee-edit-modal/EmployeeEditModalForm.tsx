@@ -38,6 +38,14 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     EMP_NAME: employee.EMP_NAME,
     MOB_NMBR: employee.MOB_NMBR,
     USR_TYPE: employee.USR_TYPE,
+    SALE_OS_ACTIVE: employee.SALE_OS_ACTIVE,
+    PUR_OS_ACTIVE: employee.PUR_OS_ACTIVE,
+    SALE_ORDER_ACTIVE: employee.SALE_ORDER_ACTIVE,
+    PURCHASE_ORDER_ACTIVE: employee.PURCHASE_ORDER_ACTIVE,
+    SALE_ORDER_ENTRY: employee.SALE_ORDER_ENTRY,
+    SALE_REPORT_ACTIVE: employee.SALE_REPORT_ACTIVE,
+    PURCHASE_REPORT_ACTIVE: employee.PURCHASE_REPORT_ACTIVE,
+    LEDGER_REPORT_ACTIVE: employee.LEDGER_REPORT_ACTIVE,
   });
 
   useEffect(() => {
@@ -122,27 +130,34 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
         {label}
       </label>
       {isToggleBtn ? (
-         <div className="form-check form-switch">
-         <input
-           {...formik.getFieldProps(name)}
-           type="checkbox"
-           className={clsx(
-             "form-check-input",
-             { "is-invalid": formik.touched[name] && formik.errors[name] },
-             { "is-valid": formik.touched[name] && !formik.errors[name] }
-           )}
-           disabled={formik.isSubmitting || isEmployeeLoading}
-           checked={formik.values[name] === "1"}
-           onChange={(e) =>
-             formik.setFieldValue(name, e.target.checked ? "1" : "0")
-           }
-         />
-         {formik.touched[name] && formik.errors[name] && (
-           <div className="fv-plugins-message-container">
-             <span role="alert">{formik.errors[name]}</span>
-           </div>
-         )}
-       </div>
+        <div className="form-check form-switch">
+          <input
+            {...formik.getFieldProps(name)}
+            type="checkbox"
+            className={clsx(
+              "form-check-input",
+              { "is-invalid": formik.touched[name] && formik.errors[name] },
+              { "is-valid": formik.touched[name] && !formik.errors[name] }
+            )}
+            disabled={formik.isSubmitting || isEmployeeLoading}
+            checked={
+              name === "USR_TYPE"
+                ? formik.values[name] === "1"
+                : formik.values[name] === "Y"
+            }
+            onChange={(e) =>
+              formik.setFieldValue(
+                name,
+                e.target.checked ? (name === "USR_TYPE" ? "1" : "Y") : (name === "USR_TYPE" ? "0" : "N")
+              )
+            }
+          />
+          {formik.touched[name] && formik.errors[name] && (
+            <div className="fv-plugins-message-container">
+              <span role="alert">{formik.errors[name]}</span>
+            </div>
+          )}
+        </div>
       ) : (
         <input
           placeholder={label}
@@ -217,6 +232,14 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           {renderField("Employee Name", "EMP_NAME")}
           {renderField("Mobile Number", "MOB_NMBR")}
           {renderField("Is Admin?", "USR_TYPE", "checkbox", false, true)}
+          {renderField("Sale Outstanding?", "SALE_OS_ACTIVE", "checkbox", false, true)}
+          {renderField("Purchase Outstanding?", "PUR_OS_ACTIVE", "checkbox", false, true)}
+          {renderField("Sale Order Active?", "SALE_ORDER_ACTIVE", "checkbox", false, true)}
+          {renderField("Purchase Order Active?", "PURCHASE_ORDER_ACTIVE", "checkbox", false, true)}
+          {renderField("Sale Order Entry?", "SALE_ORDER_ENTRY", "checkbox", false, true)}
+          {renderField("Sale Report Active?", "SALE_REPORT_ACTIVE", "checkbox", false, true)}
+          {renderField("Purchase Report Active?", "PURCHASE_REPORT_ACTIVE", "checkbox", false, true)}
+          {renderField("Ledger Report Active?", "LEDGER_REPORT_ACTIVE", "checkbox", false, true)}
         </div>
         <div className="text-center pt-15">
           <button
