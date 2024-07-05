@@ -10,7 +10,7 @@ export type Employee = {
   SYN_DATE?: string,
   EMP_MAIL?: string,
   SUB_CODE?: string,
-  USR_TYPE?: boolean,
+  USR_TYPE?: string,
   REGDATE?: string,
   SUB_STDT?: string,
   SUB_ENDT?: string,

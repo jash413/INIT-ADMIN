@@ -61,7 +61,10 @@ const UserActionsCell: FC<Props> = ({id}) => {
           <a
             className='menu-link px-3'
             data-kt-users-table-filter='delete_row'
-            onClick={async () => await deleteItem.mutateAsync()}
+            onClick={async () => {
+              const isConfirmed = window.confirm('Are you sure to delete this customer?')
+              if (!isConfirmed) return
+              await deleteItem.mutateAsync()}}
           >
             Delete
           </a>

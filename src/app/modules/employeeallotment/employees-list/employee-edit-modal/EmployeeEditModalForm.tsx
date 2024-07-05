@@ -122,25 +122,27 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
         {label}
       </label>
       {isToggleBtn ? (
-        <div className="form-check form-switch">
-          <input
-            {...formik.getFieldProps(name)}
-            type="checkbox"
-            className={clsx(
-              "form-check-input",
-              { "is-invalid": formik.touched[name] && formik.errors[name] },
-              { "is-valid": formik.touched[name] && !formik.errors[name] }
-            )}
-            disabled={formik.isSubmitting || isEmployeeLoading}
-            checked={formik.values[name] as boolean}
-            onChange={() => formik.setFieldValue(name, !formik.values[name])}
-          />
-          {formik.touched[name] && formik.errors[name] && (
-            <div className="fv-plugins-message-container">
-              <span role="alert">{formik.errors[name]}</span>
-            </div>
-          )}
-        </div>
+         <div className="form-check form-switch">
+         <input
+           {...formik.getFieldProps(name)}
+           type="checkbox"
+           className={clsx(
+             "form-check-input",
+             { "is-invalid": formik.touched[name] && formik.errors[name] },
+             { "is-valid": formik.touched[name] && !formik.errors[name] }
+           )}
+           disabled={formik.isSubmitting || isEmployeeLoading}
+           checked={formik.values[name] === "1"}
+           onChange={(e) =>
+             formik.setFieldValue(name, e.target.checked ? "1" : "0")
+           }
+         />
+         {formik.touched[name] && formik.errors[name] && (
+           <div className="fv-plugins-message-container">
+             <span role="alert">{formik.errors[name]}</span>
+           </div>
+         )}
+       </div>
       ) : (
         <input
           placeholder={label}
