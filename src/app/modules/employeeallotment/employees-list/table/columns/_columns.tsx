@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Column} from 'react-table'
-import {EmployeeInfoCell} from './EmployeeInfoCell'
 import {EmployeeActionsCell} from './EmployeeActionsCell'
 import {EmployeeSelectionCell} from './EmployeeSelectionCell'
 import {EmployeeCustomHeader} from './EmployeeCustomHeader'
 import {EmployeeSelectionHeader} from './EmployeeSelectionHeader'
 import {Employee} from '../../core/_models'
-import {getAdminById} from '../../../../customers/users-list/core/_requests'
+import {getAdminById, getUserById} from '../../../../customers/users-list/core/_requests'
 import moment from 'moment'
 
 const employeesColumns: ReadonlyArray<Column<Employee>> = [
@@ -24,30 +23,39 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
     accessor: 'EMP_CODE',
   },
   {
-    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Mobile Number' />,
+    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Employee Phone' />,
     accessor: 'MOB_NMBR',
   },
   {
-    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Subscription Start Date' />,
+    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Company Name' />,
+    accessor: 'CUS_CODE',
+    Cell: ({value}) => {
+      const [customer, setCustomer] = useState<string | undefined>(undefined)
+      useEffect(() => {
+        getUserById(value).then((data) => {
+          setCustomer(data?.CUS_NAME)
+        })
+      }, [value])
+      return customer
+    },
+  },
+  {
+    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Subscription Code' />,
+    accessor: 'SUB_CODE',
+  },
+  {
+    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Start Date' />,
     accessor: 'SUB_STDT',
-    Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
+    Cell: ({value}) => moment(value).format('DD/MM/YYYY'),
   },
   {
-    Header: (props) => <EmployeeCustomHeader tableProps={props} title='Subscription End Date' />,
+    Header: (props) => <EmployeeCustomHeader tableProps={props} title='End Date' />,
     accessor: 'SUB_ENDT',
-    Cell: ({value}) => moment(value).format('YYYY-MM-DD'),
+    Cell: ({value}) => moment(value).format('DD/MM/YYYY'),
   },
   {
     Header: (props) => (
-      <EmployeeCustomHeader tableProps={props} title="Created At" />
-    ),
-    accessor: "CREATED_AT",
-    Cell: ({ value }) =>
-      value ? moment(value).format("DD/MM/YYYY HH:mm:ss") : "Not Available",
-  },
-  {
-    Header: (props) => (
-      <EmployeeCustomHeader tableProps={props} title="Created By" />
+      <EmployeeCustomHeader tableProps={props} title="Alloted By" />
     ),
     accessor: "ad_id",
     Cell: ({ value }) => {
@@ -56,9 +64,22 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
         getAdminById(value).then((data) => {
           setAdmin(data.data.ad_name);
         });
-      }, []);
+      }, [value]);
       return admin;
     },
+  },
+  {
+    Header: (props) => (
+      <EmployeeCustomHeader tableProps={props} title="Allotment Date" />
+    ),
+    accessor: "CREATED_AT",
+    Cell: ({ value }) =>
+      value ? moment(value).format("DD/MM/YYYY HH:mm:ss") : "Not Available",
+  },
+  {
+    Header: "Is Admin",
+    accessor: "USR_TYPE",
+    Cell: ({ value }) => (value ? "Yes" : "No"),
   },
   {
     Header: (props) => (

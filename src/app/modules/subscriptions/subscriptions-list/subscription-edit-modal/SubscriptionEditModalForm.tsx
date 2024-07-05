@@ -25,6 +25,7 @@ const editSubscriptionSchema = Yup.object().shape({
   PLA_CODE: Yup.string().required("Plan Code is required"),
   LIC_USER: Yup.number().required("License User is required"),
   SUB_ORDN: Yup.string().required("Order Number is required"),
+  SUB_STDT: Yup.string().required("Subscription Start Date is required"),
   INV_DATE: Yup.string().required("Invoice Date is required"),
 });
 
@@ -41,6 +42,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
     LIC_USER: subscription.LIC_USER,
     SUB_ORDN: subscription.SUB_ORDN,
     ORD_REQD: subscription.ORD_REQD,
+    SUB_STDT: moment(subscription.SUB_STDT).format("YYYY-MM-DD"),
     status: subscription.status,
     INV_DATE: moment(subscription.INV_DATE).format("YYYY-MM-DD"),
   });
@@ -203,6 +205,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
         >
           {renderSelectField("Select Customer", "CUS_CODE", customers)}
           {renderSelectField("Select Plan", "PLA_CODE", plans)}
+          {renderField("Subscription Start Date", "SUB_STDT", "date")}
           {renderField("License Users", "LIC_USER")}
           {renderField("Invoice No.", "SUB_ORDN")}
           {renderField("Invoice Date", "INV_DATE", "date")}

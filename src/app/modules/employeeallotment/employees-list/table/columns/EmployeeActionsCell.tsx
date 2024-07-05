@@ -18,7 +18,7 @@ const EmployeeActionsCell: FC<Props> = ({id}) => {
 
   useEffect(() => {
     MenuComponent.reinitialization()
-  }, [])
+  }, []) 
 
   const openEditModal = () => {
     setItemIdForUpdate(id)
@@ -28,7 +28,7 @@ const EmployeeActionsCell: FC<Props> = ({id}) => {
     // 💡 response of the mutation is passed to onSuccess
     onSuccess: () => {
       // ✅ update detail view directly
-      queryClient.invalidateQueries([`${QUERIES.USERS_LIST}-${query}`])
+      queryClient.invalidateQueries([`${QUERIES.EMPLOYEES_LIST}-${query}`])
     },
   })
 

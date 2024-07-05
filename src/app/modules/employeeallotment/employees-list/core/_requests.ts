@@ -1,4 +1,6 @@
 import axios, { AxiosResponse } from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ID, Response } from "../../../../../_metronic/helpers";
 import { Employee, EmployeesQueryResponse } from "./_models";
 
@@ -9,51 +11,85 @@ const GET_EMPLOYEES_URL = `${API_URL}/api/employees`;
 const getEmployees = (query: string): Promise<EmployeesQueryResponse> => {
   return axios
     .get(`${GET_EMPLOYEES_URL}?${query}`)
-    .then((d: AxiosResponse<EmployeesQueryResponse>) => d.data);
+    .then((d: AxiosResponse<EmployeesQueryResponse>) => d.data)
+    .catch((error) => {
+      toast.error(`Failed to get employees: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
 const getEmployeeById = (id: ID): Promise<Employee | undefined> => {
   return axios
     .get(`${EMPLOYEE_URL}/${id}`)
     .then((response: AxiosResponse<Response<Employee>>) => response.data)
-    .then((response: Response<Employee>) => response.data);
+    .then((response: Response<Employee>) => response.data)
+    .catch((error) => {
+      toast.error(`Failed to get employee by ID: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
-const createEmployee = (user: Employee): Promise<Employee | undefined> => {
+const createEmployee = (employee: Employee): Promise<Employee | undefined> => {
   return axios
-    .post(EMPLOYEE_URL, user)
+    .post(EMPLOYEE_URL, employee)
     .then((response: AxiosResponse<Response<Employee>>) => response.data)
-    .then((response: Response<Employee>) => response.data);
+    .then((response: Response<Employee>) => response.data)
+    .catch((error) => {
+      toast.error(`Failed to create employee: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
-const updateEmployee = (user: Employee): Promise<Employee | undefined> => {
+const updateEmployee = (employee: Employee): Promise<Employee | undefined> => {
   return axios
-    .put(`${EMPLOYEE_URL}/${user.CUS_CODE}`, user)
+    .put(`${EMPLOYEE_URL}/${employee.CUS_CODE}`, employee)
     .then((response: AxiosResponse<Response<Employee>>) => response.data)
-    .then((response: Response<Employee>) => response.data);
+    .then((response: Response<Employee>) => response.data)
+    .catch((error) => {
+      toast.error(`Failed to update employee: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
-const deleteEmployee = (userId: ID): Promise<void> => {
-  return axios.delete(`${EMPLOYEE_URL}/${userId}`).then(() => {});
+const deleteEmployee = (employeeId: ID): Promise<void> => {
+  return axios
+    .delete(`${EMPLOYEE_URL}/${employeeId}`)
+    .then(() => {})
+    .catch((error) => {
+      toast.error(`Failed to delete employee: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
-const deleteSelectedEmployees = (userIds: Array<ID>): Promise<void> => {
-  const requests = userIds.map((id) => axios.delete(`${EMPLOYEE_URL}/${id}`));
-  return axios.all(requests).then(() => {});
+const deleteSelectedEmployees = (employeeIds: Array<ID>): Promise<void> => {
+  const requests = employeeIds.map((id) => axios.delete(`${EMPLOYEE_URL}/${id}`));
+  return axios
+    .all(requests)
+    .then(() => {})
+    .catch((error) => {
+      toast.error(`Failed to delete selected employees: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
 const fetchCustomers = (): Promise<any> => {
   return axios
     .get(`${API_URL}/api/customers`)
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((error) => {
+      toast.error(`Failed to fetch customers: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
-const fetchSubscriptionsByCustomerId = (
-  customerId: ID
-): Promise<any> => {
+const fetchSubscriptionsByCustomerId = (customerId: ID): Promise<any> => {
   return axios
     .get(`${API_URL}/api/subscriptions/${customerId}`)
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((error) => {
+      toast.error(`Failed to fetch subscriptions for customer: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
 };
 
 export {
