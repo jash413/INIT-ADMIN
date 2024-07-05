@@ -43,7 +43,7 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
   },
   {
     Header: (props) => (
-      <SubscriptionCustomHeader tableProps={props} title="Plan" />
+      <SubscriptionCustomHeader tableProps={props} title="Plan Name" />
     ),
     accessor: "PLA_CODE",
     Cell: ({ value }) => {
