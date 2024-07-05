@@ -79,7 +79,7 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
   {
     Header: "Is Admin",
     accessor: "USR_TYPE",
-    Cell: ({ value }) => (value ? "Yes" : "No"),
+    Cell: ({ value }) => (value === "1" ? "Yes" : "No"),
   },
   {
     Header: (props) => (
