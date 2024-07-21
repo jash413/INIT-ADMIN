@@ -125,7 +125,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     isRequired = true,
     isToggleBtn = false
   ) => (
-    <div className="fv-row mb-7">
+    <div className={clsx("fv-row mb-7", isToggleBtn && "col-md-6")}>
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
         {label}
       </label>
@@ -148,7 +148,13 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
             onChange={(e) =>
               formik.setFieldValue(
                 name,
-                e.target.checked ? (name === "USR_TYPE" ? "1" : "Y") : (name === "USR_TYPE" ? "0" : "N")
+                e.target.checked
+                  ? name === "USR_TYPE"
+                    ? "1"
+                    : "Y"
+                  : name === "USR_TYPE"
+                  ? "0"
+                  : "N"
               )
             }
           />
@@ -231,15 +237,73 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           {renderSelectField("Select Subscription", "SUB_CODE", subscriptions)}
           {renderField("Employee Name", "EMP_NAME")}
           {renderField("Mobile Number", "MOB_NMBR")}
-          {renderField("Is Admin?", "USR_TYPE", "checkbox", false, true)}
-          {renderField("Sale Outstanding?", "SALE_OS_ACTIVE", "checkbox", false, true)}
-          {renderField("Purchase Outstanding?", "PUR_OS_ACTIVE", "checkbox", false, true)}
-          {renderField("Sale Order Active?", "SALE_ORDER_ACTIVE", "checkbox", false, true)}
-          {renderField("Purchase Order Active?", "PURCHASE_ORDER_ACTIVE", "checkbox", false, true)}
-          {renderField("Sale Order Entry?", "SALE_ORDER_ENTRY", "checkbox", false, true)}
-          {renderField("Sale Report Active?", "SALE_REPORT_ACTIVE", "checkbox", false, true)}
-          {renderField("Purchase Report Active?", "PURCHASE_REPORT_ACTIVE", "checkbox", false, true)}
-          {renderField("Ledger Report Active?", "LEDGER_REPORT_ACTIVE", "checkbox", false, true)}
+          <div className="row">
+            {renderField("Is Admin?", "USR_TYPE", "checkbox", false, true)}
+            {renderField(
+              "Sale Outstanding?",
+              "SALE_OS_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+          </div>
+          <div className="row">
+            {renderField(
+              "Purchase Outstanding?",
+              "PUR_OS_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+            {renderField(
+              "Sale Order Active?",
+              "SALE_ORDER_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+          </div>
+          <div className="row">
+            {renderField(
+              "Purchase Order Active?",
+              "PURCHASE_ORDER_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+            {renderField(
+              "Sale Order Entry?",
+              "SALE_ORDER_ENTRY",
+              "checkbox",
+              false,
+              true
+            )}
+          </div>
+          <div className="row">
+            {renderField(
+              "Sale Report Active?",
+              "SALE_REPORT_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+            {renderField(
+              "Purchase Report Active?",
+              "PURCHASE_REPORT_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+          </div>
+          <div className="row">
+            {renderField(
+              "Ledger Report Active?",
+              "LEDGER_REPORT_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
+          </div>
         </div>
         <div className="text-center pt-15">
           <button
