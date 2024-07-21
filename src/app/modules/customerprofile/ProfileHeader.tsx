@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { KTIcon, toAbsoluteUrl } from "../../../_metronic/helpers";
-import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
+import { Link, useLocation } from "react-router-dom";
+import { KTIcon } from "../../../_metronic/helpers";
 import { Content } from "../../../_metronic/layout/components/content";
 import { getUserById } from "../customers/users-list/core/_requests";
 import { getSubscriptionById } from "../subscriptions/subscriptions-list/core/_requests";
@@ -27,7 +26,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
 
   return (
     <>
-      <ToolbarWrapper />
       <Content>
         <div className="card mb-5 mb-xl-10">
           <div className="card-body pt-9 pb-0">

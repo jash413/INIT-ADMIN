@@ -1,5 +1,6 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
+import { getPlanById } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 
 type Props = {
   badgeColor: string;
@@ -22,11 +23,17 @@ const Card2: FC<Props> = ({
   paymentDate,
   licenseUsers,
 }) => {
+  const [plan, setPlan] = useState<any>({});
+
+  const getPlan = async () => {
+    const response = await getPlanById(description ? description : "");
+    setPlan(response.data);
+  };
+
+  getPlan();
+
   return (
-    <Link
-      to="/subscription-management/subscriptions"
-      className="card border border-2 border-gray-300 border-hover"
-    >
+    <Link to="#" className="card border border-2 border-gray-300 border-hover">
       <div className="card-header border-0 pt-9">
         <div className="fs-3 fw-bolder text-gray-900 mt-1">{title}</div>
         <div className="card-toolbar">
@@ -41,7 +48,7 @@ const Card2: FC<Props> = ({
       <div className="card-body p-9">
         {description && (
           <p className="text-gray-500 fw-bold fs-5 mt-1 mb-7">
-            Plan - {description}
+            Plan - {plan?.PLA_DESC}
           </p>
         )}
         <div className="d-flex flex-wrap mb-5">
