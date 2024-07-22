@@ -14,7 +14,9 @@ interface EmployeesProps {
 const Employees: FC<EmployeesProps> = ({ id }) => {
   const [employees, setEmployees] = useState<any>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    null
+  );
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
   const debouncedSearchTerm = useDebounce(searchTerm, 150);
@@ -109,10 +111,9 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
                 onClick={() => handleEditEmployee(employee)}
               >
                 <Card3
-                  badgeColor={employee.EMP_ACTV  ? "success" : "danger"}
+                  badgeColor={employee.EMP_ACTV ? "success" : "danger"}
                   status={employee.EMP_ACTV ? "Active" : "Inactive"}
                   title={employee.EMP_NAME}
-                  description={employee.EMP_MAIL}
                   startDate={moment(employee?.SUB_STDT).format("DD/MM/YYYY")}
                   endDate={moment(employee?.SUB_ENDT).format("DD/MM/YYYY")}
                 />
@@ -137,4 +138,3 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
 };
 
 export { Employees };
-

@@ -5,7 +5,6 @@ type Props = {
   badgeColor: string;
   status: string;
   title: string | undefined;
-  description: string | undefined;
   startDate: string | undefined;
   endDate: string | undefined;
   paymentDate?: string | undefined;
