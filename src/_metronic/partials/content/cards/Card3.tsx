@@ -1,69 +1,83 @@
-
-import {FC} from 'react'
-import {KTIcon, toAbsoluteUrl} from '../../../helpers'
+import { FC, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getPlanById } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 
 type Props = {
-  color?: string
-  avatar?: string
-  online?: boolean
-  name: string
-  job: string
-  avgEarnings: string
-  totalEarnings: string
-}
+  badgeColor: string;
+  status: string;
+  title: string | undefined;
+  description: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+  paymentDate?: string | undefined;
+  licenseUsers?: number;
+};
 
 const Card3: FC<Props> = ({
-  color = '',
-  avatar = '',
-  online = false,
-  name,
-  job,
-  avgEarnings,
-  totalEarnings,
+  badgeColor,
+  status,
+  title,
+  description,
+  startDate,
+  endDate,
+  paymentDate,
+  licenseUsers,
 }) => {
+  const [plan, setPlan] = useState<any>({});
+
+  const getPlan = async () => {
+    const response = await getPlanById(description ? description : "");
+    setPlan(response.data);
+  };
+
+  useEffect(() => {
+    getPlan();
+  }, [description]);
+
   return (
-    <div className='card'>
-      <div className='card-body d-flex flex-center flex-column p-9'>
-        <div className='mb-5'>
-          <div className='symbol symbol-75px symbol-circle'>
-            {color ? (
-              <span className={`symbol-label bg-light-${color} text-${color} fs-5 fw-bolder`}>
-                {name.charAt(0)}
-              </span>
-            ) : (
-              <img alt='Pic' src={toAbsoluteUrl(avatar)} />
-            )}
-            {online && (
-              <div className='symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n3 mt-n3'></div>
-            )}
-          </div>
+    <Link to="#" className="card border border-2 border-gray-300 border-hover">
+      <div className="card-header border-0 pt-9">
+        <div className="fs-3 fw-bolder text-gray-900 mt-1">{title}</div>
+        <div className="card-toolbar">
+          <span
+            className={`badge badge-light-${badgeColor} fw-bolder me-auto px-4 py-3`}
+          >
+            {status}
+          </span>
         </div>
-
-        <a href='#' className='fs-4 text-gray-800 text-hover-primary fw-bolder mb-0'>
-          {name}
-        </a>
-
-        <div className='fw-bold text-gray-500 mb-6'>{job}</div>
-
-        <div className='d-flex flex-center flex-wrap mb-5'>
-          <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mx-3 mb-3'>
-            <div className='fs-6 fw-bolder text-gray-700'>{avgEarnings}</div>
-            <div className='fw-bold text-gray-500'>Avg. Earnings</div>
-          </div>
-
-          <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 mx-3 px-4 mb-3'>
-            <div className='fs-6 fw-bolder text-gray-700'>{totalEarnings}</div>
-            <div className='fw-bold text-gray-500'>Total Sales</div>
-          </div>
-        </div>
-
-        <a href='#' className='btn btn-sm btn-light'>
-          <KTIcon iconName='plus' className='fs-3' />
-          Connect
-        </a>
       </div>
-    </div>
-  )
-}
 
-export {Card3}
+      <div className="card-body p-9">
+        {description && (
+          <p className="text-gray-500 fw-bold fs-5 mt-1 mb-7">
+            Plan - {plan?.PLA_DESC}
+          </p>
+        )}
+        <div className="d-flex flex-wrap mb-5">
+          <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
+            <div className="fs-6 text-gray-800 fw-bolder">{startDate}</div>
+            <div className="fw-bold text-gray-500">Start Date</div>
+          </div>
+
+          <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
+            <div className="fs-6 text-gray-800 fw-bolder">{endDate}</div>
+            <div className="fw-bold text-gray-500">End Date</div>
+          </div>
+        </div>
+        <div className="d-flex flex-wrap">
+          <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
+            <div className="fs-6 text-gray-800 fw-bolder">{paymentDate}</div>
+            <div className="fw-bold text-gray-500">Payment Date</div>
+          </div>
+
+          <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
+            <div className="fs-6 text-gray-800 fw-bolder">{licenseUsers}</div>
+            <div className="fw-bold text-gray-500">License Users</div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+export { Card3 };

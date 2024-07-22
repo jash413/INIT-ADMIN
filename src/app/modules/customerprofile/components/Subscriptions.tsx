@@ -110,7 +110,6 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
               <div
                 key={subscription.SUB_CODE}
                 className="col-md-6 col-xl-4"
-                onClick={() => handleEditSubscription(subscription)}
               >
                 <Card2
                   badgeColor={subscription.status === 1 ? "success" : "danger"}
@@ -125,6 +124,8 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
                     "DD/MM/YYYY"
                   )}
                   licenseUsers={subscription?.LIC_USER}
+                  handleEditSubscription={handleEditSubscription}
+                  subscription={subscription}
                 />
               </div>
             ))

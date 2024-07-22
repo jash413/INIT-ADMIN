@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { Content } from "../../../../_metronic/layout/components/content";
-import { Card2 } from "../../../../_metronic/partials/content/cards/Card2";
 import { getEmployeeById, searchEmployees } from "../employeeCore/_requests";
 import { Employee } from "../../employeeallotment/employees-list/core/_models";
 import moment from "moment";
 import { EmployeeEditModalForm } from "./EmployeeEditModalForm";
 import { useDebounce, KTIcon } from "../../../../_metronic/helpers";
+import { Card3 } from "../../../../_metronic/partials/content/cards/Card3";
 
 interface EmployeesProps {
   id: string;
@@ -108,7 +108,7 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
                 className="col-md-6 col-xl-4"
                 onClick={() => handleEditEmployee(employee)}
               >
-                <Card2
+                <Card3
                   badgeColor={employee.EMP_ACTV  ? "success" : "danger"}
                   status={employee.EMP_ACTV ? "Active" : "Inactive"}
                   title={employee.EMP_NAME}
