@@ -1,0 +1,408 @@
+import { FC, useState, useEffect } from "react";
+import { KTIcon } from "../../../../_metronic/helpers";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { isNotEmpty } from "../../../../_metronic/helpers";
+import { Employee } from "../employeeCore/_models";
+import clsx from "clsx";
+import { useListView } from "../employeeCore/ListViewProvider";
+import {
+  createEmployee,
+  updateEmployee,
+  fetchCustomers,
+  fetchSubscriptionsByCustomerId,
+} from "../employeeCore/_requests";
+import { useQueryResponse } from "../employeeCore/QueryResponseProvider";
+import moment from "moment";
+
+type Props = {
+  isEmployeeLoading: boolean;
+  employee: Employee;
+  onClose: () => void;
+  onEmployeeSaved: () => void;
+};
+
+const editEmployeeSchema = Yup.object().shape({
+  CUS_CODE: Yup.string().required("Customer Code is required"),
+  SUB_CODE: Yup.string().required("Subscription Code is required"),
+  EMP_NAME: Yup.string().required("Employee Name is required"),
+  MOB_NMBR: Yup.string().required("Mobile Number is required"),
+});
+
+const EmployeeEditModalForm: FC<Props> = ({
+  employee,
+  isEmployeeLoading,
+  onClose,
+  onEmployeeSaved,
+}) => {
+  const { setItemIdForUpdate } = useListView();
+  const { refetch } = useQueryResponse();
+  const [customers, setCustomers] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [subscriptions, setSubscriptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  const [employeeForEdit] = useState<Employee>({
+    ...employee,
+    EMP_NAME: employee.EMP_NAME,
+    MOB_NMBR: employee.MOB_NMBR,
+    USR_TYPE: employee.USR_TYPE,
+    SALE_OS_ACTIVE: employee.SALE_OS_ACTIVE,
+    PUR_OS_ACTIVE: employee.PUR_OS_ACTIVE,
+    SALE_ORDER_ACTIVE: employee.SALE_ORDER_ACTIVE,
+    PURCHASE_ORDER_ACTIVE: employee.PURCHASE_ORDER_ACTIVE,
+    SALE_ORDER_ENTRY: employee.SALE_ORDER_ENTRY,
+    SALE_REPORT_ACTIVE: employee.SALE_REPORT_ACTIVE,
+    PURCHASE_REPORT_ACTIVE: employee.PURCHASE_REPORT_ACTIVE,
+    LEDGER_REPORT_ACTIVE: employee.LEDGER_REPORT_ACTIVE,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const customersData = await fetchCustomers();
+        setCustomers(
+          customersData?.data?.map((customer: any) => ({
+            value: customer.CUS_CODE,
+            label: `${customer.CUS_CODE}: ${customer.CUS_NAME}`,
+          }))
+        );
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const formik = useFormik({
+    initialValues: employeeForEdit,
+    validationSchema: editEmployeeSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      try {
+        if (isNotEmpty(values.EMP_CODE)) {
+          await updateEmployee(values);
+        } else {
+          await createEmployee(values);
+        }
+        onEmployeeSaved(); // Refresh the list after saving
+      } catch (ex) {
+        console.error(ex);
+      } finally {
+        setSubmitting(false);
+        cancel(true);
+      }
+    },
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!formik.values.CUS_CODE) {
+          return;
+        }
+        const subscriptionsData = await fetchSubscriptionsByCustomerId(
+          formik.values.CUS_CODE
+        );
+        setSubscriptions(
+          subscriptionsData?.data?.map((subscription: any) => ({
+            value: subscription.SUB_CODE,
+            label: `${subscription.SUB_CODE}: ${moment(
+              subscription.SUB_STDT
+            ).format("DD/MM/YYYY")} - ${moment(subscription.SUB_ENDT).format(
+              "DD/MM/YYYY"
+            )}`,
+          }))
+        );
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      }
+    };
+    fetchData();
+  }, [formik.values.CUS_CODE]);
+
+  const cancel = (withRefresh?: boolean) => {
+    if (withRefresh) {
+      refetch();
+    }
+    setItemIdForUpdate(undefined);
+    onClose();
+  };
+
+  const renderField = (
+    label: string,
+    name: keyof Employee,
+    type = "text",
+    isRequired = true,
+    isToggleBtn = false
+  ) => (
+    <div className={clsx("fv-row mb-7", isToggleBtn && "col-md-6")}>
+      <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
+        {label}
+      </label>
+      {isToggleBtn ? (
+        <div className="form-check form-switch">
+          <input
+            {...formik.getFieldProps(name)}
+            type="checkbox"
+            className={clsx(
+              "form-check-input",
+              { "is-invalid": formik.touched[name] && formik.errors[name] },
+              { "is-valid": formik.touched[name] && !formik.errors[name] }
+            )}
+            disabled={formik.isSubmitting || isEmployeeLoading}
+            checked={
+              name === "USR_TYPE"
+                ? formik.values[name] === "1"
+                : formik.values[name] === "Y"
+            }
+            onChange={(e) =>
+              formik.setFieldValue(
+                name,
+                e.target.checked
+                  ? name === "USR_TYPE"
+                    ? "1"
+                    : "Y"
+                  : name === "USR_TYPE"
+                  ? "0"
+                  : "N"
+              )
+            }
+          />
+          {formik.touched[name] && formik.errors[name] && (
+            <div className="fv-plugins-message-container">
+              <span role="alert">{formik.errors[name]}</span>
+            </div>
+          )}
+        </div>
+      ) : (
+        <input
+          placeholder={label}
+          {...formik.getFieldProps(name)}
+          type={type}
+          className={clsx(
+            "form-control form-control-solid mb-3 mb-lg-0",
+            { "is-invalid": formik.touched[name] && formik.errors[name] },
+            { "is-valid": formik.touched[name] && !formik.errors[name] }
+          )}
+          autoComplete="off"
+          disabled={formik.isSubmitting || isEmployeeLoading}
+        />
+      )}
+    </div>
+  );
+
+  const renderSelectField = (
+    label: string,
+    name: keyof Employee,
+    options: { value: string; label: string }[],
+    isRequired = true
+  ) => (
+    <div className="fv-row mb-7">
+      <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
+        {label}
+      </label>
+      <select
+        {...formik.getFieldProps(name)}
+        className={clsx(
+          "form-control form-control-solid mb-3 mb-lg-0",
+          { "is-invalid": formik.touched[name] && formik.errors[name] },
+          { "is-valid": formik.touched[name] && !formik.errors[name] }
+        )}
+        disabled={formik.isSubmitting || isEmployeeLoading}
+      >
+        <option value="">Select {label.slice(6)}</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      {formik.touched[name] && formik.errors[name] && (
+        <div className="fv-plugins-message-container">
+          <span role="alert">{formik.errors[name]}</span>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <>
+      <div
+        className="modal fade show d-block"
+        id="kt_modal_add_user"
+        role="dialog"
+        tabIndex={-1}
+        aria-modal="true"
+      >
+        {/* begin::Modal dialog */}
+        <div className="modal-dialog modal-dialog-centered mw-650px">
+          {/* begin::Modal content */}
+          <div className="modal-content">
+            <div className="modal-header">
+              {/* begin::Modal title */}
+              <h2 className="fw-bolder">
+                {employee.EMP_CODE ? "Edit Employee" : "Add Employee"}
+              </h2>
+              {/* end::Modal title */}
+
+              {/* begin::Close */}
+              <div
+                className="btn btn-icon btn-sm btn-active-icon-primary"
+                data-kt-users-modal-action="close"
+                onClick={() => cancel()}
+                style={{ cursor: "pointer" }}
+              >
+                <KTIcon iconName="cross" className="fs-1" />
+              </div>
+              {/* end::Close */}
+            </div>
+            {/* begin::Modal body */}
+            <div className="modal-body scroll-y mx-5 mx-xl-15 my-7">
+              <form
+                id="kt_modal_add_employee_form"
+                className="form"
+                onSubmit={formik.handleSubmit}
+                noValidate
+              >
+                <div
+                  className="d-flex flex-column scroll-y me-n7 pe-7"
+                  id="kt_modal_add_employee_scroll"
+                  data-kt-scroll="true"
+                  data-kt-scroll-activate="{default: false, lg: true}"
+                  data-kt-scroll-max-height="auto"
+                  data-kt-scroll-dependencies="#kt_modal_add_employee_header"
+                  data-kt-scroll-wrappers="#kt_modal_add_employee_scroll"
+                  data-kt-scroll-offset="300px"
+                >
+                  {renderSelectField("Select Customer", "CUS_CODE", customers)}
+                  {renderSelectField(
+                    "Select Subscription",
+                    "SUB_CODE",
+                    subscriptions
+                  )}
+                  {renderField("Employee Name", "EMP_NAME")}
+                  {renderField("Mobile Number", "MOB_NMBR")}
+                  <div className="row">
+                    {renderField(
+                      "Is Admin?",
+                      "USR_TYPE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                    {renderField(
+                      "Sale Outstanding?",
+                      "SALE_OS_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                  </div>
+                  <div className="row">
+                    {renderField(
+                      "Purchase Outstanding?",
+                      "PUR_OS_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                    {renderField(
+                      "Sale Order Active?",
+                      "SALE_ORDER_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                  </div>
+                  <div className="row">
+                    {renderField(
+                      "Purchase Order Active?",
+                      "PURCHASE_ORDER_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                    {renderField(
+                      "Sale Order Entry?",
+                      "SALE_ORDER_ENTRY",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                  </div>
+                  <div className="row">
+                    {renderField(
+                      "Sale Report Active?",
+                      "SALE_REPORT_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                    {renderField(
+                      "Purchase Report Active?",
+                      "PURCHASE_REPORT_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                  </div>
+                  <div className="row">
+                    {renderField(
+                      "Ledger Report Active?",
+                      "LEDGER_REPORT_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
+                  </div>
+                </div>
+                <div className="text-center pt-15">
+                  <button
+                    type="reset"
+                    onClick={() => cancel()}
+                    className="btn btn-light me-3"
+                    data-kt-employees-modal-action="cancel"
+                    disabled={formik.isSubmitting || isEmployeeLoading}
+                  >
+                    Discard
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    data-kt-employees-modal-action="submit"
+                    disabled={
+                      isEmployeeLoading ||
+                      formik.isSubmitting ||
+                      !formik.isValid ||
+                      !formik.touched
+                    }
+                  >
+                    <span className="indicator-label">Submit</span>
+                    {(formik.isSubmitting || isEmployeeLoading) && (
+                      <span className="indicator-progress">
+                        Please wait...{" "}
+                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+            {/* end::Modal body */}
+          </div>
+          {/* end::Modal content */}
+        </div>
+        {/* end::Modal dialog */}
+      </div>
+      {/* begin::Modal Backdrop */}
+      <div className="modal-backdrop fade show"></div>
+      {/* end::Modal Backdrop */}
+    </>
+  );
+};
+
+export { EmployeeEditModalForm };

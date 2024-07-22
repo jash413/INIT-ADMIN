@@ -24,6 +24,9 @@ const PrivateRoutes = () => {
   const CustomerProfilePage = lazy(
     () => import("../modules/customerprofile/ProfilePage")
   );
+  const SubscriptionProfilePage = lazy(
+    () => import("../modules/subscriptionprofile/ProfilePage")
+  );
 
   return (
     <Routes>
@@ -79,6 +82,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <CustomerProfilePage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="subscription-profile/*"
+          element={
+            <SuspensedView>
+              <SubscriptionProfilePage />
             </SuspensedView>
           }
         />

@@ -4,6 +4,7 @@ import { SubscriptionActionsCell } from "./SubscriptionActionsCell";
 import { SubscriptionSelectionCell } from "./SubscriptionSelectionCell";
 import { SubscriptionCustomHeader } from "./SubscriptionCustomHeader";
 import { SubscriptionSelectionHeader } from "./SubscriptionSelectionHeader";
+import { SubscriptionInfoCell } from "./SubscriptionInfoCell";
 import { Subscription } from "../../core/_models";
 import {
   getAdminById,
@@ -25,6 +26,9 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
       <SubscriptionCustomHeader tableProps={props} title="Subscription Code" />
     ),
     accessor: "SUB_CODE",
+    Cell: ({ ...props }) => (
+      <SubscriptionInfoCell subscription={props.data[props.row.index]} />
+    ),
   },
   {
     Header: (props) => (

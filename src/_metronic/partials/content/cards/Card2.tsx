@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getPlanById } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 
@@ -30,7 +30,9 @@ const Card2: FC<Props> = ({
     setPlan(response.data);
   };
 
-  getPlan();
+  useEffect(() => {
+    getPlan();
+  }, [description]);
 
   return (
     <Link to="#" className="card border border-2 border-gray-300 border-hover">
