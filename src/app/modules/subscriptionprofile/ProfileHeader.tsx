@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { KTIcon } from "../../../_metronic/helpers";
 import { Content } from "../../../_metronic/layout/components/content";
 import { getEmployeeById } from "../employeeallotment/employees-list/core/_requests";
@@ -12,8 +12,6 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
-  const location = useLocation();
-  const { pathname } = location;
   const [subscription, setSubscription] = useState<any>(null);
   const [employees, setEmployees] = useState<any>([]);
   const [customer, setCustomer] = useState<any>({});
@@ -34,7 +32,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
       });
     }
   }, [subscription]);
-
 
   return (
     <>
@@ -100,21 +97,29 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                       <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                         <div className="d-flex align-items-center">
                           <div className="fs-2 fw-bolder">
-                            {moment(subscription?.SUB_STDT).format("DD/MM/YYYY")}
+                            {moment(subscription?.SUB_STDT).format(
+                              "DD/MM/YYYY"
+                            )}
                           </div>
                         </div>
 
-                        <div className="fw-bold fs-6 text-gray-500">Start Date</div>
+                        <div className="fw-bold fs-6 text-gray-500">
+                          Start Date
                         </div>
+                      </div>
                       <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                         <div className="d-flex align-items-center">
                           <div className="fs-2 fw-bolder">
-                            {moment(subscription?.SUB_ENDT).format("DD/MM/YYYY")}
+                            {moment(subscription?.SUB_ENDT).format(
+                              "DD/MM/YYYY"
+                            )}
                           </div>
                         </div>
 
-                        <div className="fw-bold fs-6 text-gray-500">End Date</div>
+                        <div className="fw-bold fs-6 text-gray-500">
+                          End Date
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
