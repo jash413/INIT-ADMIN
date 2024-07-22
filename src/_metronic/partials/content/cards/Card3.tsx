@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Link } from "react-router-dom";
-import { getPlanById } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 
 type Props = {
   badgeColor: string;
@@ -17,22 +16,11 @@ const Card3: FC<Props> = ({
   badgeColor,
   status,
   title,
-  description,
   startDate,
   endDate,
   paymentDate,
   licenseUsers,
 }) => {
-  const [plan, setPlan] = useState<any>({});
-
-  const getPlan = async () => {
-    const response = await getPlanById(description ? description : "");
-    setPlan(response.data);
-  };
-
-  useEffect(() => {
-    getPlan();
-  }, [description]);
 
   return (
     <Link to="#" className="card border border-2 border-gray-300 border-hover">
@@ -48,11 +36,6 @@ const Card3: FC<Props> = ({
       </div>
 
       <div className="card-body p-9">
-        {description && (
-          <p className="text-gray-500 fw-bold fs-5 mt-1 mb-7">
-            Plan - {plan?.PLA_DESC}
-          </p>
-        )}
         <div className="d-flex flex-wrap mb-5">
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
             <div className="fs-6 text-gray-800 fw-bolder">{startDate}</div>
