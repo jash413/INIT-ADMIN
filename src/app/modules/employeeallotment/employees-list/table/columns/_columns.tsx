@@ -15,6 +15,10 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
     Cell: ({...props}) => <EmployeeSelectionCell id={props.data[props.row.index].EMP_CODE} />,
   },
   {
+    Header: "SR.NO",
+    Cell: ({ row }) => <>{row.index + 1}</>,
+  },
+  {
     Header: (props) => <EmployeeCustomHeader tableProps={props} title='Employee Name' />,
     accessor: 'EMP_NAME',
   },

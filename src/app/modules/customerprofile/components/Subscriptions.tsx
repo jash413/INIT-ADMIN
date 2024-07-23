@@ -4,6 +4,7 @@ import { Card2 } from "../../../../_metronic/partials/content/cards/Card2";
 import {
   getSubscriptionById,
   searchSubscriptions,
+  deleteSubscription,
 } from "../subscriptionCore/_requests";
 import { Subscription } from "../../subscriptions/subscriptions-list/core/_models";
 import moment from "moment";
@@ -64,6 +65,19 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteSubscription = async (subscription: Subscription) => {
+    try {
+      const warning = window.confirm(
+        `Are you sure you want to delete subscription ${subscription.SUB_CODE}?`
+      );
+      if (!warning) return;
+      await deleteSubscription(subscription.SUB_CODE);
+      fetchSubscriptions();
+    } catch (error) {
+      console.error("Delete Subscription Error:", error);
+    }
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -107,10 +121,7 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
         <div className="row g-6 g-xl-9">
           {subscriptions.length > 0 ? (
             subscriptions.map((subscription: Subscription) => (
-              <div
-                key={subscription.SUB_CODE}
-                className="col-md-6 col-xl-4"
-              >
+              <div key={subscription.SUB_CODE} className="col-md-6 col-xl-4">
                 <Card2
                   badgeColor={subscription.status === 1 ? "success" : "danger"}
                   status={subscription.status === 1 ? "Active" : "Inactive"}
@@ -120,11 +131,12 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
                     "DD/MM/YYYY"
                   )}
                   endDate={moment(subscription?.SUB_ENDT).format("DD/MM/YYYY")}
-                  paymentDate={moment(subscription?.SUB_PDAT).format(
+                  invoiceDate={moment(subscription?.INV_DATE).format(
                     "DD/MM/YYYY"
                   )}
-                  licenseUsers={subscription?.LIC_USER}
+                  invoiceNumber={subscription?.SUB_ORDN}
                   handleEditSubscription={handleEditSubscription}
+                  handleDeleteSubscription={handleDeleteSubscription}
                   subscription={subscription}
                 />
               </div>
@@ -141,6 +153,7 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
           isSubscriptionLoading={false}
           onClose={handleCloseModal}
           onSubscriptionSaved={fetchSubscriptions}
+          customerId={id}
         />
       )}
     </Content>

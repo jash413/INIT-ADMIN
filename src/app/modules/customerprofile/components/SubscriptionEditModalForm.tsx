@@ -20,6 +20,7 @@ type Props = {
   subscription: Subscription;
   onClose: () => void; // Add onClose prop to handle modal closure
   onSubscriptionSaved: () => void;
+  customerId: string;
 };
 
 const editSubscriptionSchema = Yup.object().shape({
@@ -36,12 +37,14 @@ const SubscriptionEditModalForm: FC<Props> = ({
   isSubscriptionLoading,
   onClose, // Destructure onClose,
   onSubscriptionSaved,
+  customerId,
 }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
 
   const [subscriptionForEdit] = useState<Subscription>({
     ...subscription,
+    CUS_CODE: customerId,
     PLA_CODE: subscription.PLA_CODE,
     LIC_USER: subscription.LIC_USER,
     SUB_ORDN: subscription.SUB_ORDN,
@@ -161,7 +164,8 @@ const SubscriptionEditModalForm: FC<Props> = ({
     label: string,
     name: keyof Subscription,
     options: { value: string; label: string }[],
-    isRequired = true
+    isRequired = true,
+    isDisabled = false
   ) => (
     <div className="fv-row mb-7">
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
@@ -174,7 +178,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
           { "is-invalid": formik.touched[name] && formik.errors[name] },
           { "is-valid": formik.touched[name] && !formik.errors[name] }
         )}
-        disabled={formik.isSubmitting || isSubscriptionLoading}
+        disabled={formik.isSubmitting || isSubscriptionLoading || isDisabled}
       >
         <option value="">Select {label.slice(6)}</option>
         {options.map((option) => (
@@ -240,7 +244,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
                   data-kt-scroll-wrappers="#kt_modal_add_subscription_scroll"
                   data-kt-scroll-offset="300px"
                 >
-                  {renderSelectField("Select Customer", "CUS_CODE", customers)}
+                  {renderSelectField("Select Customer", "CUS_CODE", customers, false, true)}
                   {renderSelectField("Select Plan", "PLA_CODE", plans)}
                   {renderField("Subscription Start Date", "SUB_STDT", "date")}
                   {renderField("License Users", "LIC_USER")}

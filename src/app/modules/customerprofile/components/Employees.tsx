@@ -1,11 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { Content } from "../../../../_metronic/layout/components/content";
 import { getEmployeeById, searchEmployees } from "../employeeCore/_requests";
-import { Employee } from "../../employeeallotment/employees-list/core/_models";
+import { Employee } from "../employeeCore/_models";
 import moment from "moment";
 import { EmployeeEditModalForm } from "./EmployeeEditModalForm";
 import { useDebounce, KTIcon } from "../../../../_metronic/helpers";
 import { Card3 } from "../../../../_metronic/partials/content/cards/Card3";
+import { getSubscriptionById } from "../subscriptionCore/_requests";
+import { toast } from "react-toastify";
 
 interface EmployeesProps {
   id: string;
@@ -18,11 +20,13 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
     null
   );
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [subscriptions, setSubscriptions] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
   const debouncedSearchTerm = useDebounce(searchTerm, 150);
 
   useEffect(() => {
     fetchEmployees(); // Fetch employees on initial load or ID change
+    fetchSubscriptions();
   }, [id]);
 
   useEffect(() => {
@@ -52,8 +56,21 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
     }
   };
 
+  const fetchSubscriptions = async () => {
+    try {
+      const data = await getSubscriptionById(id);
+      setSubscriptions(data);
+    } catch (error) {
+      console.error("Fetch Subscriptions Error:", error);
+    }
+  };
+
   const handleNewEmployee = () => {
     setSelectedEmployee(null);
+    if (subscriptions.filter((s: any) => s.status === 1).length === 0) {
+      toast.error("No active subscriptions found for this customer.");
+      return;
+    }
     setIsModalOpen(true);
   };
 
@@ -111,11 +128,12 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
                 onClick={() => handleEditEmployee(employee)}
               >
                 <Card3
-                  badgeColor={employee.EMP_ACTV ? "success" : "danger"}
-                  status={employee.EMP_ACTV ? "Active" : "Inactive"}
+                  badgeColor={employee.EMP_ACTV === "1" ? "success" : "danger"}
+                  status={employee.EMP_ACTV === "1" ? "Active" : "Inactive"}
                   title={employee.EMP_NAME}
                   startDate={moment(employee?.SUB_STDT).format("DD/MM/YYYY")}
                   endDate={moment(employee?.SUB_ENDT).format("DD/MM/YYYY")}
+                  mobile={employee?.MOB_NMBR}
                 />
               </div>
             ))
@@ -131,6 +149,7 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
           isEmployeeLoading={false}
           onClose={handleCloseModal}
           onEmployeeSaved={fetchEmployees}
+          customerId = {id}
         />
       )}
     </Content>

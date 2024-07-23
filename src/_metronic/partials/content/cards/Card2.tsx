@@ -10,9 +10,10 @@ type Props = {
   description: string | undefined;
   startDate: string | undefined;
   endDate: string | undefined;
-  paymentDate?: string | undefined;
-  licenseUsers?: number;
+  invoiceDate: string | undefined;
+  invoiceNumber: string | undefined;
   handleEditSubscription: any;
+  handleDeleteSubscription: any;
   subscription: any;
 };
 
@@ -23,9 +24,10 @@ const Card2: FC<Props> = ({
   description,
   startDate,
   endDate,
-  paymentDate,
-  licenseUsers,
+  invoiceDate,
+  invoiceNumber,
   handleEditSubscription,
+  handleDeleteSubscription,
   subscription,
 }) => {
   const [plan, setPlan] = useState<any>({});
@@ -51,9 +53,15 @@ const Card2: FC<Props> = ({
         <span>
           <button
             onClick={() => handleEditSubscription(subscription)}
-            className="btn btn-icon btn-bg-light btn-active-color-primary border-2 border-hover border-gray-300"
+            className="btn btn-icon btn-bg-light btn-active-color-primary border-2 border-hover border-gray-300 me-2"
           >
             <KTIcon iconName="notepad-edit" className="fs-1" />
+          </button>
+          <button
+            onClick={() => handleDeleteSubscription(subscription)}
+            className="btn btn-icon btn-bg-light btn-active-color-danger border-2 border-hover border-gray-300"
+          >
+            <KTIcon iconName="trash" className="fs-1" />
           </button>
         </span>
       </div>
@@ -84,13 +92,13 @@ const Card2: FC<Props> = ({
         </div>
         <div className="d-flex flex-wrap">
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
-            <div className="fs-6 text-gray-800 fw-bolder">{paymentDate}</div>
-            <div className="fw-bold text-gray-500">Payment Date</div>
+            <div className="fs-6 text-gray-800 fw-bolder">{invoiceDate}</div>
+            <div className="fw-bold text-gray-500">Invoice Date</div>
           </div>
 
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
-            <div className="fs-6 text-gray-800 fw-bolder">{licenseUsers}</div>
-            <div className="fw-bold text-gray-500">License Users</div>
+            <div className="fs-6 text-gray-800 fw-bolder">{invoiceNumber}</div>
+            <div className="fw-bold text-gray-500">Invoice Number</div>
           </div>
         </div>
       </div>

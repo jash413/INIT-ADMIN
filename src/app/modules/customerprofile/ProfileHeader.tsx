@@ -4,6 +4,7 @@ import { KTIcon } from "../../../_metronic/helpers";
 import { Content } from "../../../_metronic/layout/components/content";
 import { getUserById } from "../customers/users-list/core/_requests";
 import { getSubscriptionById } from "../subscriptions/subscriptions-list/core/_requests";
+import { getEmployeeById } from "./employeeCore/_requests";
 
 interface ProfileHeaderProps {
   id: string;
@@ -14,6 +15,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
   const { pathname } = location;
   const [customer, setCustomer] = useState<any>({});
   const [subscriptions, setSubscriptions] = useState<any>([]);
+  const [employees, setEmployees] = useState<any>([]);
 
   useEffect(() => {
     getUserById(id).then(async (data) => {
@@ -21,6 +23,9 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
     });
     getSubscriptionById(id).then(async (data) => {
       setSubscriptions(data);
+    });
+    getEmployeeById(id).then(async (data) => {
+      setEmployees(data);
     });
   }, [id]);
 
@@ -38,7 +43,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                         href="#"
                         className="text-gray-800 text-hover-primary fs-2 fw-bolder me-1"
                       >
-                        {customer?.CUS_NAME}
+                        {customer?.CUS_NAME} - {customer?.CUS_CODE}
                       </a>
                     </div>
 
@@ -77,12 +82,63 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                       <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                         <div className="d-flex align-items-center">
                           <div className="fs-2 fw-bolder">
-                            {subscriptions?.length}
+                            {
+                              subscriptions?.filter(
+                                (subscription: any) => subscription.status === 1
+                              ).length
+                            }
                           </div>
                         </div>
 
                         <div className="fw-bold fs-6 text-gray-500">
-                          Subscriptions
+                          Active Subscriptions
+                        </div>
+                      </div>
+                      <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                        <div className="d-flex align-items-center">
+                          <div className="fs-2 fw-bolder">
+                            {
+                              subscriptions?.filter(
+                                (subscription: any) => subscription.status === 0
+                              ).length
+                            }
+                          </div>
+                        </div>
+
+                        <div className="fw-bold fs-6 text-gray-500">
+                          Inactive Subscriptions
+                        </div>
+                      </div>
+                      <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                        <div className="d-flex align-items-center">
+                          <div className="fs-2 fw-bolder">
+                            {
+                              employees?.filter(
+                                (employee: any) => employee.EMP_ACTV === "1"
+                              ).length
+                            }
+                          </div>
+                        </div>
+
+                        <div className="fw-bold fs-6 text-gray-500">
+                          Active Employees
+                        </div>
+                      </div>
+                      <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                        <div className="d-flex align-items-center">
+                          <div className="fs-2 fw-bolder">
+                            {
+                              employees?.filter(
+                                (employee: any) =>
+                                  employee.EMP_ACTV === "0" ||
+                                  employee.EMP_ACTV === null
+                              ).length
+                            }
+                          </div>
+                        </div>
+
+                        <div className="fw-bold fs-6 text-gray-500">
+                          Inactive Employees
                         </div>
                       </div>
                     </div>

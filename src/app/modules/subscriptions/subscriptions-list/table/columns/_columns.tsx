@@ -22,6 +22,10 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
     ),
   },
   {
+    Header: "SR.NO",
+    Cell: ({ row }) => <>{row.index + 1}</>,
+  },
+  {
     Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Subscription Code" />
     ),

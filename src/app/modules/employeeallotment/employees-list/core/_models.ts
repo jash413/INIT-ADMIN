@@ -6,7 +6,7 @@ export type Employee = {
   EMP_PASS?: string,
   EMP_IMEI?: string,
   MOB_NMBR?: string,
-  EMP_ACTV?: boolean,
+  EMP_ACTV?: string,
   SYN_DATE?: string,
   EMP_MAIL?: string,
   SUB_CODE?: string,

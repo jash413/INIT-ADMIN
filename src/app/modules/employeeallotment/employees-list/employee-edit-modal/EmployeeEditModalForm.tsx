@@ -38,6 +38,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     EMP_NAME: employee.EMP_NAME,
     MOB_NMBR: employee.MOB_NMBR,
     USR_TYPE: employee.USR_TYPE,
+    EMP_ACTV: employee.EMP_ACTV,
     SALE_OS_ACTIVE: employee.SALE_OS_ACTIVE,
     PUR_OS_ACTIVE: employee.PUR_OS_ACTIVE,
     SALE_ORDER_ACTIVE: employee.SALE_ORDER_ACTIVE,
@@ -233,19 +234,13 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           data-kt-scroll-wrappers="#kt_modal_add_employee_scroll"
           data-kt-scroll-offset="300px"
         >
-          {renderSelectField("Select Customer", "CUS_CODE", customers)}
+          {renderSelectField("Select Customer", "CUS_CODE", customers, true)}
           {renderSelectField("Select Subscription", "SUB_CODE", subscriptions)}
           {renderField("Employee Name", "EMP_NAME")}
           {renderField("Mobile Number", "MOB_NMBR")}
           <div className="row">
+            {renderField("Is Active?", "EMP_ACTV", "checkbox", false, true)}
             {renderField("Is Admin?", "USR_TYPE", "checkbox", false, true)}
-            {renderField(
-              "Sale Outstanding?",
-              "SALE_OS_ACTIVE",
-              "checkbox",
-              false,
-              true
-            )}
           </div>
           <div className="row">
             {renderField(
@@ -296,6 +291,13 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
             )}
           </div>
           <div className="row">
+            {renderField(
+              "Sale Outstanding?",
+              "SALE_OS_ACTIVE",
+              "checkbox",
+              false,
+              true
+            )}
             {renderField(
               "Ledger Report Active?",
               "LEDGER_REPORT_ACTIVE",

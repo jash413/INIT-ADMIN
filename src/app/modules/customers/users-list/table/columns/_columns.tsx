@@ -18,6 +18,10 @@ const usersColumns: ReadonlyArray<Column<User>> = [
     ),
   },
   {
+    Header: "SR.NO",
+    Cell: ({ row }) => <>{row.index + 1}</>,
+  },
+  {
     Header: (props) => (
       <UserCustomHeader tableProps={props} title="Code" />
     ),

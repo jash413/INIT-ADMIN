@@ -20,6 +20,7 @@ type Props = {
   employee: Employee;
   onClose: () => void;
   onEmployeeSaved: () => void;
+  customerId: string;
 };
 
 const editEmployeeSchema = Yup.object().shape({
@@ -34,6 +35,7 @@ const EmployeeEditModalForm: FC<Props> = ({
   isEmployeeLoading,
   onClose,
   onEmployeeSaved,
+  customerId,
 }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
@@ -46,9 +48,11 @@ const EmployeeEditModalForm: FC<Props> = ({
 
   const [employeeForEdit] = useState<Employee>({
     ...employee,
+    CUS_CODE: customerId,
     EMP_NAME: employee.EMP_NAME,
     MOB_NMBR: employee.MOB_NMBR,
     USR_TYPE: employee.USR_TYPE,
+    EMP_ACTV: employee.EMP_ACTV,
     SALE_OS_ACTIVE: employee.SALE_OS_ACTIVE,
     PUR_OS_ACTIVE: employee.PUR_OS_ACTIVE,
     SALE_ORDER_ACTIVE: employee.SALE_ORDER_ACTIVE,
@@ -154,7 +158,7 @@ const EmployeeEditModalForm: FC<Props> = ({
             )}
             disabled={formik.isSubmitting || isEmployeeLoading}
             checked={
-              name === "USR_TYPE"
+              name === "USR_TYPE" || name === "EMP_ACTV"
                 ? formik.values[name] === "1"
                 : formik.values[name] === "Y"
             }
@@ -162,7 +166,7 @@ const EmployeeEditModalForm: FC<Props> = ({
               formik.setFieldValue(
                 name,
                 e.target.checked
-                  ? name === "USR_TYPE"
+                  ? name === "USR_TYPE" || name === "EMP_ACTV"
                     ? "1"
                     : "Y"
                   : name === "USR_TYPE"
@@ -198,7 +202,8 @@ const EmployeeEditModalForm: FC<Props> = ({
     label: string,
     name: keyof Employee,
     options: { value: string; label: string }[],
-    isRequired = true
+    isRequired = true,
+    isDisabled = false
   ) => (
     <div className="fv-row mb-7">
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
@@ -211,7 +216,7 @@ const EmployeeEditModalForm: FC<Props> = ({
           { "is-invalid": formik.touched[name] && formik.errors[name] },
           { "is-valid": formik.touched[name] && !formik.errors[name] }
         )}
-        disabled={formik.isSubmitting || isEmployeeLoading}
+        disabled={formik.isSubmitting || isEmployeeLoading || isDisabled}
       >
         <option value="">Select {label.slice(6)}</option>
         {options.map((option) => (
@@ -277,7 +282,13 @@ const EmployeeEditModalForm: FC<Props> = ({
                   data-kt-scroll-wrappers="#kt_modal_add_employee_scroll"
                   data-kt-scroll-offset="300px"
                 >
-                  {renderSelectField("Select Customer", "CUS_CODE", customers)}
+                  {renderSelectField(
+                    "Select Customer",
+                    "CUS_CODE",
+                    customers,
+                    false,
+                    true
+                  )}
                   {renderSelectField(
                     "Select Subscription",
                     "SUB_CODE",
@@ -287,15 +298,15 @@ const EmployeeEditModalForm: FC<Props> = ({
                   {renderField("Mobile Number", "MOB_NMBR")}
                   <div className="row">
                     {renderField(
-                      "Is Admin?",
-                      "USR_TYPE",
+                      "Is Active?",
+                      "EMP_ACTV",
                       "checkbox",
                       false,
                       true
                     )}
                     {renderField(
-                      "Sale Outstanding?",
-                      "SALE_OS_ACTIVE",
+                      "Is Admin?",
+                      "USR_TYPE",
                       "checkbox",
                       false,
                       true
@@ -350,6 +361,13 @@ const EmployeeEditModalForm: FC<Props> = ({
                     )}
                   </div>
                   <div className="row">
+                    {renderField(
+                      "Sale Outstanding?",
+                      "SALE_OS_ACTIVE",
+                      "checkbox",
+                      false,
+                      true
+                    )}
                     {renderField(
                       "Ledger Report Active?",
                       "LEDGER_REPORT_ACTIVE",

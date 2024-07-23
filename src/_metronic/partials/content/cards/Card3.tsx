@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import { KTIcon } from "../../../helpers";
 
 type Props = {
   badgeColor: string;
@@ -9,6 +10,7 @@ type Props = {
   endDate: string | undefined;
   paymentDate?: string | undefined;
   licenseUsers?: number;
+  mobile?: string;
 };
 
 const Card3: FC<Props> = ({
@@ -19,8 +21,8 @@ const Card3: FC<Props> = ({
   endDate,
   paymentDate,
   licenseUsers,
+  mobile,
 }) => {
-
   return (
     <Link to="#" className="card border border-2 border-gray-300 border-hover">
       <div className="card-header border-0 pt-9">
@@ -35,6 +37,12 @@ const Card3: FC<Props> = ({
       </div>
 
       <div className="card-body p-9">
+        <div className="d-flex flex-wrap mb-5">
+          <div className="fs-6 text-gray-800 fw-bolder">
+            {" "}
+            PH: {mobile}
+          </div>
+        </div>
         <div className="d-flex flex-wrap mb-5">
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
             <div className="fs-6 text-gray-800 fw-bolder">{startDate}</div>
