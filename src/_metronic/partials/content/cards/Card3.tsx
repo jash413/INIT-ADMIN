@@ -50,7 +50,12 @@ const Card3: FC<Props> = ({
 
       <div className="card-body p-9">
         <div className="d-flex justify-content-between align-items-center">
-          <p className="text-gray-500 fw-bold fs-5 mt-1 mb-7">PH: {mobile}</p>
+          <a
+            href={`tel:${mobile}`}
+            className="text-gray-500 text-hover-primary fw-bold fs-5 mt-1 mb-7"
+          >
+            PH: {mobile}
+          </a>
           <p className={`badge badge-light-${badgeColor} fw-bolder px-4 py-3`}>
             {status}
           </p>

@@ -86,6 +86,20 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                       <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                         <div className="d-flex align-items-center">
                           <div className="fs-2 fw-bolder">
+                            {
+                              employees?.filter((e: any) => e.EMP_ACTV === "0")
+                                .length
+                            }
+                          </div>
+                        </div>
+
+                        <div className="fw-bold fs-6 text-gray-500">
+                          Inactive Employees
+                        </div>
+                      </div>
+                      <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                        <div className="d-flex align-items-center">
+                          <div className="fs-2 fw-bolder">
                             {moment(subscription?.SUB_STDT).format(
                               "DD/MM/YYYY"
                             )}
