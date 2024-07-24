@@ -18,8 +18,6 @@ const Card3: FC<Props> = ({
   title,
   startDate,
   endDate,
-  paymentDate,
-  licenseUsers,
   mobile,
 }) => {
   return (
@@ -37,10 +35,7 @@ const Card3: FC<Props> = ({
 
       <div className="card-body p-9">
         <div className="d-flex flex-wrap mb-5">
-          <div className="fs-6 text-gray-800 fw-bolder">
-            {" "}
-            PH: {mobile}
-          </div>
+          <div className="fs-6 text-gray-800 fw-bolder"> PH: {mobile}</div>
         </div>
         <div className="d-flex flex-wrap mb-5">
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
@@ -51,17 +46,6 @@ const Card3: FC<Props> = ({
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
             <div className="fs-6 text-gray-800 fw-bolder">{endDate}</div>
             <div className="fw-bold text-gray-500">End Date</div>
-          </div>
-        </div>
-        <div className="d-flex flex-wrap">
-          <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
-            <div className="fs-6 text-gray-800 fw-bolder">{paymentDate}</div>
-            <div className="fw-bold text-gray-500">Payment Date</div>
-          </div>
-
-          <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
-            <div className="fs-6 text-gray-800 fw-bolder">{licenseUsers}</div>
-            <div className="fw-bold text-gray-500">License Users</div>
           </div>
         </div>
       </div>

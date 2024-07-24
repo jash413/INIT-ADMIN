@@ -62,20 +62,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                         />
                         {customer?.CUS_NAME}
                       </Link>
-                      {/* <a
-                        href="#"
-                        className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2"
-                      >
-                        <KTIcon iconName="geolocation" className="fs-4 me-1" />
-                        {customer?.CUS_ADDR}
-                      </a>
-                      <a
-                        href={`mailto:${customer?.CUS_MAIL}`}
-                        className="d-flex align-items-center text-gray-500 text-hover-primary mb-2"
-                      >
-                        <KTIcon iconName="sms" className="fs-4 me-1" />
-                        {customer?.CUS_MAIL}
-                      </a> */}
                     </div>
                   </div>
                 </div>
@@ -86,12 +72,15 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                       <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                         <div className="d-flex align-items-center">
                           <div className="fs-2 fw-bolder">
-                            {employees?.length}
+                            {
+                              employees?.filter((e: any) => e.EMP_ACTV === "1")
+                                .length
+                            }
                           </div>
                         </div>
 
                         <div className="fw-bold fs-6 text-gray-500">
-                          Employees
+                          Active Employees
                         </div>
                       </div>
                       <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">

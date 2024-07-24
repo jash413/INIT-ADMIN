@@ -6,6 +6,7 @@ import moment from "moment";
 import { EmployeeEditModalForm } from "./EmployeeEditModalForm";
 import { useDebounce, KTIcon } from "../../../../_metronic/helpers";
 import { Card3 } from "../../../../_metronic/partials/content/cards/Card3";
+import { getSubscriptionById } from "../../customerprofile/subscriptionCore/_requests";
 
 interface EmployeesProps {
   id: string;
@@ -19,10 +20,12 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
   );
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
+  const [customerId, setCustomerId] = useState<any>("");
   const debouncedSearchTerm = useDebounce(searchTerm, 150);
 
   useEffect(() => {
     fetchEmployees(); // Fetch employees on initial load or ID change
+    fetchCustomerId();
   }, [id]);
 
   useEffect(() => {
@@ -49,6 +52,15 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
       console.error("Fetch Employees Error:", error);
     } finally {
       setLoading(false); // Set loading to false once the fetch is complete
+    }
+  };
+
+  const fetchCustomerId = async () => {
+    try {
+      const data = await getSubscriptionById(id);
+      setCustomerId(data?.CUS_CODE);
+    } catch (error) {
+      console.error("Fetch Customer ID Error:", error);
     }
   };
 
@@ -111,11 +123,12 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
                 onClick={() => handleEditEmployee(employee)}
               >
                 <Card3
-                  badgeColor={employee.EMP_ACTV ? "success" : "danger"}
-                  status={employee.EMP_ACTV ? "Active" : "Inactive"}
+                  badgeColor={employee.EMP_ACTV === "1" ? "success" : "danger"}
+                  status={employee.EMP_ACTV === "1" ? "Active" : "Inactive"}
                   title={employee.EMP_NAME}
                   startDate={moment(employee?.SUB_STDT).format("DD/MM/YYYY")}
                   endDate={moment(employee?.SUB_ENDT).format("DD/MM/YYYY")}
+                  mobile={employee?.MOB_NMBR}
                 />
               </div>
             ))
@@ -131,6 +144,8 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
           isEmployeeLoading={false}
           onClose={handleCloseModal}
           onEmployeeSaved={fetchEmployees}
+          customerId={customerId}
+          subscriptionId={id}
         />
       )}
     </Content>
