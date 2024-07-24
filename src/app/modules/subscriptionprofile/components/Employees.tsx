@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { Content } from "../../../../_metronic/layout/components/content";
-import { getEmployeeById, searchEmployees } from "../employeeCore/_requests";
+import {
+  getEmployeeById,
+  searchEmployees,
+  deleteEmployee,
+} from "../employeeCore/_requests";
 import { Employee } from "../../employeeallotment/employees-list/core/_models";
 import moment from "moment";
 import { EmployeeEditModalForm } from "./EmployeeEditModalForm";
@@ -74,6 +78,19 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteEmployee = async (employee: Employee) => {
+    try {
+      const confirm = window.confirm(
+        `Are you sure you want to delete ${employee.EMP_NAME}?`
+      );
+      if (!confirm) return;
+      await deleteEmployee(employee.EMP_CODE);
+      fetchEmployees();
+    } catch (error) {
+      console.error("Delete Employee Error:", error);
+    }
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -120,7 +137,6 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
               <div
                 key={employee.EMP_CODE}
                 className="col-md-6 col-xl-4"
-                onClick={() => handleEditEmployee(employee)}
               >
                 <Card3
                   badgeColor={employee.EMP_ACTV === "1" ? "success" : "danger"}
@@ -129,6 +145,8 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
                   startDate={moment(employee?.SUB_STDT).format("DD/MM/YYYY")}
                   endDate={moment(employee?.SUB_ENDT).format("DD/MM/YYYY")}
                   mobile={employee?.MOB_NMBR}
+                  handleEditEmployee={handleEditEmployee}
+                  handleDeleteEmployee={() => handleDeleteEmployee(employee)}
                 />
               </div>
             ))
