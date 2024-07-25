@@ -12,7 +12,7 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
   {
     Header: (props) => <EmployeeSelectionHeader tableProps={props} />,
     id: 'selection',
-    Cell: ({...props}) => <EmployeeSelectionCell id={props.data[props.row.index].EMP_CODE} />,
+    Cell: ({...props}) => <EmployeeSelectionCell id={props.data[props.row.index].MOB_NMBR} />,
   },
   {
     Header: "SR.NO",
@@ -90,7 +90,7 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
       <EmployeeCustomHeader tableProps={props} title='Actions' className='text-end min-w-100px' />
     ),
     id: 'actions',
-    Cell: ({...props}) => <EmployeeActionsCell id={props.data[props.row.index].EMP_CODE} />,
+    Cell: ({...props}) => <EmployeeActionsCell id={props.data[props.row.index].MOB_NMBR} />,
   },
 ]
 

@@ -42,7 +42,7 @@ const createEmployee = (employee: Employee): Promise<Employee | undefined> => {
 
 const updateEmployee = (employee: Employee): Promise<Employee | undefined> => {
   return axios
-    .put(`${EMPLOYEE_URL}/${employee.EMP_CODE}`, employee)
+    .put(`${EMPLOYEE_URL}/${employee.MOB_NMBR}`, employee)
     .then((response: AxiosResponse<Response<Employee>>) => response.data)
     .then((response: Response<Employee>) => response.data)
     .catch((error) => {

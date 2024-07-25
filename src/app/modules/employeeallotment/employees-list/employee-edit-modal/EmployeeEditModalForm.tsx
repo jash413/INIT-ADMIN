@@ -186,7 +186,8 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
     label: string,
     name: keyof Employee,
     options: { value: string; label: string }[],
-    isRequired = true
+    isRequired = true,
+    isDisabled = false
   ) => (
     <div className="fv-row mb-7">
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
@@ -199,7 +200,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           { "is-invalid": formik.touched[name] && formik.errors[name] },
           { "is-valid": formik.touched[name] && !formik.errors[name] }
         )}
-        disabled={formik.isSubmitting || isEmployeeLoading}
+        disabled={formik.isSubmitting || isEmployeeLoading || isDisabled}
       >
         <option value="">Select {label.slice(6)}</option>
         {options.map((option) => (
@@ -234,7 +235,13 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
           data-kt-scroll-wrappers="#kt_modal_add_employee_scroll"
           data-kt-scroll-offset="300px"
         >
-          {renderSelectField("Select Customer", "CUS_CODE", customers, true)}
+          {renderSelectField(
+            "Select Customer",
+            "CUS_CODE",
+            customers,
+            true,
+            employee?.CUS_CODE ? true : false
+          )}
           {renderSelectField("Select Subscription", "SUB_CODE", subscriptions)}
           {renderField("Employee Name", "EMP_NAME")}
           {renderField("Mobile Number", "MOB_NMBR")}

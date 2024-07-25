@@ -85,7 +85,7 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
         `Are you sure you want to delete ${employee.EMP_NAME}?`
       );
       if (!confirm) return;
-      await deleteEmployee(employee.EMP_CODE);
+      await deleteEmployee(employee.MOB_NMBR);
       fetchEmployees();
     } catch (error) {
       console.error("Delete Employee Error:", error);
@@ -136,7 +136,7 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
           {employees.length > 0 ? (
             employees.map((employee: Employee) => (
               <div
-                key={employee.EMP_CODE}
+                key={employee.MOB_NMBR}
                 className="col-md-6 col-xl-4"
               >
                 <Card3
