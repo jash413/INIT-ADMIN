@@ -18,6 +18,16 @@ const getEmployees = (query: string): Promise<EmployeesQueryResponse> => {
     });
 };
 
+const getAllEmployees = (): Promise<any> => {
+  return axios
+    .get(`${EMPLOYEE_URL}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      toast.error(`Failed to get employees: ${error.response?.data?.message || error.message}`);
+      throw error;
+    });
+}
+
 const searchEmployees = (query: string, id: ID): Promise<EmployeesQueryResponse> => {
   return axios
     .get(`${GET_EMPLOYEES_URL}/${id}?search=${query}`)
@@ -112,4 +122,5 @@ export {
   fetchCustomers,
   fetchSubscriptionsByCustomerId,
   searchEmployees,
+  getAllEmployees
 };

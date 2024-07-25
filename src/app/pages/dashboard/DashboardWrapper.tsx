@@ -1,130 +1,211 @@
-import {FC} from 'react'
-import {useIntl} from 'react-intl'
-import {toAbsoluteUrl} from '../../../_metronic/helpers'
-import {PageTitle} from '../../../_metronic/layout/core'
+import { FC, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
+import { PageTitle } from "../../../_metronic/layout/core";
 import {
-  ListsWidget2,
-  ListsWidget3,
-  ListsWidget4,
-  ListsWidget6,
   TablesWidget5,
-  TablesWidget10,
-  MixedWidget8,
-  CardsWidget7,
   CardsWidget17,
-  CardsWidget20,
-  ListsWidget26,
-  EngageWidget10,
-} from '../../../_metronic/partials/widgets'
-import { ToolbarWrapper } from '../../../_metronic/layout/components/toolbar'
-import { Content } from '../../../_metronic/layout/components/content'
+} from "../../../_metronic/partials/widgets";
+import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
+import { Content } from "../../../_metronic/layout/components/content";
+import { getAllUsers } from "../../modules/customers/users-list/core/_requests";
+import { getAllSubscriptions } from "../../modules/customerprofile/subscriptionCore/_requests";
+import { getAllEmployees } from "../../modules/customerprofile/employeeCore/_requests";
+import moment from "moment";
 
-const DashboardPage: FC = () => (
+interface DashboardPageProps {
+  noOfActiveSubscriptions: number;
+  noOfInactiveSubscriptions: number;
+  noOfActiveEmployees: number;
+  noOfInactiveEmployees: number;
+  noOfActiveCustomers: number;
+  noOfInactiveCustomers: number;
+  noOfActiveToday: number;
+  noOfActiveWeekly: number;
+  noOfActiveMonthly: number;
+  noOfInactiveToday: number;
+  noOfInactiveWeekly: number;
+  noOfInactiveMonthly: number;
+}
+
+const DashboardPage: FC<DashboardPageProps> = ({
+  noOfActiveSubscriptions,
+  noOfInactiveSubscriptions,
+  noOfActiveEmployees,
+  noOfInactiveEmployees,
+  noOfActiveCustomers,
+  noOfInactiveCustomers,
+  noOfActiveToday,
+  noOfActiveWeekly,
+  noOfActiveMonthly,
+  noOfInactiveToday,
+  noOfInactiveWeekly,
+  noOfInactiveMonthly,
+}) => (
   <>
     <ToolbarWrapper />
     <Content>
-    {/* begin::Row */}
-    <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
-      {/* begin::Col */}
-      <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
-        <CardsWidget20
-          className='h-md-50 mb-5 mb-xl-10'
-          description='Active Projects'
-          color='#F1416C'
-          img={toAbsoluteUrl('media/patterns/vector-1.png')}
-        />
-        <CardsWidget7
-          className='h-md-50 mb-5 mb-xl-10'
-          description='Professionals'
-          icon={false}
-          stats={357}
-          labelColor='dark'
-          textColor='gray-300'
-        />
+      {/* begin::Row */}
+      <div className="row gy-5 g-xl-8">
+        <div className="col-xl-4">
+          <CardsWidget17
+            active={noOfActiveSubscriptions}
+            inactive={noOfInactiveSubscriptions}
+            type="Subscriptions"
+            chartName="NO OF SUBSCRIPTIONS"
+            className="card-xxl-stretch mb-5 mb-xl-8"
+          />
+        </div>
+        <div className="col-xl-4">
+          <CardsWidget17
+            active={noOfActiveCustomers}
+            inactive={noOfInactiveCustomers}
+            type="Customers"
+            chartName="NO OF CUSTOMERS"
+            className="card-xxl-stretch mb-5 mb-xl-8"
+          />
+        </div>
+        <div className="col-xl-4">
+          <CardsWidget17
+            active={noOfActiveEmployees}
+            inactive={noOfInactiveEmployees}
+            type="Employees"
+            chartName="NO OF EMPLOYEES"
+            className="card-xxl-stretch mb-5 mb-xl-8"
+          />
+        </div>
       </div>
-      {/* end::Col */}
+      <div className="row gy-5 g-xl-8">
+        <div className="col-xl-4">
+          <CardsWidget17
+            active={noOfActiveToday}
+            inactive={noOfInactiveToday}
+            type="Subscriptions"
+            chartName="TODAY'S SUBSCRIPTIONS"
+            className="card-xxl-stretch mb-5 mb-xl-8"
+          />
+        </div>
+        <div className="col-xl-4">
+          <CardsWidget17
+            active={noOfActiveWeekly}
+            inactive={noOfInactiveWeekly}
+            type="Subscriptions"
+            chartName="WEEKLY SUBSCRIPTIONS"
+            className="card-xxl-stretch mb-5 mb-xl-8"
+          />
+        </div>
+        <div className="col-xl-4">
+          <CardsWidget17
+            active={noOfActiveMonthly}
+            inactive={noOfInactiveMonthly}
+            type="Subscriptions"
+            chartName="MONTHLY SUBSCRIPTIONS"
+            className="card-xxl-stretch mb-5 mb-xl-8"
+          />
+        </div>
+      </div>
+      {/* end::Row */}
 
-      {/* begin::Col */}
-      <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
-        <CardsWidget17 className='h-md-50 mb-5 mb-xl-10' />
-        <ListsWidget26 className='h-lg-50' />
+      <div className="row g-5 gx-xxl-8">
+        <TablesWidget5 className="card-xxl-stretch mb-5 mb-xxl-8" />
       </div>
-      {/* end::Col */}
-
-      {/* begin::Col */}
-      <div className='col-xxl-6'>
-        <EngageWidget10 className='h-md-100' />
-      </div>
-      {/* end::Col */}
-    </div>
-    {/* end::Row */}
-
-    {/* begin::Row */}
-    <div className='row gx-5 gx-xl-10'>
-      {/* begin::Col */}
-      <div className='col-xxl-6 mb-5 mb-xl-10'>
-        {/* <app-new-charts-widget8 cssclassName="h-xl-100" chartHeight="275px" [chartHeightNumber]="275"></app-new-charts-widget8> */}
-      </div>
-      {/* end::Col */}
-
-      {/* begin::Col */}
-      <div className='col-xxl-6 mb-5 mb-xl-10'>
-        {/* <app-cards-widget18 cssclassName="h-xl-100" image="./assetsmedia/stock/600x600/img-65.jpg"></app-cards-widget18> */}
-      </div>
-      {/* end::Col */}
-    </div>
-    {/* end::Row */}
-
-    {/* begin::Row */}
-    <div className='row gy-5 gx-xl-8'>
-      <div className='col-xxl-4'>
-        <ListsWidget3 className='card-xxl-stretch mb-xl-3' />
-      </div>
-      <div className='col-xl-8'>
-        <TablesWidget10 className='card-xxl-stretch mb-5 mb-xl-8' />
-      </div>
-    </div>
-    {/* end::Row */}
-
-    {/* begin::Row */}
-    <div className='row gy-5 g-xl-8'>
-      <div className='col-xl-4'>
-        <ListsWidget2 className='card-xl-stretch mb-xl-8' />
-      </div>
-      <div className='col-xl-4'>
-        <ListsWidget6 className='card-xl-stretch mb-xl-8' />
-      </div>
-      <div className='col-xl-4'>
-        <ListsWidget4 className='card-xl-stretch mb-5 mb-xl-8' items={5} />
-        {/* partials/widgets/lists/_widget-4', 'class' => 'card-xl-stretch mb-5 mb-xl-8', 'items' => '5' */}
-      </div>
-    </div>
-    {/* end::Row */}
-
-    <div className='row g-5 gx-xxl-8'>
-      <div className='col-xxl-4'>
-        <MixedWidget8
-          className='card-xxl-stretch mb-xl-3'
-          chartColor='success'
-          chartHeight='150px'
-        />
-      </div>
-      <div className='col-xxl-8'>
-        <TablesWidget5 className='card-xxl-stretch mb-5 mb-xxl-8' />
-      </div>
-    </div>
     </Content>
   </>
-)
+);
 
 const DashboardWrapper: FC = () => {
-  const intl = useIntl()
+  const [noOfActiveSubscriptions, setNoOfActiveSubscriptions] = useState(0);
+  const [noOfActiveEmployees, setNoOfActiveEmployees] = useState(0);
+  const [noOfActiveCustomers, setNoOfActiveCustomers] = useState(0);
+  const [noOfInactiveSubscriptions, setNoOfInactiveSubscriptions] = useState(0);
+  const [noOfInactiveEmployees, setNoOfInactiveEmployees] = useState(0);
+  const [noOfInactiveCustomers, setNoOfInactiveCustomers] = useState(0);
+  const [noOfActiveToday, setNoOfActiveToday] = useState(0);
+  const [noOfActiveWeekly, setNoOfActiveWeekly] = useState(0);
+  const [noOfActiveMonthly, setNoOfActiveMonthly] = useState(0);
+  const [noOfInactiveToday, setNoOfInactiveToday] = useState(0);
+  const [noOfInactiveWeekly, setNoOfInactiveWeekly] = useState(0);
+  const [noOfInactiveMonthly, setNoOfInactiveMonthly] = useState(0);
+
+  const fetchAllData = async () => {
+    try {
+      const users = await getAllUsers();
+      const subscriptions = await getAllSubscriptions();
+      const employees = await getAllEmployees();
+
+      const today = moment().startOf("day");
+      const startOfWeek = moment().startOf("week");
+      const startOfMonth = moment().startOf("month");
+      const endOfToday = moment().endOf("day");
+      const endOfWeek = moment().endOf("week");
+      const endOfMonth = moment().endOf("month");
+
+      const activeSubscriptions = subscriptions.data.filter((s: any) => s.status === 1);
+      const inactiveSubscriptions = subscriptions.data.filter((s: any) => s.status === 0);
+
+      setNoOfActiveToday(
+        activeSubscriptions.filter((s: any) => moment(s.created_at).isBetween(today, endOfToday)).length
+      );
+      setNoOfActiveWeekly(
+        activeSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfWeek, endOfWeek)).length
+      );
+      setNoOfActiveMonthly(
+        activeSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfMonth, endOfMonth)).length
+      );
+      setNoOfInactiveToday(
+        inactiveSubscriptions.filter((s: any) => moment(s.created_at).isBetween(today, endOfToday)).length
+      );
+      setNoOfInactiveWeekly(
+        inactiveSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfWeek, endOfWeek)).length
+      );
+      setNoOfInactiveMonthly(
+        inactiveSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfMonth, endOfMonth)).length
+      );
+
+      setNoOfActiveSubscriptions(activeSubscriptions.length);
+      setNoOfInactiveSubscriptions(inactiveSubscriptions.length);
+
+      const activeEmployees = employees.data.filter((e: any) => e.EMP_ACTV === "1");
+      const inactiveEmployees = employees.data.filter((e: any) => e.EMP_ACTV === "0" || e.EMP_ACTV === null);
+
+      setNoOfActiveEmployees(activeEmployees.length);
+      setNoOfInactiveEmployees(inactiveEmployees.length);
+
+      const activeCustomers = users.data.filter((u: any) => u.is_active === 1);
+      const inactiveCustomers = users.data.filter((u: any) => u.is_active === 0 || u.is_active === null);
+
+      setNoOfActiveCustomers(activeCustomers.length);
+      setNoOfInactiveCustomers(inactiveCustomers.length);
+    } catch (error) {
+      console.error("Failed to fetch data", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  const intl = useIntl();
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
-      <DashboardPage />
+      <PageTitle breadcrumbs={[]}>
+        {intl.formatMessage({ id: "MENU.DASHBOARD" })}
+      </PageTitle>
+      <DashboardPage
+        noOfActiveSubscriptions={noOfActiveSubscriptions}
+        noOfInactiveSubscriptions={noOfInactiveSubscriptions}
+        noOfActiveEmployees={noOfActiveEmployees}
+        noOfInactiveEmployees={noOfInactiveEmployees}
+        noOfActiveCustomers={noOfActiveCustomers}
+        noOfInactiveCustomers={noOfInactiveCustomers}
+        noOfActiveToday={noOfActiveToday}
+        noOfActiveWeekly={noOfActiveWeekly}
+        noOfActiveMonthly={noOfActiveMonthly}
+        noOfInactiveToday={noOfInactiveToday}
+        noOfInactiveWeekly={noOfInactiveWeekly}
+        noOfInactiveMonthly={noOfInactiveMonthly}
+      />
     </>
-  )
-}
+  );
+};
 
-export {DashboardWrapper}
+export { DashboardWrapper };

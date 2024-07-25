@@ -40,6 +40,26 @@ const getSubscriptionById = (id: ID): Promise<Subscription | undefined> => {
     });
 };
 
+const getAllSubscriptions = (): Promise<any> => {
+  return axios
+    .get(`${SUBSCRIPTION_URL}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      toast.error(`${error.response.data.message}`);
+      throw error;
+    });
+}
+
+const getSubscriptionsByDateRange = (startDate: string, endDate: string): Promise<any> => {
+  return axios
+    .get(`${SUBSCRIPTION_URL}?filter_from=${startDate}&filter_to=${endDate}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      toast.error(`${error.response.data.message}`);
+      throw error;
+    });
+}
+
 const createSubscription = (subscription: Subscription): Promise<Subscription | undefined> => {
   return axios
     .post(SUBSCRIPTION_URL, subscription)
@@ -124,4 +144,6 @@ export {
   fetchPlans,
   getPlanById,
   searchSubscriptions,
+  getAllSubscriptions,
+  getSubscriptionsByDateRange
 };
