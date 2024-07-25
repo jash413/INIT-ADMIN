@@ -143,22 +143,22 @@ const DashboardWrapper: FC = () => {
       const inactiveSubscriptions = subscriptions.data.filter((s: any) => s.status === 0);
 
       setNoOfActiveToday(
-        activeSubscriptions.filter((s: any) => moment(s.created_at).isBetween(today, endOfToday)).length
+        activeSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(today, endOfToday)).length
       );
       setNoOfActiveWeekly(
-        activeSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfWeek, endOfWeek)).length
+        activeSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfWeek, endOfWeek)).length
       );
       setNoOfActiveMonthly(
-        activeSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfMonth, endOfMonth)).length
+        activeSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfMonth, endOfMonth)).length
       );
       setNoOfInactiveToday(
-        inactiveSubscriptions.filter((s: any) => moment(s.created_at).isBetween(today, endOfToday)).length
+        inactiveSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(today, endOfToday)).length
       );
       setNoOfInactiveWeekly(
-        inactiveSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfWeek, endOfWeek)).length
+        inactiveSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfWeek, endOfWeek)).length
       );
       setNoOfInactiveMonthly(
-        inactiveSubscriptions.filter((s: any) => moment(s.created_at).isBetween(startOfMonth, endOfMonth)).length
+        inactiveSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfMonth, endOfMonth)).length
       );
 
       setNoOfActiveSubscriptions(activeSubscriptions.length);
