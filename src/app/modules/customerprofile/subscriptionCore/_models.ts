@@ -14,6 +14,7 @@ export type Subscription = {
   CREATED_AT?: string,
   ad_id?: string,
   INV_DATE?: string,
+  is_verified?: boolean,
 }
 
 export type SubscriptionsQueryResponse = Response<Array<Subscription>>

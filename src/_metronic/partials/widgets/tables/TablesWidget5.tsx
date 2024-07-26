@@ -1,6 +1,9 @@
 import { FC, useEffect, useState } from "react";
 import { KTIcon } from "../../../helpers";
-import { getSubscriptionsByDateRange } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
+import {
+  getSubscriptionsByDateRange,
+  updateSubscription,
+} from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
@@ -15,6 +18,7 @@ type Subscription = {
   SUB_STDT: string;
   SUB_ENDT: string;
   status: number;
+  is_verified: boolean;
 };
 
 const TablesWidget5: FC<Props> = ({ className }) => {
@@ -22,13 +26,23 @@ const TablesWidget5: FC<Props> = ({ className }) => {
   const [duration, setDuration] = useState<"Day" | "Week" | "Month">("Month");
 
   const fetchData = async () => {
-    const startDate = moment()
-      .subtract(
-        1,
-        duration.toLowerCase() as moment.unitOfTime.DurationConstructor
-      )
-      .format("YYYY-MM-DD");
-    const endDate = moment().format("YYYY-MM-DD");
+    let startDate: string;
+    let endDate: string = moment().endOf("day").format("YYYY-MM-DD");
+
+    switch (duration) {
+      case "Day":
+        startDate = moment().startOf("day").format("YYYY-MM-DD");
+        break;
+      case "Week":
+        startDate = moment().startOf("week").format("YYYY-MM-DD");
+        break;
+      case "Month":
+        startDate = moment().startOf("month").format("YYYY-MM-DD");
+        break;
+      default:
+        startDate = moment().startOf("month").format("YYYY-MM-DD");
+    }
+
     try {
       const data = await getSubscriptionsByDateRange(startDate, endDate);
       if (data?.data) {
@@ -85,13 +99,30 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                 {/* begin::Table head */}
                 <thead>
                   <tr className="border-0">
-                    <th className="p-0 w-150px"></th>
-                    <th className="p-0 min-w-150px"></th>
-                    <th className="p-0 min-w-140px"></th>
-                    <th className="p-0 min-w-120px"></th>
-                    <th className="p-0 min-w-110px"></th>
-                    <th className="p-0 min-w-50px"></th>
-                    <th className="p-0 min-w-50px"></th>
+                    <th className="p-0 w-150px text-center">
+                      <span className="text-muted fw-bold">#</span>
+                    </th>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">Invoice Date</span>
+                    </th>
+                    <th className="p-0 min-w-140px text-center">
+                      <span className="text-muted fw-bold">Invoice Number</span>
+                    </th>
+                    <th className="p-0 min-w-120px text-center">
+                      <span className="text-muted fw-bold">Start Date</span>
+                    </th>
+                    <th className="p-0 min-w-110px text-center">
+                      <span className="text-muted fw-bold">End Date</span>
+                    </th>
+                    <th className="p-0 min-w-50px text-center">
+                      <span className="text-muted fw-bold">Verified</span>
+                    </th>
+                    <th className="p-0 min-w-50px text-center">
+                      <span className="text-muted fw-bold">Status</span>
+                    </th>
+                    <th className="p-0 min-w-50px text-center">
+                      <span className="text-muted fw-bold">Details</span>
+                    </th>
                   </tr>
                 </thead>
                 {/* end::Table head */}
@@ -99,7 +130,7 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                 <tbody>
                   {subscriptions.map((subscription, index) => (
                     <tr key={index}>
-                      <td>
+                      <td className="text-center">
                         <Link
                           to={`/subscription-profile/${subscription.SUB_CODE}`}
                           className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
@@ -107,19 +138,40 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                           {subscription.SUB_CODE}
                         </Link>
                       </td>
-                      <td className="text-muted fw-semibold">
+                      <td className="text-center text-muted fw-semibold">
                         {moment(subscription.INV_DATE).format("DD/MMM/YYYY")}
                       </td>
-                      <td className="text-end text-muted fw-semibold">
+                      <td className="text-center text-muted fw-semibold">
                         {subscription.SUB_ORDN}
                       </td>
-                      <td className="text-end text-muted fw-semibold">
+                      <td className="text-center text-muted fw-semibold">
                         {moment(subscription.SUB_STDT).format("DD/MMM/YYYY")}
                       </td>
-                      <td className="text-end text-muted fw-semibold">
+                      <td className="text-center text-muted fw-semibold">
                         {moment(subscription.SUB_ENDT).format("DD/MMM/YYYY")}
                       </td>
-                      <td className="text-end">
+                      <td className="text-center">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          checked={subscription.is_verified}
+                          onChange={async () => {
+                            try {
+                              await updateSubscription({
+                                ...subscription,
+                                is_verified: !subscription.is_verified,
+                              });
+                              fetchData();
+                            } catch (error) {
+                              console.error(
+                                "Failed to update subscription:",
+                                error
+                              );
+                            }
+                          }}
+                        />
+                      </td>
+                      <td className="text-center">
                         <span
                           className={`badge badge-light-${
                             subscription.status === 1 ? "success" : "danger"
@@ -128,7 +180,7 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                           {subscription.status === 1 ? "Active" : "Inactive"}
                         </span>
                       </td>
-                      <td className="text-end">
+                      <td className="text-center">
                         <Link
                           to={`/subscription-profile/${subscription.SUB_CODE}`}
                           className="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
