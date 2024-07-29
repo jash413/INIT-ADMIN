@@ -1,7 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { KTIcon } from "../../../../_metronic/helpers";
-import { getPlanById } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 
 type Props = {
   badgeColor: string;
@@ -30,16 +29,6 @@ const Card2: FC<Props> = ({
   handleDeleteSubscription,
   subscription,
 }) => {
-  const [plan, setPlan] = useState<any>({});
-
-  const getPlan = async () => {
-    const response = await getPlanById(description ? description : "");
-    setPlan(response.data);
-  };
-
-  useEffect(() => {
-    getPlan();
-  }, [description]);
 
   return (
     <div className="card border border-2 border-gray-300 border-hover">
@@ -70,7 +59,7 @@ const Card2: FC<Props> = ({
         {description && (
           <div className="d-flex justify-content-between align-items-center">
             <p className="text-gray-500 fw-bold fs-5 mt-1 mb-7">
-              PLAN - {plan?.PLA_DESC}
+              PLAN - {subscription?.plan_description}
             </p>
             <p
               className={`badge badge-light-${badgeColor} fw-bolder px-4 py-3`}

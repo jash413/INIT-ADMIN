@@ -27,6 +27,8 @@ export type Employee = {
   LEDGER_REPORT_ACTIVE?: string,
   CREATED_AT?: string,
   ad_id?: string,
+  admin_name?: string,
+  customer_name?: string,
 }
 
 export type EmployeesQueryResponse = Response<Array<Employee>>

@@ -29,6 +29,7 @@ export type User = {
   reg_type_id?: string,
   ad_id?: string,
   CREATED_AT?: string,
+  admin_name?: string,
 }
 
 export type UsersQueryResponse = Response<Array<User>>

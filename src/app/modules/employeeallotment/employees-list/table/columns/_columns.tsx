@@ -5,7 +5,6 @@ import {EmployeeSelectionCell} from './EmployeeSelectionCell'
 import {EmployeeCustomHeader} from './EmployeeCustomHeader'
 import {EmployeeSelectionHeader} from './EmployeeSelectionHeader'
 import {Employee} from '../../core/_models'
-import {getAdminById, getUserById} from '../../../../customers/users-list/core/_requests'
 import moment from 'moment'
 
 const employeesColumns: ReadonlyArray<Column<Employee>> = [
@@ -32,16 +31,7 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
   },
   {
     Header: (props) => <EmployeeCustomHeader tableProps={props} title='Company Name' />,
-    accessor: 'CUS_CODE',
-    Cell: ({value}) => {
-      const [customer, setCustomer] = useState<string | undefined>(undefined)
-      useEffect(() => {
-        getUserById(value).then((data) => {
-          setCustomer(data?.CUS_NAME)
-        })
-      }, [value])
-      return customer
-    },
+    accessor: 'customer_name',
   },
   {
     Header: (props) => <EmployeeCustomHeader tableProps={props} title='Subscription Code' />,
@@ -61,16 +51,7 @@ const employeesColumns: ReadonlyArray<Column<Employee>> = [
     Header: (props) => (
       <EmployeeCustomHeader tableProps={props} title="Alloted By" />
     ),
-    accessor: "ad_id",
-    Cell: ({ value }) => {
-      const [admin, setAdmin] = useState<string | undefined>(undefined);
-      useEffect(() => {
-        getAdminById(value).then((data) => {
-          setAdmin(data.data.ad_name);
-        });
-      }, [value]);
-      return admin;
-    },
+    accessor: "admin_name",
   },
   {
     Header: (props) => (

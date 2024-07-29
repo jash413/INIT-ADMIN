@@ -6,11 +6,6 @@ import { SubscriptionCustomHeader } from "./SubscriptionCustomHeader";
 import { SubscriptionSelectionHeader } from "./SubscriptionSelectionHeader";
 import { SubscriptionInfoCell } from "./SubscriptionInfoCell";
 import { Subscription } from "../../core/_models";
-import {
-  getAdminById,
-  getUserById,
-} from "../../../../customers/users-list/core/_requests";
-import { getPlanById } from "../../core/_requests";
 import moment from "moment";
 
 const usersColumns: ReadonlyArray<Column<Subscription>> = [
@@ -38,34 +33,13 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
     Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Customer Name" />
     ),
-    accessor: "CUS_CODE",
-    Cell: ({ value }) => {
-      const [customer, setCustomer] = useState<string | undefined>(undefined);
-      useEffect(() => {
-        getUserById(value).then((data) => {
-          setCustomer(data?.CUS_NAME);
-        });
-      }, []);
-      return customer;
-    },
+    accessor: "customer_name",
   },
   {
     Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Plan Name" />
     ),
-    accessor: "PLA_CODE",
-    Cell: ({ value }) => {
-      console.log(value,"value");
-      const [plan, setPlan] = useState<string | undefined>(undefined);
-      useEffect(() => {
-        if (value) {
-          getPlanById(value).then((data) => {
-            setPlan(data?.data.PLA_DESC);
-          });
-        }
-      }, [value]);
-      return plan;
-    },
+    accessor: "plan_description",
   },
   {
     Header: (props) => (
@@ -115,16 +89,7 @@ const usersColumns: ReadonlyArray<Column<Subscription>> = [
     Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Created By" />
     ),
-    accessor: "ad_id",
-    Cell: ({ value }) => {
-      const [admin, setAdmin] = useState<string | undefined>(undefined);
-      useEffect(() => {
-        getAdminById(value).then((data) => {
-          setAdmin(data.data.ad_name);
-        });
-      }, [value]);
-      return admin;
-    },
+    accessor: "admin_name",
   },
   {
     Header: (props) => (

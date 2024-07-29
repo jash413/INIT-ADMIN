@@ -14,6 +14,9 @@ export type Subscription = {
   CREATED_AT?: string,
   ad_id?: string,
   INV_DATE?: string,
+  admin_name?: string,
+  customer_name?: string,
+  plan_description?: string,
 }
 
 export type SubscriptionsQueryResponse = Response<Array<Subscription>>

@@ -6,7 +6,6 @@ import { UserSelectionCell } from "./UserSelectionCell";
 import { UserCustomHeader } from "./UserCustomHeader";
 import { UserSelectionHeader } from "./UserSelectionHeader";
 import { User } from "../../core/_models";
-import { getAdminById } from "../../core/_requests";
 import moment from "moment";
 
 const usersColumns: ReadonlyArray<Column<User>> = [
@@ -74,17 +73,7 @@ const usersColumns: ReadonlyArray<Column<User>> = [
     Header: (props) => (
       <UserCustomHeader tableProps={props} title="Created By" />
     ),
-    accessor: "ad_id",
-    Cell: ({ value }) => {
-      const [admin, setAdmin] = useState<string | undefined>(undefined);
-      useEffect(() => {
-        getAdminById(value).then((data) => {
-          setAdmin(data.data.ad_name);
-          console.log(data);
-        });
-      }, []);
-      return admin;
-    },
+    accessor: "admin_name",
   },
   {
     Header: (props) => <UserCustomHeader tableProps={props} title="Status" />,
