@@ -47,6 +47,7 @@ const EmployeeEditModalForm: FC<Props> = ({
   const [subscriptions, setSubscriptions] = useState<
     { value: string; label: string }[]
   >([]);
+  const [mobileNumber] = useState(employee.MOB_NMBR || "");
 
   const [employeeForEdit] = useState<Employee>({
     ...employee,
@@ -90,7 +91,7 @@ const EmployeeEditModalForm: FC<Props> = ({
       setSubmitting(true);
       try {
         if (isNotEmpty(values.EMP_CODE)) {
-          await updateEmployee(values);
+          await updateEmployee(mobileNumber,values);
         } else {
           await createEmployee(values);
         }

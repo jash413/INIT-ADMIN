@@ -32,6 +32,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
   const { refetch } = useQueryResponse();
   const [customers, setCustomers] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [mobileNumber] = useState(employee.MOB_NMBR || "");
 
   const [employeeForEdit] = useState<Employee>({
     ...employee,
@@ -73,7 +74,7 @@ const EmployeeEditModalForm: FC<Props> = ({ employee, isEmployeeLoading }) => {
       setSubmitting(true);
       try {
         if (isNotEmpty(values.EMP_CODE)) {
-          await updateEmployee(values);
+          await updateEmployee(mobileNumber, values);
         } else {
           await createEmployee(values);
         }

@@ -29,6 +29,7 @@ export type Employee = {
   ad_id?: string,
   admin_name?: string,
   customer_name?: string,
+  currentEmployeeNumber?: string,
 }
 
 export type EmployeesQueryResponse = Response<Array<Employee>>
