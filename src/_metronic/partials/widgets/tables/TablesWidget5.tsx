@@ -21,6 +21,7 @@ type Subscription = {
   is_verified: boolean;
   customer_name: string;
   admin_name: string;
+  LIC_USER: number;
 };
 
 const TablesWidget5: FC<Props> = ({ className }) => {
@@ -119,6 +120,9 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                       <span className="text-muted fw-bold">Invoice Number</span>
                     </th>
                     <th className="p-0 min-w-120px text-center">
+                      <span className="text-muted fw-bold">Users</span>
+                    </th>
+                    <th className="p-0 min-w-120px text-center">
                       <span className="text-muted fw-bold">Start Date</span>
                     </th>
                     <th className="p-0 min-w-110px text-center">
@@ -159,6 +163,9 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                       </td>
                       <td className="text-center text-muted fw-semibold">
                         {subscription.SUB_ORDN}
+                      </td>
+                      <td className="text-center">
+                       {subscription.LIC_USER}
                       </td>
                       <td className="text-center text-muted fw-semibold">
                         {moment(subscription.SUB_STDT).format("DD/MMM/YYYY")}
