@@ -26,7 +26,7 @@ type Subscription = {
 
 const TablesWidget5: FC<Props> = ({ className }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [duration, setDuration] = useState<"Day" | "Week" | "Month">("Month");
+  const [duration, setDuration] = useState<"Day" | "Week" | "Month">("Day");
 
   const fetchData = async () => {
     let startDate: string;
