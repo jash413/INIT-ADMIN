@@ -159,7 +159,7 @@ const EmployeeEditModalForm: FC<Props> = ({
             )}
             disabled={formik.isSubmitting || isEmployeeLoading}
             checked={
-              name === "USR_TYPE" || name === "EMP_ACTV"
+              (name === "USR_TYPE" || name === "EMP_ACTV")
                 ? formik.values[name] === "1"
                 : formik.values[name] === "Y"
             }
@@ -167,10 +167,10 @@ const EmployeeEditModalForm: FC<Props> = ({
               formik.setFieldValue(
                 name,
                 e.target.checked
-                  ? name === "USR_TYPE" || name === "EMP_ACTV"
+                  ? (name === "USR_TYPE" || name === "EMP_ACTV")
                     ? "1"
                     : "Y"
-                  : name === "USR_TYPE" || name === "EMP_ACTV"
+                  : (name === "USR_TYPE" || name === "EMP_ACTV")
                   ? "0"
                   : "N"
               )
