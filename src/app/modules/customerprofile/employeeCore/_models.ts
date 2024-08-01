@@ -16,7 +16,7 @@ export type Employee = {
   SUB_ENDT?: string,
   REG_TOKEN?: string,
   DEVICE_ID?: string,
-  STATUS?: boolean,
+  STATUS?: string,
   SALE_OS_ACTIVE?: string,
   PUR_OS_ACTIVE?: string,
   SALE_ORDER_ACTIVE?: string,

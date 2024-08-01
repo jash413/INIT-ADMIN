@@ -62,6 +62,7 @@ const EmployeeEditModalForm: FC<Props> = ({
     SALE_REPORT_ACTIVE: employee.SALE_REPORT_ACTIVE,
     PURCHASE_REPORT_ACTIVE: employee.PURCHASE_REPORT_ACTIVE,
     LEDGER_REPORT_ACTIVE: employee.LEDGER_REPORT_ACTIVE,
+    STATUS: employee.EMP_ACTV
   });
 
   useEffect(() => {
