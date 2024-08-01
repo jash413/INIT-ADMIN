@@ -170,7 +170,7 @@ const EmployeeEditModalForm: FC<Props> = ({
                   ? name === "USR_TYPE" || name === "EMP_ACTV"
                     ? "1"
                     : "Y"
-                  : name === "USR_TYPE"
+                  : name === "USR_TYPE" || name === "EMP_ACTV"
                   ? "0"
                   : "N"
               )
