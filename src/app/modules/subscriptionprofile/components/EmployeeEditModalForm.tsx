@@ -65,7 +65,7 @@ const EmployeeEditModalForm: FC<Props> = ({
     SALE_REPORT_ACTIVE: employee.SALE_REPORT_ACTIVE,
     PURCHASE_REPORT_ACTIVE: employee.PURCHASE_REPORT_ACTIVE,
     LEDGER_REPORT_ACTIVE: employee.LEDGER_REPORT_ACTIVE,
-    STATUS: employee.EMP_ACTV
+    STATUS: employee.STATUS,
   });
 
   useEffect(() => {
@@ -90,6 +90,7 @@ const EmployeeEditModalForm: FC<Props> = ({
     validationSchema: editEmployeeSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
+      values.STATUS = values.EMP_ACTV;
       try {
         if (isNotEmpty(values.EMP_CODE)) {
           await updateEmployee(mobileNumber,values);
