@@ -27,6 +27,7 @@ const PrivateRoutes = () => {
   const SubscriptionProfilePage = lazy(
     () => import("../modules/subscriptionprofile/ProfilePage")
   );
+  const ApiCustomersPage = lazy(() => import("../modules/apicustomers/CustomersPage"));
 
   return (
     <Routes>
@@ -58,6 +59,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <CustomerPage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="api-customer-management/*"
+          element={
+            <SuspensedView>
+              <ApiCustomersPage />
             </SuspensedView>
           }
         />
