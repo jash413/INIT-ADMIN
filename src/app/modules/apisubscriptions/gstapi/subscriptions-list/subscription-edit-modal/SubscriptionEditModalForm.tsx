@@ -1,21 +1,21 @@
 import { FC, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { isNotEmpty } from "../../../../../_metronic/helpers";
-import { Customer } from "../core/_models";
+import { isNotEmpty } from "../../../../../../_metronic/helpers";
+import { Subscription } from "../core/_models";
 import clsx from "clsx";
 import { useListView } from "../core/ListViewProvider";
-import { CustomersListLoading } from "../components/loading/CustomersListLoading";
-import { createCustomer, updateCustomer } from "../core/_requests";
+import { SubscriptionsListLoading } from "../components/loading/SubscriptionsListLoading";
+import { createSubscription, updateSubscription } from "../core/_requests";
 import { useQueryResponse } from "../core/QueryResponseProvider";
 import moment from "moment";
 
 type Props = {
-  isCustomerLoading: boolean;
-  customer: Customer;
+  isSubscriptionLoading: boolean;
+  subscription: Subscription;
 };
 
-const editCustomerSchema = Yup.object().shape({
+const editSubscriptionSchema = Yup.object().shape({
   CUS_NAME: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
@@ -25,16 +25,16 @@ const editCustomerSchema = Yup.object().shape({
   notification_date: Yup.string().required("Notification date is required"),
 });
 
-const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
+const SubscriptionEditModalForm: FC<Props> = ({ subscription, isSubscriptionLoading }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
 
-  const [customerForEdit] = useState<Customer>({
-    ...customer,
-    CUS_NAME: customer.CUS_NAME,
-    CUS_ADDR: customer.CUS_ADDR,
-    CMP_NAME: customer.CMP_NAME,
-    notification_date: moment(customer.notification_date).format("YYYY-MM-DD"),
+  const [subscriptionForEdit] = useState<Subscription>({
+    ...subscription,
+    CUS_NAME: subscription.CUS_NAME,
+    CUS_ADDR: subscription.CUS_ADDR,
+    CMP_NAME: subscription.CMP_NAME,
+    notification_date: moment(subscription.notification_date).format("YYYY-MM-DD"),
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -45,15 +45,15 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
   };
 
   const formik = useFormik({
-    initialValues: customerForEdit,
-    validationSchema: editCustomerSchema,
+    initialValues: subscriptionForEdit,
+    validationSchema: editSubscriptionSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       try {
         if (isNotEmpty(values.id)) {
-          await updateCustomer(values);
+          await updateSubscription(values);
         } else {
-          await createCustomer(values);
+          await createSubscription(values);
         }
       } catch (ex) {
         console.error(ex);
@@ -66,7 +66,7 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
 
   const renderField = (
     label: string,
-    name: keyof Customer,
+    name: keyof Subscription,
     type = "text",
     isRequired = true
   ) => (
@@ -84,7 +84,7 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
           { "is-valid": formik.touched[name] && !formik.errors[name] }
         )}
         autoComplete="off"
-        disabled={formik.isSubmitting || isCustomerLoading}
+        disabled={formik.isSubmitting || isSubscriptionLoading}
       />
     </div>
   );
@@ -92,22 +92,22 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
   return (
     <>
       <form
-        id="kt_modal_add_customer_form"
+        id="kt_modal_add_subscription_form"
         className="form"
         onSubmit={formik.handleSubmit}
         noValidate
       >
         <div
           className="d-flex flex-column scroll-y me-n7 pe-7"
-          id="kt_modal_add_customer_scroll"
+          id="kt_modal_add_subscription_scroll"
           data-kt-scroll="true"
           data-kt-scroll-activate="{default: false, lg: true}"
           data-kt-scroll-max-height="auto"
-          data-kt-scroll-dependencies="#kt_modal_add_customer_header"
-          data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
+          data-kt-scroll-dependencies="#kt_modal_add_subscription_header"
+          data-kt-scroll-wrappers="#kt_modal_add_subscription_scroll"
           data-kt-scroll-offset="300px"
         >
-          {renderField("Customer Name", "CUS_NAME")}
+          {renderField("Subscription Name", "CUS_NAME")}
           {renderField("Address", "CUS_ADDR")}
           {renderField("Company Name", "CMP_NAME")}
           {renderField("Notification Date", "notification_date", "date")}
@@ -117,8 +117,8 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
             type="reset"
             onClick={() => cancel()}
             className="btn btn-light me-3"
-            data-kt-customers-modal-action="cancel"
-            disabled={formik.isSubmitting || isCustomerLoading}
+            data-kt-subscriptions-modal-action="cancel"
+            disabled={formik.isSubmitting || isSubscriptionLoading}
           >
             Discard
           </button>
@@ -126,16 +126,16 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
           <button
             type="submit"
             className="btn btn-primary"
-            data-kt-customers-modal-action="submit"
+            data-kt-subscriptions-modal-action="submit"
             disabled={
-              isCustomerLoading ||
+              isSubscriptionLoading ||
               formik.isSubmitting ||
               !formik.isValid ||
               !formik.touched
             }
           >
             <span className="indicator-label">Submit</span>
-            {(formik.isSubmitting || isCustomerLoading) && (
+            {(formik.isSubmitting || isSubscriptionLoading) && (
               <span className="indicator-progress">
                 Please wait...{" "}
                 <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -144,9 +144,9 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
           </button>
         </div>
       </form>
-      {(formik.isSubmitting || isCustomerLoading) && <CustomersListLoading />}
+      {(formik.isSubmitting || isSubscriptionLoading) && <SubscriptionsListLoading />}
     </>
   );
 };
 
-export { CustomerEditModalForm };
+export { SubscriptionEditModalForm };

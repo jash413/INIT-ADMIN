@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Column } from "react-table";
 import { CustomerInfoCell } from "./CustomerInfoCell";
 import { CustomerActionsCell } from "./CustomerActionsCell";
@@ -58,6 +57,12 @@ const customersColumns: ReadonlyArray<Column<Customer>> = [
     accessor: "notification_date",
     Cell: ({ value }) => moment(value).format("DD-MM-YYYY"),
 
+  },
+  {
+    Header: (props) => (
+      <CustomerCustomHeader tableProps={props} title="Created By" />
+    ),
+    accessor: "CREATED_BY",
   },
   {
     Header: (props) => (

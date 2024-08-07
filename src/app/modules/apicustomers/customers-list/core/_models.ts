@@ -6,6 +6,7 @@ export type Customer = {
   CUS_ADDR?: string;
   CMP_NAME?: string;
   notification_date?: string;
+  CREATED_BY?: string;
 };
 
 export type CustomersQueryResponse = Response<Array<Customer>>;

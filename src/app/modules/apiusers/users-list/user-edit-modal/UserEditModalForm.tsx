@@ -2,20 +2,20 @@ import { FC, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { isNotEmpty } from "../../../../../_metronic/helpers";
-import { Customer } from "../core/_models";
+import { User } from "../core/_models";
 import clsx from "clsx";
 import { useListView } from "../core/ListViewProvider";
-import { CustomersListLoading } from "../components/loading/CustomersListLoading";
-import { createCustomer, updateCustomer } from "../core/_requests";
+import { UsersListLoading } from "../components/loading/UsersListLoading";
+import { createUser, updateUser } from "../core/_requests";
 import { useQueryResponse } from "../core/QueryResponseProvider";
 import moment from "moment";
 
 type Props = {
-  isCustomerLoading: boolean;
-  customer: Customer;
+  isUserLoading: boolean;
+  user: User;
 };
 
-const editCustomerSchema = Yup.object().shape({
+const editUserSchema = Yup.object().shape({
   CUS_NAME: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
@@ -25,16 +25,18 @@ const editCustomerSchema = Yup.object().shape({
   notification_date: Yup.string().required("Notification date is required"),
 });
 
-const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
+const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
 
-  const [customerForEdit] = useState<Customer>({
-    ...customer,
-    CUS_NAME: customer.CUS_NAME,
-    CUS_ADDR: customer.CUS_ADDR,
-    CMP_NAME: customer.CMP_NAME,
-    notification_date: moment(customer.notification_date).format("YYYY-MM-DD"),
+  const [userForEdit] = useState<User>({
+    ...user,
+    GST_CODE: user.GST_CODE,
+    GST_NMBR: user.GST_NMBR,
+    USR_ID: user.USR_ID,
+    USR_PASS: user.USR_PASS,
+    USR_ACTV: user.USR_ACTV,
+    is_admin: user.is_admin,
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -45,15 +47,15 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
   };
 
   const formik = useFormik({
-    initialValues: customerForEdit,
-    validationSchema: editCustomerSchema,
+    initialValues: userForEdit,
+    validationSchema: editUserSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       try {
         if (isNotEmpty(values.id)) {
-          await updateCustomer(values);
+          await updateUser(values);
         } else {
-          await createCustomer(values);
+          await createUser(values);
         }
       } catch (ex) {
         console.error(ex);
@@ -66,7 +68,7 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
 
   const renderField = (
     label: string,
-    name: keyof Customer,
+    name: keyof User,
     type = "text",
     isRequired = true
   ) => (
@@ -84,7 +86,7 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
           { "is-valid": formik.touched[name] && !formik.errors[name] }
         )}
         autoComplete="off"
-        disabled={formik.isSubmitting || isCustomerLoading}
+        disabled={formik.isSubmitting || isUserLoading}
       />
     </div>
   );
@@ -92,33 +94,35 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
   return (
     <>
       <form
-        id="kt_modal_add_customer_form"
+        id="kt_modal_add_user_form"
         className="form"
         onSubmit={formik.handleSubmit}
         noValidate
       >
         <div
           className="d-flex flex-column scroll-y me-n7 pe-7"
-          id="kt_modal_add_customer_scroll"
+          id="kt_modal_add_user_scroll"
           data-kt-scroll="true"
           data-kt-scroll-activate="{default: false, lg: true}"
           data-kt-scroll-max-height="auto"
-          data-kt-scroll-dependencies="#kt_modal_add_customer_header"
-          data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
+          data-kt-scroll-dependencies="#kt_modal_add_user_header"
+          data-kt-scroll-wrappers="#kt_modal_add_user_scroll"
           data-kt-scroll-offset="300px"
         >
-          {renderField("Customer Name", "CUS_NAME")}
-          {renderField("Address", "CUS_ADDR")}
-          {renderField("Company Name", "CMP_NAME")}
-          {renderField("Notification Date", "notification_date", "date")}
+          {renderField("Select Customer", "GST_CODE")}
+          {renderField("GST Number", "GST_NMBR")}
+          {renderField("Email", "USR_ID", "email")}
+          {renderField("Password", "USR_PASS", "password")}
+          {renderField("Active", "USR_ACTV", "checkbox", false)}
+          {renderField("Is Admin", "is_admin", "checkbox", false)}
         </div>
         <div className="text-center pt-15">
           <button
             type="reset"
             onClick={() => cancel()}
             className="btn btn-light me-3"
-            data-kt-customers-modal-action="cancel"
-            disabled={formik.isSubmitting || isCustomerLoading}
+            data-kt-users-modal-action="cancel"
+            disabled={formik.isSubmitting || isUserLoading}
           >
             Discard
           </button>
@@ -126,16 +130,16 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
           <button
             type="submit"
             className="btn btn-primary"
-            data-kt-customers-modal-action="submit"
+            data-kt-users-modal-action="submit"
             disabled={
-              isCustomerLoading ||
+              isUserLoading ||
               formik.isSubmitting ||
               !formik.isValid ||
               !formik.touched
             }
           >
             <span className="indicator-label">Submit</span>
-            {(formik.isSubmitting || isCustomerLoading) && (
+            {(formik.isSubmitting || isUserLoading) && (
               <span className="indicator-progress">
                 Please wait...{" "}
                 <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -144,9 +148,9 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
           </button>
         </div>
       </form>
-      {(formik.isSubmitting || isCustomerLoading) && <CustomersListLoading />}
+      {(formik.isSubmitting || isUserLoading) && <UsersListLoading />}
     </>
   );
 };
 
-export { CustomerEditModalForm };
+export { UserEditModalForm };

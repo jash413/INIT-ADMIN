@@ -27,7 +27,19 @@ const PrivateRoutes = () => {
   const SubscriptionProfilePage = lazy(
     () => import("../modules/subscriptionprofile/ProfilePage")
   );
-  const ApiCustomersPage = lazy(() => import("../modules/apicustomers/CustomersPage"));
+  const ApiCustomersPage = lazy(
+    () => import("../modules/apicustomers/CustomersPage")
+  );
+  const ApiUsersPage = lazy(() => import("../modules/apiusers/UsersPage"));
+  const ApiEwayEinvoiceSubscriptionsPage = lazy(
+    () => import("../modules/apisubscriptions/ewayeinvoice/SubscriptionsPage")
+  );
+  const ApiGstApiSubscriptionsPage = lazy(
+    () => import("../modules/apisubscriptions/gstapi/SubscriptionsPage")
+  );
+  const ApiWhatsappSubscriptionsPage = lazy(
+    () => import("../modules/apisubscriptions/whatsapp/SubscriptionsPage")
+  );
 
   return (
     <Routes>
@@ -67,6 +79,38 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <ApiCustomersPage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="api-user-management/*"
+          element={
+            <SuspensedView>
+              <ApiUsersPage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="api-ewayeinvoice-subscription-management/*"
+          element={
+            <SuspensedView>
+              <ApiEwayEinvoiceSubscriptionsPage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="api-gstapi-subscription-management/*"
+          element={
+            <SuspensedView>
+              <ApiGstApiSubscriptionsPage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="api-whatsapp-subscription-management/*"
+          element={
+            <SuspensedView>
+              <ApiWhatsappSubscriptionsPage />
             </SuspensedView>
           }
         />
