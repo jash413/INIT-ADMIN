@@ -74,6 +74,19 @@ const subscriptionsColumns: ReadonlyArray<Column<Subscription>> = [
   },
   {
     Header: (props) => (
+      <SubscriptionCustomHeader tableProps={props} title="INV DATE" />
+    ),
+    accessor: "INV_DATE",
+    Cell: ({ value }) => moment(value).format("DD-MM-YYYY"),
+  },
+  {
+    Header: (props) => (
+      <SubscriptionCustomHeader tableProps={props} title="INV NO" />
+    ),
+    accessor: "INV_NO",
+  },
+  {
+    Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Alloted Calls" />
     ),
     accessor: "ALLOTED_CALLS",
