@@ -64,15 +64,15 @@ const SidebarMenuMain = () => {
       >
         <SidebarMenuItem
           to="/api-ewayeinvoice-subscription-management/subscriptions"
-          title="Eway/Einvoice Subscriptions"
+          title="EWAY/EINVOICE"
         />
         <SidebarMenuItem
           to="/api-whatsapp-subscription-management/subscriptions"
-          title="Whatsapp Subscriptions"
+          title="WHATSAPP"
         />
         <SidebarMenuItem
           to="/api-gstapi-subscription-management/subscriptions"
-          title="GST API Subscriptions"
+          title="GST API"
         />
       </SidebarMenuItemWithSub>
     </>

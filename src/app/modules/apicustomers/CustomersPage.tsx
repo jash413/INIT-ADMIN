@@ -25,7 +25,7 @@ const CustomersPage = () => {
           path='customers'
           element={
             <>
-              <PageTitle breadcrumbs={customersBreadcrumbs}>Customer list</PageTitle>
+              <PageTitle breadcrumbs={customersBreadcrumbs}>API Customer list</PageTitle>
               <CustomersListWrapper />
             </>
           }
