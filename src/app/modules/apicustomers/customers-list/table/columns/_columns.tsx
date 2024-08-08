@@ -60,6 +60,13 @@ const customersColumns: ReadonlyArray<Column<Customer>> = [
   },
   {
     Header: (props) => (
+      <CustomerCustomHeader tableProps={props} title="CREATED ON" />
+    ),
+    accessor: "created_on",
+    Cell: ({ value }) => moment(value).format("DD-MM-YYYY"),
+  },
+  {
+    Header: (props) => (
       <CustomerCustomHeader tableProps={props} title="Created By" />
     ),
     accessor: "CREATED_BY",

@@ -7,6 +7,7 @@ export type Customer = {
   CMP_NAME?: string;
   notification_date?: string;
   CREATED_BY?: string;
+  created_on?: string;
 };
 
 export type CustomersQueryResponse = Response<Array<Customer>>;
