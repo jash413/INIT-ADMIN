@@ -9,24 +9,38 @@ import { FC, useEffect, useState } from "react";
 import { Subscription } from "../../core/_models";
 
 const columns = [
-  "ID",
-  "Name",
-  "Address",
-  "Company Name",
-  "Notification Date",
-  "Registration Code",
+  "GST_CODE",
+  "GST_NMBR",
+  "SYSTEM_ID",
+  "SUBSCRIPTION_ID",
+  "SUBSCRIPTION_DATE",
+  "ALLOTED_CALLS",
+  "USED_CALLS",
+  "PENDING_CALLS",
+  "is_active",
+  "created_on",
+  "created_by",
+  "user_id",
+  "expiry_date",
 ];
 
 const transformData = (
   subscription: Subscription,
 ): { [key: string]: any } => {
   return {
-    ID: subscription.id,
-    Name: subscription.CUS_NAME,
-    Address: subscription.CUS_ADDR,
-    "Company Name": subscription.CMP_NAME,
-    "Notification Date": subscription.notification_date,
-    "Registration Code": subscription.REG_CODE,
+    GST_CODE: subscription.GST_CODE,
+    GST_NMBR: subscription.GST_NMBR,
+    SYSTEM_ID: subscription.SYSTEM_ID,
+    SUBSCRIPTION_ID: subscription.SUBSCRIPTION_ID,
+    SUBSCRIPTION_DATE: subscription.SUBSCRIPTION_DATE,
+    ALLOTED_CALLS: subscription.ALLOTED_CALLS,
+    USED_CALLS: subscription.USED_CALLS,
+    PENDING_CALLS: subscription.PENDING_CALLS,
+    is_active: subscription.is_active,
+    created_on: subscription.created_on,
+    created_by: subscription.created_by,
+    user_id: subscription.user_id,
+    expiry_date: subscription.expiry_date,
   };
 };
 

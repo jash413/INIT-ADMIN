@@ -10,11 +10,15 @@ import { User } from "../../core/_models";
 
 const columns = [
   "ID",
-  "Name",
-  "Address",
-  "Company Name",
-  "Notification Date",
-  "Registration Code",
+  "GST CODE",
+  "GST NUMBER",
+  "EMAIL",
+  "PASSWORD",
+  "STATUS",
+  "CREATED ON",
+  "CREATED BY",
+  "IS ADMIN",
+  "LAST LOGIN",
 ];
 
 const transformData = (
@@ -22,11 +26,15 @@ const transformData = (
 ): { [key: string]: any } => {
   return {
     ID: user.id,
-    Name: user.CUS_NAME,
-    Address: user.CUS_ADDR,
-    "Company Name": user.CMP_NAME,
-    "Notification Date": user.notification_date,
-    "Registration Code": user.REG_CODE,
+    "GST CODE": user.GST_CODE,
+    "GST NUMBER": user.GST_NMBR,
+    EMAIL: user.USR_ID,
+    PASSWORD: user.USR_PASS,
+    STATUS: user.USR_ACTV,
+    "CREATED ON": user.CREATED_ON,
+    "CREATED BY": user.CREATED_BY,
+    "IS ADMIN": user.is_admin,
+    "LAST LOGIN": user.last_login,
   };
 };
 
