@@ -23,6 +23,8 @@ const editSubscriptionSchema = Yup.object().shape({
   SUBSCRIPTION_DATE: Yup.string().required("Subscription Date is required"),
   expiry_date: Yup.string().required("Expiry Date is required"),
   user_id: Yup.string().required("User Id is required"),
+  INV_DATE: Yup.string().required("Invoice Date is required"),
+  INV_NO: Yup.string().required("Invoice Number is required"),
 });
 
 const SubscriptionEditModalForm: FC<Props> = ({
@@ -58,13 +60,15 @@ const SubscriptionEditModalForm: FC<Props> = ({
     ...subscription,
     GST_CODE: subscription.GST_CODE,
     GST_NMBR: subscription.GST_NMBR,
-    SYSTEM_ID: "1",
+    SYSTEM_ID: "4",
     SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format(
       "DD/MM/YYYY"
     ),
     is_active: subscription.is_active,
     user_id: subscription.user_id,
     expiry_date: moment(subscription.expiry_date).format("DD/MM/YYYY"),
+    INV_DATE: moment(subscription.INV_DATE).format("DD/MM/YYYY"),
+    INV_NO: subscription.INV_NO,
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -202,6 +206,8 @@ const SubscriptionEditModalForm: FC<Props> = ({
         {renderField("GST No", "GST_NMBR")}
         {renderField("Subscription Date", "SUBSCRIPTION_DATE", "date")}
         {renderField("Expiry Date", "expiry_date", "date")}
+        {renderField("Invoice No", "INV_NO")}
+        {renderField("Invoice Date", "INV_DATE", "date")}
         {renderField("Is Active", "is_active", "text", true, true)}
         <div className="text-center pt-15">
           <button
