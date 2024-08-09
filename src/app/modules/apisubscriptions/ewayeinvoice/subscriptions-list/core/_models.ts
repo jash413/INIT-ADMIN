@@ -9,7 +9,7 @@ export type Subscription = {
   ALLOTED_CALLS?: string;
   USED_CALLS?: string;
   PENDING_CALLS?: string;
-  is_active?: string;
+  is_active?: number;
   created_on?: string;
   created_by?: string;
   user_id?: string;

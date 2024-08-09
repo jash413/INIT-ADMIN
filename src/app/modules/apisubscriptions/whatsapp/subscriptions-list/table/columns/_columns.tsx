@@ -109,7 +109,7 @@ const subscriptionsColumns: ReadonlyArray<Column<Subscription>> = [
     ),
     accessor: "is_active",
     Cell: ({ value }) =>
-      value === "1" ? (
+      value === 1 ? (
         <span className="badge badge-light-success">Active</span>
       ) : (
         <span className="badge badge-light-danger">Inactive</span>
