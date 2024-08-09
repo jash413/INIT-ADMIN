@@ -40,7 +40,7 @@ const usersColumns: ReadonlyArray<Column<User>> = [
     Header: (props) => <UserCustomHeader tableProps={props} title="Active" />,
     accessor: "USR_ACTV",
     Cell: ({ value }) =>
-      value === "1" ? (
+      value === 1 ? (
         <span className="badge badge-light-success">Active</span>
       ) : (
         <span className="badge badge-light-danger">Inactive</span>
@@ -50,7 +50,7 @@ const usersColumns: ReadonlyArray<Column<User>> = [
     Header: (props) => <UserCustomHeader tableProps={props} title="Is Admin" />,
     accessor: "is_admin",
     Cell: ({ value }) =>
-      value === "1" ? (
+      value === 1 ? (
         <span className="badge badge-light-success">Yes</span>
       ) : (
         <span className="badge badge-light-danger">No</span>

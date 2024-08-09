@@ -99,9 +99,9 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               { "is-valid": formik.touched[name] && !formik.errors[name] }
             )}
             disabled={formik.isSubmitting || isUserLoading}
-            checked={formik.values[name] === "1"}
+            checked={formik.values[name] === 1}
             onChange={(e) =>
-              formik.setFieldValue(name, e.target.checked ? "1" : "0")
+              formik.setFieldValue(name, e.target.checked ? 1 : 0)
             }
           />
           {formik.touched[name] && formik.errors[name] && (

@@ -61,13 +61,11 @@ const SubscriptionEditModalForm: FC<Props> = ({
     GST_CODE: subscription.GST_CODE,
     GST_NMBR: subscription.GST_NMBR,
     SYSTEM_ID: "3",
-    SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format(
-      "DD/MM/YYYY"
-    ),
+    SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format("YYYY-MM-DD"),
     is_active: subscription.is_active,
     user_id: subscription.user_id,
-    expiry_date: moment(subscription.expiry_date).format("DD/MM/YYYY"),
-    INV_DATE: moment(subscription.INV_DATE).format("DD/MM/YYYY"),
+    expiry_date: moment(subscription.expiry_date).format("YYYY-MM-DD"),
+    INV_DATE: moment(subscription.INV_DATE).format("YYYY-MM-DD"),
     INV_NO: subscription.INV_NO,
   });
 
