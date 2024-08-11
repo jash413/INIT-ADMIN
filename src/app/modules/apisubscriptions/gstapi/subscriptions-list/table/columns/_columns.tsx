@@ -48,12 +48,6 @@ const subscriptionsColumns: ReadonlyArray<Column<Subscription>> = [
   },
   {
     Header: (props) => (
-      <SubscriptionCustomHeader tableProps={props} title="System Id" />
-    ),
-    accessor: "SYSTEM_ID",
-  },
-  {
-    Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="Sub Id" />
     ),
     accessor: "SUBSCRIPTION_ID",

@@ -39,7 +39,7 @@ const getAdminById = (id: ID): Promise<any> => {
 
 const getSubscriptions = (query: string): Promise<SubscriptionsQueryResponse> => {
   return axios
-    .get(`${GET_SUBSCRIPTIONS_URL}?${query}`)
+    .get(`${GET_SUBSCRIPTIONS_URL}?filter_system_id=4&${query}`)
     .then((d: AxiosResponse<SubscriptionsQueryResponse>) => d.data)
     .catch((error) => {
       toast.error(

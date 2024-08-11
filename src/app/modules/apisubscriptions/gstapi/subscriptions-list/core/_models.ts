@@ -15,7 +15,7 @@ export type Subscription = {
   user_id?: string;
   expiry_date?: string;
   INV_DATE?: string;
-  INV_NO?: string
+  INV_NO?: string;
 };
 
 export type SubscriptionsQueryResponse = Response<Array<Subscription>>;
