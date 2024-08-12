@@ -61,7 +61,9 @@ const SubscriptionEditModalForm: FC<Props> = ({
     GST_CODE: subscription.GST_CODE,
     GST_NMBR: subscription.GST_NMBR,
     SYSTEM_ID: "4",
-    SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format("YYYY-MM-DD"),
+    SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format(
+      "YYYY-MM-DD"
+    ),
     is_active: subscription.is_active || 0,
     user_id: subscription.user_id,
     expiry_date: moment(subscription.expiry_date).format("YYYY-MM-DD"),
@@ -199,7 +201,13 @@ const SubscriptionEditModalForm: FC<Props> = ({
           data-kt-scroll-wrappers="#kt_modal_add_subscription_scroll"
           data-kt-scroll-offset="300px"
         ></div>
-        {renderSelectField("Select Customer", "GST_CODE", customers)}
+        {renderSelectField(
+          "Select Customer",
+          "GST_CODE",
+          customers,
+          true,
+          subscriptionForEdit.GST_CODE !== undefined
+        )}
         {renderSelectField("Select User", "user_id", users)}
         {renderField("GST No", "GST_NMBR")}
         {renderField("Subscription Date", "SUBSCRIPTION_DATE", "date")}
