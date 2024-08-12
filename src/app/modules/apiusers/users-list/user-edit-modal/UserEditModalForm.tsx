@@ -46,8 +46,8 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
     GST_NMBR: user.GST_NMBR,
     USR_ID: user.USR_ID,
     USR_PASS: user.USR_PASS,
-    USR_ACTV: user.USR_ACTV,
-    is_admin: user.is_admin,
+    USR_ACTV: user.USR_ACTV || 0,
+    is_admin: user.is_admin || 0,
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -100,8 +100,10 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
             )}
             disabled={formik.isSubmitting || isUserLoading}
             checked={formik.values[name] === 1}
-            onChange={(e) =>
+            onChange={(e) => {
+              console.log(e.target.checked,name);
               formik.setFieldValue(name, e.target.checked ? 1 : 0)
+            }
             }
           />
           {formik.touched[name] && formik.errors[name] && (

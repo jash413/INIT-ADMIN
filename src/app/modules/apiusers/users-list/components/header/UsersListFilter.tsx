@@ -30,7 +30,7 @@ const UsersListFilter = () => {
   const filterData = () => {
     updateState({
       filter: {
-        ad_id: admin,
+        created_by: admin,
         from,
         to,
       },
@@ -82,7 +82,7 @@ const UsersListFilter = () => {
             >
               <option value="">Select Admin</option>
               {admins?.map((admin) => (
-                <option key={admin.ad_name} value={admin.ad_id}>
+                <option key={admin.ad_name} value={admin.ad_name}>
                   {admin.ad_name}
                 </option>
               ))}
