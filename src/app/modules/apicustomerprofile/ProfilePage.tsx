@@ -2,8 +2,8 @@ import React from "react";
 import { Navigate, Routes, Route, Outlet, useParams } from "react-router-dom";
 import { PageLink, PageTitle } from "../../../_metronic/layout/core";
 import { Subscriptions } from "./components/Subscriptions";
-// import { Users } from "./components/Users";
 import { ProfileHeader } from "./ProfileHeader";
+import { Users } from "./components/Users";
 
 const generateBreadcrumbs = (page: string, id: string): Array<PageLink> => {
   return [
@@ -79,6 +79,10 @@ const CustomerProfilePage: React.FC = () => {
               pageTitle="Subscriptions"
             />
           }
+        />
+        <Route
+          path="users"
+          element={<RouteWithParams Component={Users} pageTitle="Users" />}
         />
         <Route index element={<Navigate to="subscriptions" />} />
       </Route>

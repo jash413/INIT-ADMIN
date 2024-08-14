@@ -11,7 +11,7 @@ import { Subscription } from "../subscriptionCore/_models";
 import moment from "moment";
 import { SubscriptionEditModalForm } from "./SubscriptionEditModalForm";
 import { useDebounce, KTIcon } from "../../../../_metronic/helpers";
-import { CustomersListFilter } from "./CustomersListFilter";
+import { CustomersListFilter } from "./CustomersSubscriptionListFilter";
 
 interface SubscriptionsProps {
   id: string;

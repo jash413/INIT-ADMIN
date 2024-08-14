@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ID, Response } from "../../../../../_metronic/helpers";
+import { ID, Response } from "../../../../_metronic/helpers";
 import { User, UsersQueryResponse } from "./_models";
 
 const API_URL = import.meta.env.VITE_APP_THEME_API_URL;
@@ -48,6 +48,20 @@ const getUsers = (query: string): Promise<UsersQueryResponse> => {
       throw error;
     });
 };
+
+const searchUsers = (searchTerm: string, id: string): Promise<any> => {
+  return axios
+    .get(`${GET_USERS_URL}/${id}?search=${searchTerm}`)
+    .then((d: AxiosResponse<any>) => d.data)
+    .catch((error) => {
+      toast.error(
+        `Failed to search users: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+      throw error;
+    });
+}
 
 const getAllUsers = (): Promise<any> => {
   return axios
@@ -148,5 +162,6 @@ export {
   updateUser,
   getAdmins,
   getAdminById,
-  getAllUsers
+  getAllUsers,
+  searchUsers,
 };
