@@ -1,5 +1,6 @@
 export interface AuthModel {
-  accessToken: string
+  accessToken: string,
+  loginType: string,
 }
 
 export interface UserModel {

@@ -32,12 +32,12 @@ export function Login(): JSX.Element {
   const [otpSent, setOtpSent] = useState(false);
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [authMethod, setAuthMethod] = useState<"email" | "mobile">("email");
-  const { saveAuth, setCurrentUser, setLoginType } = useAuth();
+  const { saveAuth, setCurrentUser } = useAuth();
   const [token, setToken] = useState("");
   const [resendOtpTimer, setResendOtpTimer] = useState(0);
   const [disableResendButton, setDisableResendButton] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authData, setAuthData] = useState({ accessToken: "" });
+  const [authData, setAuthData] = useState({ accessToken: "", loginType: "" });
   const [currentUserData, setCurrentUserData] = useState<any>(undefined);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export function Login(): JSX.Element {
             setResendOtpTimer(30);
             setDisableResendButton(true);
           } else if (values.otp === generatedOtp) {
-            setAuthData({ accessToken: token });
+            setAuthData({ accessToken: token, loginType: "" });
             const { data } = await getUserByToken(token);
             setCurrentUserData(data.data);
             setIsAuthenticated(true);
@@ -113,7 +113,7 @@ export function Login(): JSX.Element {
   };
 
   const handleSelectDashboard = (type: "IFAS" | "API") => {
-    setLoginType(type);
+    authData.loginType = type;
     saveAuth(authData);
     setCurrentUser(currentUserData);
   };

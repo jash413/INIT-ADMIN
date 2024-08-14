@@ -1,9 +1,17 @@
-import { FC, useState, useEffect, createContext, useContext, Dispatch, SetStateAction } from 'react';
-import { LayoutSplashScreen } from '../../../../_metronic/layout/core';
-import { AuthModel, UserModel } from './_models';
-import * as authHelper from './AuthHelpers';
-import { getUserByToken } from './_requests';
-import { WithChildren } from '../../../../_metronic/helpers';
+import {
+  FC,
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import { LayoutSplashScreen } from "../../../../_metronic/layout/core";
+import { AuthModel, UserModel } from "./_models";
+import * as authHelper from "./AuthHelpers";
+import { getUserByToken } from "./_requests";
+import { WithChildren } from "../../../../_metronic/helpers";
 
 type AuthContextProps = {
   auth: AuthModel | undefined;
@@ -11,8 +19,6 @@ type AuthContextProps = {
   currentUser: UserModel | undefined;
   setCurrentUser: Dispatch<SetStateAction<UserModel | undefined>>;
   logout: () => void;
-  loginType?: string;
-  setLoginType: Dispatch<SetStateAction<string | undefined>>;
 };
 
 const initAuthContextPropsState: AuthContextProps = {
@@ -21,8 +27,6 @@ const initAuthContextPropsState: AuthContextProps = {
   currentUser: undefined,
   setCurrentUser: () => {},
   logout: () => {},
-  loginType: undefined,
-  setLoginType: () => {},
 };
 
 const AuthContext = createContext<AuthContextProps>(initAuthContextPropsState);
@@ -34,7 +38,6 @@ const useAuth = () => {
 const AuthProvider: FC<WithChildren> = ({ children }) => {
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth());
   const [currentUser, setCurrentUser] = useState<UserModel | undefined>();
-  const [loginType, setLoginType] = useState<string | undefined>();
 
   const saveAuth = (auth: AuthModel | undefined) => {
     setAuth(auth);
@@ -48,12 +51,11 @@ const AuthProvider: FC<WithChildren> = ({ children }) => {
   const logout = () => {
     saveAuth(undefined);
     setCurrentUser(undefined);
-    setLoginType(undefined);
   };
 
   return (
     <AuthContext.Provider
-      value={{ auth, saveAuth, currentUser, setCurrentUser, logout, loginType, setLoginType }}
+      value={{ auth, saveAuth, currentUser, setCurrentUser, logout }}
     >
       {children}
     </AuthContext.Provider>

@@ -3,10 +3,10 @@ import { SidebarMenuItem } from "./SidebarMenuItem";
 import { useAuth } from "../../../../../app/modules/auth/core/Auth";
 
 const SidebarMenuMain = () => {
-  const { loginType } = useAuth();
+  const { auth } = useAuth();
   return (
     <>
-      {loginType === "IFAS" && (
+      {auth?.loginType === "IFAS" && (
         <>
           <div className="menu-item">
             <div className="menu-content pt-8 pb-2">
@@ -42,7 +42,7 @@ const SidebarMenuMain = () => {
         </>
       )}
 
-      {loginType === "API" && (
+      {auth?.loginType === "API" && (
         <>
           <div className="menu-item">
             <div className="menu-content pt-8 pb-2">
