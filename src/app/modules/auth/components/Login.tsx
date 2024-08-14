@@ -309,7 +309,7 @@ export function Login(): JSX.Element {
                   className="fas fa-chart-line text-primary mb-4"
                   style={{ fontSize: "3rem" }}
                 ></i>
-                <h5 className="card-title">IFAS Dashboard</h5>
+                <h5 className="card-title">IFAS APP SUBSCRIPTION</h5>
                 <p className="card-text text-muted">
                   Manage and track IFAS ERP integrations.
                 </p>
@@ -325,7 +325,7 @@ export function Login(): JSX.Element {
                   className="fas fa-code text-primary mb-4"
                   style={{ fontSize: "3rem" }}
                 ></i>
-                <h5 className="card-title">API Dashboard</h5>
+                <h5 className="card-title">API SUBSCRIPTIONS</h5>
                 <p className="card-text text-muted">
                   Manage and track API integrations.
                 </p>
