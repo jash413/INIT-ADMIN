@@ -10,7 +10,7 @@ const CustomerInfoCell: FC<Props> = ({customer}) => (
   <div className='d-flex align-items-center'>
     {/* begin:: Avatar */}
     <div className='d-flex flex-column'>
-      <Link to={`/customer-profile/${customer.id}/`} className='text-gray-800 text-hover-primary mb-1'>
+      <Link to={`/api-customer-profile/${customer.id}/`} className='text-gray-800 text-hover-primary mb-1'>
         {customer.id}
       </Link>
     </div>

@@ -40,6 +40,9 @@ const PrivateRoutes = () => {
   const ApiWhatsappSubscriptionsPage = lazy(
     () => import("../modules/apisubscriptions/whatsapp/SubscriptionsPage")
   );
+  const ApiCustomerProfilePage = lazy(
+    () => import("../modules/apicustomerprofile/ProfilePage")
+  );
 
   return (
     <Routes>
@@ -135,6 +138,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <CustomerProfilePage />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path="api-customer-profile/*"
+          element={
+            <SuspensedView>
+              <ApiCustomerProfilePage />
             </SuspensedView>
           }
         />
