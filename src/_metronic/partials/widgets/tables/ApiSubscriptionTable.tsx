@@ -184,6 +184,15 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                             try {
                               await updateSubscription({
                                 ...subscription,
+                                SUBSCRIPTION_DATE: moment(
+                                  subscription.SUBSCRIPTION_DATE
+                                ).format("YYYY-MM-DD"),
+                                expiry_date: moment(
+                                  subscription.expiry_date
+                                ).format("YYYY-MM-DD"),
+                                INV_DATE: moment(subscription.INV_DATE).format(
+                                  "YYYY-MM-DD"
+                                ),
                                 is_verified: !subscription.is_verified,
                               });
                               fetchData();
