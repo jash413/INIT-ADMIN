@@ -311,7 +311,7 @@ export function Login(): JSX.Element {
                 ></i>
                 <h5 className="card-title">IFAS APP SUBSCRIPTION</h5>
                 <p className="card-text text-muted">
-                  Manage and track IFAS ERP integrations.
+                  Manage and track IFAS ERP subscriptions.
                 </p>
               </div>
             </div>
@@ -327,7 +327,7 @@ export function Login(): JSX.Element {
                 ></i>
                 <h5 className="card-title">API SUBSCRIPTIONS</h5>
                 <p className="card-text text-muted">
-                  Manage and track API integrations.
+                  Manage and track API subscriptions.
                 </p>
               </div>
             </div>

@@ -1,27 +1,13 @@
 import { FC, useEffect, useState } from "react";
-import { KTIcon } from "../../../helpers";
 import {
   getSubscriptionsByDateRange,
   updateSubscription,
-} from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
-import { Link } from "react-router-dom";
+} from "../../../../app/modules/apicustomerprofile/subscriptionCore/_requests";
 import moment from "moment";
+import { Subscription } from "../../../../app/modules/apicustomerprofile/subscriptionCore/_models";
 
 type Props = {
   className: string;
-};
-
-type Subscription = {
-  SUB_CODE: string;
-  INV_DATE: string;
-  SUB_ORDN: string;
-  SUB_STDT: string;
-  SUB_ENDT: string;
-  status: number;
-  is_verified: boolean;
-  customer_name: string;
-  admin_name: string;
-  LIC_USER: number;
 };
 
 const ApiSubscriptionTable: FC<Props> = ({ className }) => {
@@ -102,31 +88,38 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                 {/* begin::Table head */}
                 <thead>
                   <tr className="border-0">
-                    <th className="p-0 w-150px text-center">
-                      <span className="text-muted fw-bold">
-                        Subscription Code
-                      </span>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">CUS NAME</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">Customer Name</span>
+                      <span className="text-muted fw-bold">GST NO</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">Created By</span>
+                      <span className="text-muted fw-bold">USER ID</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">Invoice Date</span>
+                      <span className="text-muted fw-bold">SUB ID</span>
+                    </th>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">SUB DATE</span>
+                    </th>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">EXP DATE</span>
+                    </th>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">INV DATE</span>
                     </th>
                     <th className="p-0 min-w-140px text-center">
-                      <span className="text-muted fw-bold">Invoice Number</span>
+                      <span className="text-muted fw-bold">INV NO</span>
                     </th>
-                    <th className="p-0 min-w-120px text-center">
-                      <span className="text-muted fw-bold">Users</span>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">ALLOTED CALLS</span>
                     </th>
-                    <th className="p-0 min-w-120px text-center">
-                      <span className="text-muted fw-bold">Start Date</span>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">USED CALLS</span>
                     </th>
-                    <th className="p-0 min-w-110px text-center">
-                      <span className="text-muted fw-bold">End Date</span>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">PENDING CALLS</span>
                     </th>
                     <th className="p-0 min-w-50px text-center">
                       <span className="text-muted fw-bold">Verified</span>
@@ -134,8 +127,11 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                     <th className="p-0 min-w-50px text-center">
                       <span className="text-muted fw-bold">Status</span>
                     </th>
-                    <th className="p-0 min-w-50px text-center">
-                      <span className="text-muted fw-bold">Details</span>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">CREATED ON</span>
+                    </th>
+                    <th className="p-0 min-w-150px text-center">
+                      <span className="text-muted fw-bold">CREATED BY</span>
                     </th>
                   </tr>
                 </thead>
@@ -144,32 +140,40 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                 <tbody>
                   {subscriptions.map((subscription, index) => (
                     <tr key={index}>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.CUS_NAME}
+                      </td>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.GST_NMBR}
+                      </td>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.user_id}
+                      </td>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.SUBSCRIPTION_ID}
+                      </td>
                       <td className="text-center">
-                        <Link
-                          to={`/subscription-profile/${subscription.SUB_CODE}`}
-                          className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
-                        >
-                          {subscription.SUB_CODE}
-                        </Link>
+                        {moment(subscription.SUBSCRIPTION_DATE).format(
+                          "DD/MMM/YYYY"
+                        )}
                       </td>
                       <td className="text-center text-muted fw-semibold">
-                        {subscription.customer_name}
-                      </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.admin_name}
+                        {moment(subscription.expiry_date).format("DD/MMM/YYYY")}
                       </td>
                       <td className="text-center text-muted fw-semibold">
                         {moment(subscription.INV_DATE).format("DD/MMM/YYYY")}
                       </td>
                       <td className="text-center text-muted fw-semibold">
-                        {subscription.SUB_ORDN}
-                      </td>
-                      <td className="text-center">{subscription.LIC_USER}</td>
-                      <td className="text-center text-muted fw-semibold">
-                        {moment(subscription.SUB_STDT).format("DD/MMM/YYYY")}
+                        {subscription.INV_NO}
                       </td>
                       <td className="text-center text-muted fw-semibold">
-                        {moment(subscription.SUB_ENDT).format("DD/MMM/YYYY")}
+                        {subscription.ALLOTED_CALLS}
+                      </td>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.USED_CALLS}
+                      </td>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.PENDING_CALLS}
                       </td>
                       <td className="text-center">
                         <input
@@ -195,19 +199,17 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                       <td className="text-center">
                         <span
                           className={`badge badge-light-${
-                            subscription.status === 1 ? "success" : "danger"
+                            subscription.is_active === 1 ? "success" : "danger"
                           } badge-pill`}
                         >
-                          {subscription.status === 1 ? "Active" : "Inactive"}
+                          {subscription.is_active === 1 ? "Active" : "Inactive"}
                         </span>
                       </td>
                       <td className="text-center">
-                        <Link
-                          to={`/subscription-profile/${subscription.SUB_CODE}`}
-                          className="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
-                        >
-                          <KTIcon iconName="arrow-right" className="fs-2" />
-                        </Link>
+                        {moment(subscription.created_on).format("DD/MMM/YYYY")}
+                      </td>
+                      <td className="text-center text-muted fw-semibold">
+                        {subscription.created_by}
                       </td>
                     </tr>
                   ))}

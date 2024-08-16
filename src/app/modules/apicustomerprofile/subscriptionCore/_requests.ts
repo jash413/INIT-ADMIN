@@ -109,6 +109,16 @@ const getSubscriptionById = (id: ID): Promise<Subscription | undefined> => {
     });
 };
 
+const getSubscriptionsByDateRange = (startDate: string, endDate: string): Promise<any> => {
+  return axios
+    .get(`${SUBSCRIPTION_URL}?filter_from=${startDate}&filter_to=${endDate}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      toast.error(`${error.response.data.message}`);
+      throw error;
+    });
+}
+
 const createSubscription = (
   customer: Subscription
 ): Promise<Subscription | undefined> => {
@@ -190,4 +200,5 @@ export {
   getAllSubscriptions,
   searchSubscriptions,
   getGstSystem,
+  getSubscriptionsByDateRange,
 };
