@@ -10,6 +10,7 @@ import { Subscription } from "../../subscriptions/subscriptions-list/core/_model
 import moment from "moment";
 import { SubscriptionEditModalForm } from "./SubscriptionEditModalForm";
 import { useDebounce, KTIcon } from "../../../../_metronic/helpers";
+import { CustomersListFilter } from "./CustomersSubscriptionListFilter";
 
 interface SubscriptionsProps {
   id: string;
@@ -105,6 +106,7 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
         </div>
 
         <div className="d-flex flex-wrap my-2">
+          <CustomersListFilter setSubscription={setSubscriptions} />
           <button
             onClick={handleNewSubscription}
             className="btn btn-primary btn-sm"

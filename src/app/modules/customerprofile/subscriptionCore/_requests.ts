@@ -8,6 +8,21 @@ import { Subscription, SubscriptionsQueryResponse } from "./_models";
 const API_URL = import.meta.env.VITE_APP_THEME_API_URL;
 const SUBSCRIPTION_URL = `${API_URL}/api/subscriptions`;
 const GET_SUBSCRIPTIONS_URL = `${API_URL}/api/subscriptions`;
+const GET_ADMINS_URL = `${API_URL}/api/admins`;
+
+const getAdmins = (): Promise<any> => {
+  return axios
+    .get(GET_ADMINS_URL)
+    .then((d: AxiosResponse<any>) => d.data)
+    .catch((error) => {
+      toast.error(
+        `Failed to get admins: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+      throw error;
+    });
+};
 
 const getSubscriptions = (query: string): Promise<SubscriptionsQueryResponse> => {
   return axios
@@ -145,5 +160,6 @@ export {
   getPlanById,
   searchSubscriptions,
   getAllSubscriptions,
-  getSubscriptionsByDateRange
+  getSubscriptionsByDateRange,
+  getAdmins
 };
