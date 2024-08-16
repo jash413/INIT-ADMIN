@@ -61,6 +61,18 @@ const getAllUsers = (): Promise<any> => {
     });
 }
 
+const getAllApiUsers = (): Promise<any> => {
+  return axios
+    .get(`${USER_URL}`)
+    .then((d: AxiosResponse<any>) => d.data)
+    .catch((error) => {
+      toast.error(
+        `Failed to get users: ${error.response?.data?.message || error.message}`
+      );
+      throw error;
+    });
+}
+
 const getUserById = (id: ID): Promise<User | undefined> => {
   return axios
     .get(`${USER_URL}/${id}`)
@@ -148,5 +160,6 @@ export {
   updateUser,
   getAdmins,
   getAdminById,
-  getAllUsers
+  getAllUsers,
+  getAllApiUsers
 };

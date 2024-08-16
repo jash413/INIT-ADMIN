@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from "react";
-import { useIntl } from "react-intl";
 import { PageTitle } from "../../../_metronic/layout/core";
 import {
   TablesWidget5,
   CardsWidget17,
+  ApiSubscriptionTable
 } from "../../../_metronic/partials/widgets";
 import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
 import { Content } from "../../../_metronic/layout/components/content";
@@ -11,12 +11,16 @@ import { getAllUsers } from "../../modules/customers/users-list/core/_requests";
 import { getAllSubscriptions } from "../../modules/customerprofile/subscriptionCore/_requests";
 import { getAllEmployees } from "../../modules/customerprofile/employeeCore/_requests";
 import moment from "moment";
+import { useAuth } from "../../modules/auth/core/Auth";
+import { getAllCustomers } from "../../modules/apicustomers/customers-list/core/_requests";
+import { getAllApiUsers } from "../../modules/apiusers/users-list/core/_requests";
+import { getAllApiSubscriptions } from "../../modules/apisubscriptions/ewayeinvoice/subscriptions-list/core/_requests";
 
 interface DashboardPageProps {
   noOfActiveSubscriptions: number;
   noOfInactiveSubscriptions: number;
-  noOfActiveEmployees: number;
-  noOfInactiveEmployees: number;
+  noOfActiveUsersOrEmployees: number;
+  noOfInactiveUsersOrEmployees: number;
   noOfActiveCustomers: number;
   noOfInactiveCustomers: number;
   noOfActiveToday: number;
@@ -25,13 +29,14 @@ interface DashboardPageProps {
   noOfInactiveToday: number;
   noOfInactiveWeekly: number;
   noOfInactiveMonthly: number;
+  type: string;
 }
 
 const DashboardPage: FC<DashboardPageProps> = ({
   noOfActiveSubscriptions,
   noOfInactiveSubscriptions,
-  noOfActiveEmployees,
-  noOfInactiveEmployees,
+  noOfActiveUsersOrEmployees,
+  noOfInactiveUsersOrEmployees,
   noOfActiveCustomers,
   noOfInactiveCustomers,
   noOfActiveToday,
@@ -40,6 +45,7 @@ const DashboardPage: FC<DashboardPageProps> = ({
   noOfInactiveToday,
   noOfInactiveWeekly,
   noOfInactiveMonthly,
+  type,
 }) => (
   <>
     <ToolbarWrapper />
@@ -66,10 +72,10 @@ const DashboardPage: FC<DashboardPageProps> = ({
         </div>
         <div className="col-xl-4">
           <CardsWidget17
-            active={noOfActiveEmployees}
-            inactive={noOfInactiveEmployees}
-            type="Employees"
-            chartName="NO OF EMPLOYEES"
+            active={noOfActiveUsersOrEmployees}
+            inactive={noOfInactiveUsersOrEmployees}
+            type={type}
+            chartName={`NO OF ${type.toUpperCase()}`}
             className="card-xxl-stretch mb-5 mb-xl-8"
           />
         </div>
@@ -106,7 +112,11 @@ const DashboardPage: FC<DashboardPageProps> = ({
       {/* end::Row */}
 
       <div className="row g-5 gx-xxl-8">
-        <TablesWidget5 className="card-xxl-stretch mb-5 mb-xxl-8" />
+        {type === "API Users" ? (
+          <ApiSubscriptionTable className="card-xxl-stretch mb-5 mb-xxl-8" />
+        ) : (
+          <TablesWidget5 className="card-xxl-stretch mb-5 mb-xxl-8" />
+        )}
       </div>
     </Content>
   </>
@@ -114,10 +124,12 @@ const DashboardPage: FC<DashboardPageProps> = ({
 
 const DashboardWrapper: FC = () => {
   const [noOfActiveSubscriptions, setNoOfActiveSubscriptions] = useState(0);
-  const [noOfActiveEmployees, setNoOfActiveEmployees] = useState(0);
+  const [noOfActiveUsersOrEmployees, setNoOfActiveUsersOrEmployees] =
+    useState(0);
   const [noOfActiveCustomers, setNoOfActiveCustomers] = useState(0);
   const [noOfInactiveSubscriptions, setNoOfInactiveSubscriptions] = useState(0);
-  const [noOfInactiveEmployees, setNoOfInactiveEmployees] = useState(0);
+  const [noOfInactiveUsersOrEmployees, setNoOfInactiveUsersOrEmployees] =
+    useState(0);
   const [noOfInactiveCustomers, setNoOfInactiveCustomers] = useState(0);
   const [noOfActiveToday, setNoOfActiveToday] = useState(0);
   const [noOfActiveWeekly, setNoOfActiveWeekly] = useState(0);
@@ -125,12 +137,15 @@ const DashboardWrapper: FC = () => {
   const [noOfInactiveToday, setNoOfInactiveToday] = useState(0);
   const [noOfInactiveWeekly, setNoOfInactiveWeekly] = useState(0);
   const [noOfInactiveMonthly, setNoOfInactiveMonthly] = useState(0);
+  const { auth } = useAuth();
 
-  const fetchAllData = async () => {
+  const fetchData = async (isIfas: boolean) => {
     try {
-      const users = await getAllUsers();
-      const subscriptions = await getAllSubscriptions();
-      const employees = await getAllEmployees();
+      const users = isIfas ? await getAllUsers() : await getAllApiUsers();
+      const subscriptions = isIfas
+        ? await getAllSubscriptions()
+        : await getAllApiSubscriptions();
+      const entity = isIfas ? await getAllEmployees() : await getAllCustomers();
 
       const today = moment().startOf("day");
       const startOfWeek = moment().startOf("week");
@@ -139,39 +154,69 @@ const DashboardWrapper: FC = () => {
       const endOfWeek = moment().endOf("week");
       const endOfMonth = moment().endOf("month");
 
-      const activeSubscriptions = subscriptions.data.filter((s: any) => s.status === 1);
-      const inactiveSubscriptions = subscriptions.data.filter((s: any) => s.status === 0);
+      const activeSubscriptions = subscriptions.data.filter(
+        (s: any) => (isIfas ? s.status : s.is_active) === 1
+      );
+      const inactiveSubscriptions = subscriptions.data.filter(
+        (s: any) => (isIfas ? s.status : s.is_active) === 0
+      );
 
       setNoOfActiveToday(
-        activeSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(today, endOfToday)).length
+        activeSubscriptions.filter((s: any) =>
+          moment(s.CREATED_ON || s.CREATED_AT).isBetween(today, endOfToday)
+        ).length
       );
       setNoOfActiveWeekly(
-        activeSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfWeek, endOfWeek)).length
+        activeSubscriptions.filter((s: any) =>
+          moment(s.CREATED_ON || s.CREATED_AT).isBetween(startOfWeek, endOfWeek)
+        ).length
       );
       setNoOfActiveMonthly(
-        activeSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfMonth, endOfMonth)).length
+        activeSubscriptions.filter((s: any) =>
+          moment(s.CREATED_ON || s.CREATED_AT).isBetween(
+            startOfMonth,
+            endOfMonth
+          )
+        ).length
       );
       setNoOfInactiveToday(
-        inactiveSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(today, endOfToday)).length
+        inactiveSubscriptions.filter((s: any) =>
+          moment(s.CREATED_ON || s.CREATED_AT).isBetween(today, endOfToday)
+        ).length
       );
       setNoOfInactiveWeekly(
-        inactiveSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfWeek, endOfWeek)).length
+        inactiveSubscriptions.filter((s: any) =>
+          moment(s.CREATED_ON || s.CREATED_AT).isBetween(startOfWeek, endOfWeek)
+        ).length
       );
       setNoOfInactiveMonthly(
-        inactiveSubscriptions.filter((s: any) => moment(s.CREATED_AT).isBetween(startOfMonth, endOfMonth)).length
+        inactiveSubscriptions.filter((s: any) =>
+          moment(s.CREATED_ON || s.CREATED_AT).isBetween(
+            startOfMonth,
+            endOfMonth
+          )
+        ).length
       );
 
       setNoOfActiveSubscriptions(activeSubscriptions.length);
       setNoOfInactiveSubscriptions(inactiveSubscriptions.length);
 
-      const activeEmployees = employees.data.filter((e: any) => e.EMP_ACTV === "1");
-      const inactiveEmployees = employees.data.filter((e: any) => e.EMP_ACTV === "0" || e.EMP_ACTV === null);
+      const activeEntity = entity.data.filter(
+        (e: any) => (isIfas ? e.EMP_ACTV : e.is_active) === (isIfas ? "1" : 1)
+      );
+      const inactiveEntity = entity.data.filter(
+        (e: any) =>
+          (isIfas ? e.EMP_ACTV : e.is_active) === (isIfas ? "0" : 0) ||
+          (isIfas && e.EMP_ACTV === null)
+      );
 
-      setNoOfActiveEmployees(activeEmployees.length);
-      setNoOfInactiveEmployees(inactiveEmployees.length);
+      setNoOfActiveUsersOrEmployees(activeEntity.length);
+      setNoOfInactiveUsersOrEmployees(inactiveEntity.length);
 
       const activeCustomers = users.data.filter((u: any) => u.is_active === 1);
-      const inactiveCustomers = users.data.filter((u: any) => u.is_active === 0 || u.is_active === null);
+      const inactiveCustomers = users.data.filter(
+        (u: any) => u.is_active === 0 || u.is_active === null
+      );
 
       setNoOfActiveCustomers(activeCustomers.length);
       setNoOfInactiveCustomers(inactiveCustomers.length);
@@ -181,20 +226,22 @@ const DashboardWrapper: FC = () => {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, []);
+    const isIfas = auth?.loginType === "IFAS";
+    fetchData(isIfas);
+  }, [auth]);
 
-  const intl = useIntl();
+  const type = auth?.loginType === "IFAS" ? "Employees" : "API Users";
+
   return (
     <>
       <PageTitle breadcrumbs={[]}>
-        {intl.formatMessage({ id: "MENU.DASHBOARD" })}
+        {auth?.loginType === "IFAS" ? "IFAS Dashboard" : "API Dashboard"}
       </PageTitle>
       <DashboardPage
         noOfActiveSubscriptions={noOfActiveSubscriptions}
         noOfInactiveSubscriptions={noOfInactiveSubscriptions}
-        noOfActiveEmployees={noOfActiveEmployees}
-        noOfInactiveEmployees={noOfInactiveEmployees}
+        noOfActiveUsersOrEmployees={noOfActiveUsersOrEmployees}
+        noOfInactiveUsersOrEmployees={noOfInactiveUsersOrEmployees}
         noOfActiveCustomers={noOfActiveCustomers}
         noOfInactiveCustomers={noOfInactiveCustomers}
         noOfActiveToday={noOfActiveToday}
@@ -203,6 +250,7 @@ const DashboardWrapper: FC = () => {
         noOfInactiveToday={noOfInactiveToday}
         noOfInactiveWeekly={noOfInactiveWeekly}
         noOfInactiveMonthly={noOfInactiveMonthly}
+        type={type}
       />
     </>
   );

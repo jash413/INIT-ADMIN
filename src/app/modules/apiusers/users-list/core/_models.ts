@@ -10,6 +10,7 @@ export type User = {
   CREATED_BY?: string;
   is_admin?: number;
   last_login?: string;
+  CUS_NAME?: string;
 };
 
 export type UsersQueryResponse = Response<Array<User>>;

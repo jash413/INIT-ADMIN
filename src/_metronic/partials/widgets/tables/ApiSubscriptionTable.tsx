@@ -24,7 +24,7 @@ type Subscription = {
   LIC_USER: number;
 };
 
-const TablesWidget5: FC<Props> = ({ className }) => {
+const ApiSubscriptionTable: FC<Props> = ({ className }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [duration, setDuration] = useState<"Day" | "Week" | "Month">("Day");
 
@@ -66,7 +66,7 @@ const TablesWidget5: FC<Props> = ({ className }) => {
       <div className="card-header border-0 pt-5">
         <h3 className="card-title align-items-start flex-column">
           <span className="card-label fw-bold fs-3 mb-1">
-            LATEST IFAS APP SUBSCRIPTIONS
+            LATEST API SUBSCRIPTIONS
           </span>
         </h3>
         <div className="card-toolbar">
@@ -164,9 +164,7 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                       <td className="text-center text-muted fw-semibold">
                         {subscription.SUB_ORDN}
                       </td>
-                      <td className="text-center">
-                       {subscription.LIC_USER}
-                      </td>
+                      <td className="text-center">{subscription.LIC_USER}</td>
                       <td className="text-center text-muted fw-semibold">
                         {moment(subscription.SUB_STDT).format("DD/MMM/YYYY")}
                       </td>
@@ -227,4 +225,4 @@ const TablesWidget5: FC<Props> = ({ className }) => {
   );
 };
 
-export { TablesWidget5 };
+export { ApiSubscriptionTable };

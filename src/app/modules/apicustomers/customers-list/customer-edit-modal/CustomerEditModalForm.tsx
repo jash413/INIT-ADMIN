@@ -6,15 +6,17 @@ import { Customer } from "../core/_models";
 import clsx from "clsx";
 import { useListView } from "../core/ListViewProvider";
 import { CustomersListLoading } from "../components/loading/CustomersListLoading";
+import { UsersListLoading } from "../../../apiusers/users-list/components/loading/UsersListLoading";
 import { createCustomer, updateCustomer } from "../core/_requests";
+import {
+  createUser,
+  updateUser,
+} from "../../../apiusers/users-list/core/_requests";
+import { User } from "../../../apiusers/users-list/core/_models";
 import { useQueryResponse } from "../core/QueryResponseProvider";
 import moment from "moment";
 
-type Props = {
-  isCustomerLoading: boolean;
-  customer: Customer;
-};
-
+// Validation schemas
 const editCustomerSchema = Yup.object().shape({
   CUS_NAME: Yup.string()
     .min(3, "Minimum 3 symbols")
@@ -25,9 +27,27 @@ const editCustomerSchema = Yup.object().shape({
   notification_date: Yup.string().required("Notification date is required"),
 });
 
-const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
+const editUserSchema = Yup.object().shape({
+  GST_NMBR: Yup.string().required("GST Number is required"),
+  USR_ID: Yup.string()
+    .email("Email is not valid")
+    .required("Email is required"),
+  USR_PASS: Yup.string().required("Password is required"),
+});
+
+interface CustomerEditModalFormProps {
+  customer: Customer;
+  isCustomerLoading: boolean;
+}
+
+const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
+  customer,
+  isCustomerLoading,
+}) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
+
+  const [showUserForm, setShowUserForm] = useState(false);
 
   const [customerForEdit] = useState<Customer>({
     ...customer,
@@ -37,6 +57,15 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
     notification_date: moment(customer.notification_date).format("YYYY-MM-DD"),
   });
 
+  const [userForEdit] = useState<User>({
+    GST_CODE: "",
+    GST_NMBR: "",
+    USR_ID: "",
+    USR_PASS: "",
+    USR_ACTV: 0,
+    is_admin: 0,
+  });
+
   const cancel = (withRefresh?: boolean) => {
     if (withRefresh) {
       refetch();
@@ -44,7 +73,7 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
     setItemIdForUpdate(undefined);
   };
 
-  const formik = useFormik({
+  const customerFormik = useFormik({
     initialValues: customerForEdit,
     validationSchema: editCustomerSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -52,8 +81,33 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
       try {
         if (isNotEmpty(values.id)) {
           await updateCustomer(values);
+          setSubmitting(false);
+          cancel(true);
         } else {
-          await createCustomer(values);
+          const response = await createCustomer(values);
+          if (response) {
+            userForEdit.GST_CODE = response.REG_CODE;
+          }
+          setShowUserForm(true);
+        }
+      } catch (ex) {
+        console.error(ex);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
+  const userFormik = useFormik({
+    initialValues: userForEdit,
+    validationSchema: editUserSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      try {
+        if (isNotEmpty(values.id)) {
+          await updateUser(values);
+        } else {
+          await createUser(values);
         }
       } catch (ex) {
         console.error(ex);
@@ -66,85 +120,227 @@ const CustomerEditModalForm: FC<Props> = ({ customer, isCustomerLoading }) => {
 
   const renderField = (
     label: string,
-    name: keyof Customer,
+    name: string,
     type = "text",
-    isRequired = true
+    isRequired = true,
+    isToggleBtn = false,
+    formik: any
   ) => (
-    <div className="fv-row mb-7">
+    <div className={clsx("fv-row mb-7", isToggleBtn && "col-md-6")}>
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
         {label}
       </label>
-      <input
-        placeholder={label}
-        {...formik.getFieldProps(name)}
-        type={type}
-        className={clsx(
-          "form-control form-control-solid mb-3 mb-lg-0",
-          { "is-invalid": formik.touched[name] && formik.errors[name] },
-          { "is-valid": formik.touched[name] && !formik.errors[name] }
-        )}
-        autoComplete="off"
-        disabled={formik.isSubmitting || isCustomerLoading}
-      />
+      {isToggleBtn ? (
+        <div className="form-check form-switch">
+          <input
+            {...formik.getFieldProps(name)}
+            type="checkbox"
+            className={clsx(
+              "form-check-input",
+              { "is-invalid": formik.touched[name] && formik.errors[name] },
+              { "is-valid": formik.touched[name] && !formik.errors[name] }
+            )}
+            disabled={
+              formik.isSubmitting || (formik === customerFormik && showUserForm)
+            }
+          />
+        </div>
+      ) : (
+        <input
+          placeholder={label}
+          {...formik.getFieldProps(name)}
+          type={type}
+          className={clsx(
+            "form-control form-control-solid mb-3 mb-lg-0",
+            { "is-invalid": formik.touched[name] && formik.errors[name] },
+            { "is-valid": formik.touched[name] && !formik.errors[name] }
+          )}
+          autoComplete="off"
+          disabled={
+            formik.isSubmitting || (formik === customerFormik && showUserForm)
+          }
+        />
+      )}
+      {formik.touched[name] && formik.errors[name] && (
+        <div className="error">{formik.errors[name]}</div>
+      )}
     </div>
   );
 
   return (
     <>
-      <form
-        id="kt_modal_add_customer_form"
-        className="form"
-        onSubmit={formik.handleSubmit}
-        noValidate
-      >
-        <div
-          className="d-flex flex-column scroll-y me-n7 pe-7"
-          id="kt_modal_add_customer_scroll"
-          data-kt-scroll="true"
-          data-kt-scroll-activate="{default: false, lg: true}"
-          data-kt-scroll-max-height="auto"
-          data-kt-scroll-dependencies="#kt_modal_add_customer_header"
-          data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
-          data-kt-scroll-offset="300px"
+      {!showUserForm ? (
+        <form
+          id="kt_modal_add_customer_form"
+          className="form"
+          onSubmit={customerFormik.handleSubmit}
+          noValidate
         >
-          {renderField("Customer Name", "CUS_NAME")}
-          {renderField("Address", "CUS_ADDR")}
-          {renderField("Company Name", "CMP_NAME")}
-          {renderField("Notification Date", "notification_date", "date")}
-        </div>
-        <div className="text-center pt-15">
-          <button
-            type="reset"
-            onClick={() => cancel()}
-            className="btn btn-light me-3"
-            data-kt-customers-modal-action="cancel"
-            disabled={formik.isSubmitting || isCustomerLoading}
+          <div
+            className="d-flex flex-column scroll-y me-n7 pe-7"
+            id="kt_modal_add_customer_scroll"
+            data-kt-scroll="true"
+            data-kt-scroll-activate="{default: false, lg: true}"
+            data-kt-scroll-max-height="auto"
+            data-kt-scroll-dependencies="#kt_modal_add_customer_header"
+            data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
+            data-kt-scroll-offset="300px"
           >
-            Discard
-          </button>
-
-          <button
-            type="submit"
-            className="btn btn-primary"
-            data-kt-customers-modal-action="submit"
-            disabled={
-              isCustomerLoading ||
-              formik.isSubmitting ||
-              !formik.isValid ||
-              !formik.touched
-            }
-          >
-            <span className="indicator-label">Submit</span>
-            {(formik.isSubmitting || isCustomerLoading) && (
-              <span className="indicator-progress">
-                Please wait...{" "}
-                <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-              </span>
+            {renderField(
+              "Customer Name",
+              "CUS_NAME",
+              "text",
+              true,
+              false,
+              customerFormik
             )}
-          </button>
-        </div>
-      </form>
-      {(formik.isSubmitting || isCustomerLoading) && <CustomersListLoading />}
+            {renderField(
+              "Address",
+              "CUS_ADDR",
+              "text",
+              true,
+              false,
+              customerFormik
+            )}
+            {renderField(
+              "Company Name",
+              "CMP_NAME",
+              "text",
+              true,
+              false,
+              customerFormik
+            )}
+            {renderField(
+              "Notification Date",
+              "notification_date",
+              "date",
+              true,
+              false,
+              customerFormik
+            )}
+          </div>
+          <div className="text-center pt-15">
+            <button
+              type="reset"
+              onClick={() => cancel()}
+              className="btn btn-light me-3"
+              data-kt-customers-modal-action="cancel"
+              disabled={customerFormik.isSubmitting || showUserForm}
+            >
+              Discard
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              data-kt-customers-modal-action="submit"
+              disabled={
+                showUserForm ||
+                customerFormik.isSubmitting ||
+                !customerFormik.isValid ||
+                !customerFormik.touched
+              }
+            >
+              <span className="indicator-label">Submit</span>
+              {(customerFormik.isSubmitting || showUserForm) && (
+                <span className="indicator-progress">
+                  Please wait...{" "}
+                  <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
+              )}
+            </button>
+          </div>
+        </form>
+      ) : (
+        <form
+          id="kt_modal_add_user_form"
+          className="form"
+          onSubmit={userFormik.handleSubmit}
+          noValidate
+        >
+          <div
+            className="d-flex flex-column scroll-y me-n7 pe-7"
+            id="kt_modal_add_user_scroll"
+            data-kt-scroll="true"
+            data-kt-scroll-activate="{default: false, lg: true}"
+            data-kt-scroll-max-height="auto"
+            data-kt-scroll-dependencies="#kt_modal_add_user_header"
+            data-kt-scroll-wrappers="#kt_modal_add_user_scroll"
+            data-kt-scroll-offset="300px"
+          >
+            {renderField(
+              "GST Number",
+              "GST_NMBR",
+              "text",
+              true,
+              false,
+              userFormik
+            )}
+            {renderField("Email", "USR_ID", "email", true, false, userFormik)}
+            {renderField(
+              "Password",
+              "USR_PASS",
+              "password",
+              true,
+              false,
+              userFormik
+            )}
+            <div className="d-flex justify-content-start">
+              {renderField(
+                "Active",
+                "USR_ACTV",
+                "checkbox",
+                false,
+                true,
+                userFormik
+              )}
+              {renderField(
+                "Admin",
+                "is_admin",
+                "checkbox",
+                false,
+                true,
+                userFormik
+              )}
+            </div>
+          </div>
+          <div className="text-center pt-15">
+            <button
+              type="reset"
+              onClick={() => cancel()}
+              className="btn btn-light me-3"
+              data-kt-users-modal-action="cancel"
+              disabled={userFormik.isSubmitting || !showUserForm}
+            >
+              Discard
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              data-kt-users-modal-action="submit"
+              disabled={
+                !showUserForm ||
+                userFormik.isSubmitting ||
+                !userFormik.isValid ||
+                !userFormik.touched
+              }
+            >
+              <span className="indicator-label">Submit</span>
+              {(userFormik.isSubmitting || !showUserForm) && (
+                <span className="indicator-progress">
+                  Please wait...{" "}
+                  <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
+              )}
+            </button>
+          </div>
+        </form>
+      )}
+
+      {customerFormik.isSubmitting ||
+        (isCustomerLoading && <CustomersListLoading />)}
+      {userFormik.isSubmitting && <UsersListLoading />}
     </>
   );
 };

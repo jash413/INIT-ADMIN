@@ -1,4 +1,4 @@
-import { lazy, FC, Suspense } from "react";
+import { lazy, FC, Suspense, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { MasterLayout } from "../../_metronic/layout/MasterLayout";
 import TopBarProgress from "react-topbar-progress-indicator";
@@ -6,8 +6,12 @@ import { DashboardWrapper } from "../pages/dashboard/DashboardWrapper";
 import { MenuTestPage } from "../pages/MenuTestPage";
 import { getCSSVariableValue } from "../../_metronic/assets/ts/_utils";
 import { WithChildren } from "../../_metronic/helpers";
+import { useAuth } from "../modules/auth";
 
 const PrivateRoutes = () => {
+  const { auth } = useAuth();
+  const loginType = auth?.loginType;
+
   const WizardsPage = lazy(() => import("../modules/wizards/WizardsPage"));
   const CustomerPage = lazy(() => import("../modules/customers/UsersPage"));
   const WidgetsPage = lazy(() => import("../modules/widgets/WidgetsPage"));
@@ -47,11 +51,12 @@ const PrivateRoutes = () => {
   return (
     <Routes>
       <Route element={<MasterLayout />}>
-        {/* Redirect to Dashboard after success login/registartion */}
+        {/* Redirect to Dashboard after success login/registration */}
         <Route path="auth/*" element={<Navigate to="/dashboard" />} />
         {/* Pages */}
         <Route path="dashboard" element={<DashboardWrapper />} />
         <Route path="menu-test" element={<MenuTestPage />} />
+
         {/* Lazy Modules */}
         <Route
           path="crafted/pages/wizards/*"
@@ -69,94 +74,107 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-        <Route
-          path="customer-management/*"
-          element={
-            <SuspensedView>
-              <CustomerPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="api-customer-management/*"
-          element={
-            <SuspensedView>
-              <ApiCustomersPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="api-user-management/*"
-          element={
-            <SuspensedView>
-              <ApiUsersPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="api-ewayeinvoice-subscription-management/*"
-          element={
-            <SuspensedView>
-              <ApiEwayEinvoiceSubscriptionsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="api-gstapi-subscription-management/*"
-          element={
-            <SuspensedView>
-              <ApiGstApiSubscriptionsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="api-whatsapp-subscription-management/*"
-          element={
-            <SuspensedView>
-              <ApiWhatsappSubscriptionsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="subscription-management/*"
-          element={
-            <SuspensedView>
-              <SubscriptionPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="employee-allotment/*"
-          element={
-            <SuspensedView>
-              <EmployeeallotmentPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="customer-profile/*"
-          element={
-            <SuspensedView>
-              <CustomerProfilePage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="api-customer-profile/*"
-          element={
-            <SuspensedView>
-              <ApiCustomerProfilePage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="subscription-profile/*"
-          element={
-            <SuspensedView>
-              <SubscriptionProfilePage />
-            </SuspensedView>
-          }
-        />
+
+        {/* IFAS Specific Routes */}
+        {loginType === "IFAS" && (
+          <>
+            <Route
+              path="customer-management/*"
+              element={
+                <SuspensedView>
+                  <CustomerPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="subscription-management/*"
+              element={
+                <SuspensedView>
+                  <SubscriptionPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="employee-allotment/*"
+              element={
+                <SuspensedView>
+                  <EmployeeallotmentPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="customer-profile/*"
+              element={
+                <SuspensedView>
+                  <CustomerProfilePage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="subscription-profile/*"
+              element={
+                <SuspensedView>
+                  <SubscriptionProfilePage />
+                </SuspensedView>
+              }
+            />
+          </>
+        )}
+
+        {/* API Specific Routes */}
+        {loginType !== "IFAS" && (
+          <>
+            <Route
+              path="api-customer-management/*"
+              element={
+                <SuspensedView>
+                  <ApiCustomersPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="api-user-management/*"
+              element={
+                <SuspensedView>
+                  <ApiUsersPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="api-ewayeinvoice-subscription-management/*"
+              element={
+                <SuspensedView>
+                  <ApiEwayEinvoiceSubscriptionsPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="api-gstapi-subscription-management/*"
+              element={
+                <SuspensedView>
+                  <ApiGstApiSubscriptionsPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="api-whatsapp-subscription-management/*"
+              element={
+                <SuspensedView>
+                  <ApiWhatsappSubscriptionsPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="api-customer-profile/*"
+              element={
+                <SuspensedView>
+                  <ApiCustomerProfilePage />
+                </SuspensedView>
+              }
+            />
+          </>
+        )}
+
         <Route
           path="apps/chat/*"
           element={
@@ -173,8 +191,9 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
+
         {/* Page Not Found */}
-        <Route path="*" element={<Navigate to="/error/404" />} />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Route>
     </Routes>
   );

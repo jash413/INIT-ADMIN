@@ -64,6 +64,7 @@ export * from './tables/TablesWidget10'
 export * from './tables/TablesWidget11'
 export * from './tables/TablesWidget12'
 export * from './tables/TablesWidget13'
+export * from './tables/ApiSubscriptionTable'
 
 // engage
 export * from './engage/EngageWidget1'

@@ -61,6 +61,18 @@ const getAllSubscriptions = (): Promise<any> => {
     });
 }
 
+const getAllApiSubscriptions = (): Promise<any> => {
+  return axios
+    .get(`${SUBSCRIPTION_URL}`)
+    .then((d: AxiosResponse<any>) => d.data)
+    .catch((error) => {
+      toast.error(
+        `Failed to get customers: ${error.response?.data?.message || error.message}`
+      );
+      throw error;
+    });
+}
+
 const getSubscriptionById = (id: ID): Promise<Subscription | undefined> => {
   return axios
     .get(`${SUBSCRIPTION_URL}/${id}`)
@@ -148,5 +160,6 @@ export {
   updateSubscription,
   getAdmins,
   getAdminById,
-  getAllSubscriptions
+  getAllSubscriptions,
+  getAllApiSubscriptions
 };
