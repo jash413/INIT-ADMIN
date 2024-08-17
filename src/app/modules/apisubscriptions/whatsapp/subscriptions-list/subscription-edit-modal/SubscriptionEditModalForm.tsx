@@ -9,7 +9,7 @@ import { SubscriptionsListLoading } from "../components/loading/SubscriptionsLis
 import { createSubscription, updateSubscription } from "../core/_requests";
 import { useQueryResponse } from "../core/QueryResponseProvider";
 import { getAllCustomers } from "../../../../apicustomers/customers-list/core/_requests";
-import { getAllUsers } from "../../../../apiusers/users-list/core/_requests";
+import { getUserById } from "../../../../apiusers/users-list/core/_requests";
 import moment from "moment";
 
 type Props = {
@@ -19,9 +19,8 @@ type Props = {
 
 const editSubscriptionSchema = Yup.object().shape({
   GST_CODE: Yup.string().required("GST Code is required"),
-  GST_NMBR: Yup.string().required("GST Number is required"),
   SUBSCRIPTION_DATE: Yup.string().required("Subscription Date is required"),
-  expiry_date: Yup.string().required("Expiry Date is required"),
+  ALLOTED_CALLS: Yup.string().required("Alloted Calls is required"),
   user_id: Yup.string().required("User Id is required"),
   INV_DATE: Yup.string().required("Invoice Date is required"),
   INV_NO: Yup.string().required("Invoice Number is required"),
@@ -35,6 +34,8 @@ const SubscriptionEditModalForm: FC<Props> = ({
   const { refetch } = useQueryResponse();
   const [customers, setCustomers] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
+  const [isUserFieldDisabled, setIsUserFieldDisabled] =
+    useState<boolean>(false);
 
   useEffect(() => {
     getAllCustomers().then((data) => {
@@ -45,28 +46,18 @@ const SubscriptionEditModalForm: FC<Props> = ({
         }))
       );
     });
-
-    getAllUsers().then((data) => {
-      setUsers(
-        data.data.map((user: any) => ({
-          value: user.id,
-          label: user.USR_ID,
-        }))
-      );
-    });
   }, []);
 
   const [subscriptionForEdit] = useState<Subscription>({
     ...subscription,
     GST_CODE: subscription.GST_CODE,
-    GST_NMBR: subscription.GST_NMBR,
     SYSTEM_ID: "3",
     SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format(
       "YYYY-MM-DD"
     ),
+    ALLOTED_CALLS: subscription.ALLOTED_CALLS,
     is_active: subscription.is_active || 0,
     user_id: subscription.user_id,
-    expiry_date: moment(subscription.expiry_date).format("YYYY-MM-DD"),
     INV_DATE: moment(subscription.INV_DATE).format("YYYY-MM-DD"),
     INV_NO: subscription.INV_NO,
   });
@@ -97,6 +88,24 @@ const SubscriptionEditModalForm: FC<Props> = ({
       }
     },
   });
+
+  useEffect(() => {
+    getUserById(formik.values.GST_CODE).then((data: any) => {
+      const userOptions = data?.map((user: any) => ({
+        value: user.id,
+        label: user.USR_ID,
+      }));
+
+      setUsers(userOptions);
+
+      if (userOptions.length === 1) {
+        formik.setFieldValue("user_id", userOptions[0].value);
+        setIsUserFieldDisabled(true);
+      } else {
+        setIsUserFieldDisabled(false);
+      }
+    });
+  }, [formik.values.GST_CODE]);
 
   const renderField = (
     label: string,
@@ -208,10 +217,15 @@ const SubscriptionEditModalForm: FC<Props> = ({
           true,
           subscriptionForEdit.GST_CODE !== undefined
         )}
-        {renderSelectField("Select User", "user_id", users)}
-        {renderField("GST No", "GST_NMBR")}
+        {renderSelectField(
+          "Select User",
+          "user_id",
+          users,
+          true,
+          isUserFieldDisabled
+        )}
         {renderField("Subscription Date", "SUBSCRIPTION_DATE", "date")}
-        {renderField("Expiry Date", "expiry_date", "date")}
+        {renderField("Alloted Calls", "ALLOTED_CALLS")}
         {renderField("Invoice No", "INV_NO")}
         {renderField("Invoice Date", "INV_DATE", "date")}
         {renderField("Is Active", "is_active", "text", true, true)}

@@ -25,9 +25,7 @@ type Props = {
 
 const editSubscriptionSchema = Yup.object().shape({
   GST_CODE: Yup.string().required("GST Code is required"),
-  GST_NMBR: Yup.string().required("GST Number is required"),
   SUBSCRIPTION_DATE: Yup.string().required("Subscription Date is required"),
-  expiry_date: Yup.string().required("Expiry Date is required"),
   user_id: Yup.string().required("User Id is required"),
   INV_DATE: Yup.string().required("Invoice Date is required"),
   INV_NO: Yup.string().required("Invoice Number is required"),
@@ -68,14 +66,12 @@ const SubscriptionEditModalForm: FC<Props> = ({
   const [subscriptionForEdit] = useState<Subscription>({
     ...subscription,
     GST_CODE: subscription.GST_CODE,
-    GST_NMBR: subscription.GST_NMBR,
     SYSTEM_ID: "2",
     SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format(
       "YYYY-MM-DD"
     ),
     is_active: subscription.is_active || 0,
     user_id: subscription.user_id,
-    expiry_date: moment(subscription.expiry_date).format("YYYY-MM-DD"),
     INV_DATE: moment(subscription.INV_DATE).format("YYYY-MM-DD"),
     INV_NO: subscription.INV_NO,
   });
@@ -251,13 +247,11 @@ const SubscriptionEditModalForm: FC<Props> = ({
                     subscriptionForEdit.GST_CODE !== undefined
                   )}
                   {renderSelectField("Select User", "user_id", users)}
-                  {renderField("GST No", "GST_NMBR")}
                   {renderField(
                     "Subscription Date",
                     "SUBSCRIPTION_DATE",
                     "date"
                   )}
-                  {renderField("Expiry Date", "expiry_date", "date")}
                   {renderField("Invoice Date", "INV_DATE", "date")}
                   {renderField("Invoice Number", "INV_NO")}
                   {renderField("Active", "is_active", "checkbox", false, true)}

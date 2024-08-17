@@ -28,7 +28,6 @@ const editCustomerSchema = Yup.object().shape({
 });
 
 const editUserSchema = Yup.object().shape({
-  GST_NMBR: Yup.string().required("GST Number is required"),
   USR_ID: Yup.string()
     .email("Email is not valid")
     .required("Email is required"),
@@ -268,14 +267,6 @@ const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
             data-kt-scroll-wrappers="#kt_modal_add_user_scroll"
             data-kt-scroll-offset="300px"
           >
-            {renderField(
-              "GST Number",
-              "GST_NMBR",
-              "text",
-              true,
-              false,
-              userFormik
-            )}
             {renderField("Email", "USR_ID", "email", true, false, userFormik)}
             {renderField(
               "Password",
