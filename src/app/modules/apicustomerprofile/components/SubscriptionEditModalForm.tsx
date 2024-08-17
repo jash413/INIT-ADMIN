@@ -14,6 +14,7 @@ import { useQueryResponse } from "../subscriptionCore/QueryResponseProvider";
 import { getUserById } from "../../apiusers/users-list/core/_requests";
 import moment from "moment";
 import { KTIcon } from "../../../../_metronic/helpers";
+import { getAllCustomers } from "../../apicustomers/customers-list/core/_requests";
 
 type Props = {
   isSubscriptionLoading: boolean;
@@ -25,6 +26,7 @@ type Props = {
 
 const editSubscriptionSchema = Yup.object().shape({
   SUBSCRIPTION_DATE: Yup.string().required("Subscription Date is required"),
+  GST_CODE: Yup.string().required("GST Code is required"),
   SYSTEM_ID: Yup.string().required("System Id is required"),
   user_id: Yup.string().required("User Id is required"),
   INV_DATE: Yup.string().required("Invoice Date is required"),
@@ -42,6 +44,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
   const { refetch } = useQueryResponse();
   const [users, setUsers] = useState<any>([]);
   const [gstSystems, setGstSystems] = useState<any>([]);
+  const [customers, setCustomers] = useState<any>([]);
   const [isUserFieldDisabled, setIsUserFieldDisabled] =
     useState<boolean>(false);
 
@@ -55,6 +58,15 @@ const SubscriptionEditModalForm: FC<Props> = ({
       setGstSystems(
         gstSystemOptions.filter((system: any) => system.value !== 1)
       );
+
+      getAllCustomers().then((data: any) => {
+        const customerOptions = data?.data.map((customer: any) => ({
+          value: customer.REG_CODE,
+          label: customer.CUS_NAME,
+        }));
+
+        setCustomers(customerOptions);
+      });
     });
   }, []);
 
@@ -252,6 +264,13 @@ const SubscriptionEditModalForm: FC<Props> = ({
                   data-kt-scroll-wrappers="#kt_modal_add_subscription_scroll"
                   data-kt-scroll-offset="300px"
                 >
+                  {renderSelectField(
+                    "Select Customer",
+                    "GST_CODE",
+                    customers,
+                    true,
+                    true
+                  )}
                   {renderSelectField(
                     "Select User",
                     "user_id",
