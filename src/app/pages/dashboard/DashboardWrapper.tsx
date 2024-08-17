@@ -3,6 +3,7 @@ import { PageTitle } from "../../../_metronic/layout/core";
 import {
   TablesWidget5,
   CardsWidget17,
+  ApiCard,
   ApiSubscriptionTable,
 } from "../../../_metronic/partials/widgets";
 import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
@@ -62,13 +63,22 @@ const DashboardPage: FC<DashboardPageProps> = ({
           />
         </div>
         <div className="col-xl-4">
-          <CardsWidget17
-            active={noOfActiveCustomers}
-            inactive={noOfInactiveCustomers}
-            type="Customers"
-            chartName="NO OF CUSTOMERS"
-            className="card-xxl-stretch mb-5 mb-xl-8"
-          />
+          {type === "IFAS" ? (
+            <CardsWidget17
+              active={noOfActiveCustomers}
+              inactive={noOfInactiveCustomers}
+              type="Customers"
+              chartName="NO OF CUSTOMERS"
+              className="card-xxl-stretch mb-5 mb-xl-8"
+            />
+          ) : (
+            <ApiCard
+              className="card-xxl-stretch mb-5 mb-xl-8"
+              customers={noOfActiveCustomers}
+              type="Customers"
+              chartName="NO OF CUSTOMERS"
+            />
+          )}
         </div>
         <div className="col-xl-4">
           <CardsWidget17
@@ -221,6 +231,12 @@ const DashboardWrapper: FC = () => {
       // Set the total number of active and inactive customers
       setNoOfActiveCustomers(activeCustomers.length);
       setNoOfInactiveCustomers(inactiveCustomers.length);
+
+      if (!isIfas) {
+        // Set the total number of active and inactive customers
+        setNoOfActiveCustomers(customers?.data.length);
+        setNoOfInactiveCustomers(customers?.data.length);
+      }
 
       // Filter active and inactive users
       const activeUsers = users.data.filter(
