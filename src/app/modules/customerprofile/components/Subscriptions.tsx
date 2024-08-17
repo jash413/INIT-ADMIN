@@ -106,7 +106,7 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
         </div>
 
         <div className="d-flex flex-wrap my-2">
-          <CustomersListFilter setSubscription={setSubscriptions} />
+          <CustomersListFilter setSubscription={setSubscriptions} id={id} />
           <button
             onClick={handleNewSubscription}
             className="btn btn-primary btn-sm"

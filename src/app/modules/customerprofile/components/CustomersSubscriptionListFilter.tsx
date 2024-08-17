@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { MenuComponent } from "../../../../_metronic/assets/ts/components";
 import { KTIcon } from "../../../../_metronic/helpers";
-import { getAdmins, getSubscriptions } from "../subscriptionCore/_requests";
+import {
+  getAdmins,
+  getSubscriptionByIdAndQuery,
+} from "../subscriptionCore/_requests";
 
 interface CustomersListFilterProps {
+  id: string;
   setSubscription: (subscriptions: any[]) => void;
 }
 
 const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
+  id,
   setSubscription,
 }) => {
   const [from, setFrom] = useState<string | undefined>();
@@ -53,7 +58,7 @@ const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
         .map(([key, value]) => `filter_${key}=${value}`)
         .join("&");
 
-      getSubscriptions(queryString)
+      getSubscriptionByIdAndQuery(id, queryString)
         .then((data) => {
           setSubscription(data?.data || []);
         })
@@ -64,7 +69,7 @@ const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
           setIsLoading(false);
         });
     } else {
-      getSubscriptions("").then((data) => {
+      getSubscriptionByIdAndQuery(id, "").then((data) => {
         setSubscription(data?.data || []);
       });
     }

@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { MenuComponent } from "../../../../_metronic/assets/ts/components";
 import { KTIcon } from "../../../../_metronic/helpers";
-import { getAdmins, getSubscriptions } from "../subscriptionCore/_requests";
+import { getAdmins, getEmployeesByIdAndQuery } from "../employeeCore/_requests";
+import { getSubscriptionByIdAndQuery } from "../subscriptionCore/_requests";
+import moment from "moment";
 
 interface CustomersListFilterProps {
-  setSubscription: (subscriptions: any[]) => void;
+  id: string;
+  setEmployee: (employees: any[]) => void;
 }
 
 const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
-  setSubscription,
+  id,
+  setEmployee,
 }) => {
   const [from, setFrom] = useState<string | undefined>();
   const [to, setTo] = useState<string | undefined>();
@@ -16,6 +20,8 @@ const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
   const [admins, setAdmins] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [query, updateState] = useState<any>("");
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [idToPass, setIdToPass] = useState<string>(id);
 
   useEffect(() => {
     MenuComponent.reinitialization();
@@ -24,6 +30,9 @@ const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
   useEffect(() => {
     getAdmins().then((data) => {
       setAdmins(data.data);
+    });
+    getSubscriptionByIdAndQuery(idToPass, "").then((data) => {
+      setSubscriptions(data?.data || []);
     });
   }, []);
 
@@ -53,19 +62,19 @@ const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
         .map(([key, value]) => `filter_${key}=${value}`)
         .join("&");
 
-      getSubscriptions(queryString)
+      getEmployeesByIdAndQuery(idToPass, queryString)
         .then((data) => {
-          setSubscription(data?.data || []);
+          setEmployee(data?.data || []);
         })
         .catch((error) => {
-          console.error("Error fetching subscriptions:", error);
+          console.error("Error fetching employees:", error);
         })
         .finally(() => {
           setIsLoading(false);
         });
     } else {
-      getSubscriptions("").then((data) => {
-        setSubscription(data?.data || []);
+      getEmployeesByIdAndQuery(idToPass, "").then((data) => {
+        setEmployee(data?.data || []);
       });
     }
   }, [query]);
@@ -103,6 +112,29 @@ const CustomersListFilter: React.FC<CustomersListFilterProps> = ({
               {admins?.map((admin) => (
                 <option key={admin.ad_id} value={admin.ad_id}>
                   {admin.ad_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-10">
+            <label className="form-label fs-6 fw-bold">Subscription</label>
+            <select
+              className="form-select form-select-solid"
+              name="subscription"
+              disabled={isLoading}
+              onChange={(e) => {
+                setIdToPass(e.target.value);
+              }}
+            >
+              <option value="">Select Subscription</option>
+              {subscriptions?.map((subscription) => (
+                <option
+                  key={subscription.SUB_CODE}
+                  value={subscription.SUB_CODE}
+                >
+                  {subscription.SUB_CODE}:{" "}
+                  {moment(subscription.SUB_STDT).format("DD/MM/YYYY")} -{" "}
+                  {moment(subscription.SUB_ENDT).format("DD/MM/YYYY")}
                 </option>
               ))}
             </select>

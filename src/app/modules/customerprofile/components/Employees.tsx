@@ -8,6 +8,7 @@ import { useDebounce, KTIcon } from "../../../../_metronic/helpers";
 import { Card3 } from "../../../../_metronic/partials/content/cards/Card3";
 import { getSubscriptionById } from "../subscriptionCore/_requests";
 import { toast } from "react-toastify";
+import { CustomersListFilter } from "./CustomersEmployeesListFilter";
 
 interface EmployeesProps {
   id: string;
@@ -119,6 +120,7 @@ const Employees: FC<EmployeesProps> = ({ id }) => {
         </div>
 
         <div className="d-flex flex-wrap my-2">
+          <CustomersListFilter setEmployee={setEmployees} id={id} />
           <button
             onClick={handleNewEmployee}
             className="btn btn-primary btn-sm"
