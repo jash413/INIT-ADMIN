@@ -5,6 +5,7 @@ import {
   getSubscriptions,
   searchSubscriptions,
   deleteSubscription,
+  getGstSystem,
 } from "../subscriptionCore/_requests";
 import { getCustomerById } from "../../apicustomers/customers-list/core/_requests";
 import { Subscription } from "../subscriptionCore/_models";
@@ -26,6 +27,8 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
   const debouncedSearchTerm = useDebounce(searchTerm, 150);
   const [customer, setCustomer] = useState<any>(null);
+  const [gstSystem, setGstSystem] = useState<any>(null);
+  const [gstSystemId, setGstSystemId] = useState<any>(null);
 
   useEffect(() => {
     getCustomerById(id).then((data) => {
@@ -34,10 +37,33 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
   }, [id]);
 
   useEffect(() => {
+    getGstSystem().then((data) => {
+      setGstSystem(data.data.filter((system: any) => system.id != 1));
+    });
+  }, []);
+
+  useEffect(() => {
     if (customer && customer.REG_CODE) {
       fetchSubscriptions();
     }
   }, [customer]);
+
+  useEffect(() => {
+    if (gstSystemId) {
+      setLoading(true); // Set loading to true before starting the search
+      getSubscriptions(
+        `filter_gst_code=${customer.REG_CODE}&filter_system_id=${gstSystemId.id}`
+      )
+        .then((data) => {
+          setSubscriptions(data?.data || []);
+        })
+        .finally(() => {
+          setLoading(false); // Set loading to false once the search is complete
+        });
+    } else {
+      fetchSubscriptions(); // Re-fetch all subscriptions if search term is cleared
+    }
+  }, [gstSystemId]);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -118,6 +144,44 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
         </div>
 
         <div className="d-flex flex-wrap my-2">
+          <div className="me-3">
+            <button
+              className="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="gstSystemDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              GST System: {gstSystemId?.name || "All"}
+            </button>
+            <ul className="dropdown-menu" aria-labelledby="gstSystemDropdown">
+              <li>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={() => setGstSystemId(null)}
+                >
+                  All
+                </a>
+              </li>
+              {gstSystem?.map((gst: any) => (
+                <li key={gst.id}>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() =>
+                      setGstSystemId({
+                        id: gst.id,
+                        name: gst.system_name,
+                      })
+                    }
+                  >
+                    {gst.system_name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
           <CustomersListFilter
             REG_CODE={customer?.REG_CODE}
             setSubscription={setSubscriptions}
