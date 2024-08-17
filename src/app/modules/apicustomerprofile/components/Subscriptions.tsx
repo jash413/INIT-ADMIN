@@ -175,7 +175,7 @@ const Subscriptions: FC<SubscriptionsProps> = ({ id }) => {
           isSubscriptionLoading={false}
           onClose={handleCloseModal}
           onSubscriptionSaved={fetchSubscriptions}
-          customerId={id}
+          customerId={customer.REG_CODE}
         />
       )}
     </Content>

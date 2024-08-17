@@ -8,10 +8,10 @@ import { useListView } from "../subscriptionCore/ListViewProvider";
 import {
   createSubscription,
   updateSubscription,
+  getGstSystem,
 } from "../subscriptionCore/_requests";
 import { useQueryResponse } from "../subscriptionCore/QueryResponseProvider";
-import { getAllCustomers } from "../../apicustomers/customers-list/core/_requests";
-import { getAllUsers } from "../../apiusers/users-list/core/_requests";
+import { getUserById } from "../../apiusers/users-list/core/_requests";
 import moment from "moment";
 import { KTIcon } from "../../../../_metronic/helpers";
 
@@ -24,8 +24,8 @@ type Props = {
 };
 
 const editSubscriptionSchema = Yup.object().shape({
-  GST_CODE: Yup.string().required("GST Code is required"),
   SUBSCRIPTION_DATE: Yup.string().required("Subscription Date is required"),
+  SYSTEM_ID: Yup.string().required("System Id is required"),
   user_id: Yup.string().required("User Id is required"),
   INV_DATE: Yup.string().required("Invoice Date is required"),
   INV_NO: Yup.string().required("Invoice Number is required"),
@@ -40,33 +40,28 @@ const SubscriptionEditModalForm: FC<Props> = ({
 }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
-  const [customers, setCustomers] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
+  const [gstSystems, setGstSystems] = useState<any>([]);
+  const [isUserFieldDisabled, setIsUserFieldDisabled] =
+    useState<boolean>(false);
 
   useEffect(() => {
-    getAllCustomers().then((data) => {
-      setCustomers(
-        data.data.map((customer: any) => ({
-          value: customer.REG_CODE,
-          label: customer.CUS_NAME,
-        }))
-      );
-    });
+    getGstSystem().then((data: any) => {
+      const gstSystemOptions = data?.data.map((gstSystem: any) => ({
+        value: gstSystem.id,
+        label: gstSystem.system_name,
+      }));
 
-    getAllUsers().then((data) => {
-      setUsers(
-        data.data.map((user: any) => ({
-          value: user.id,
-          label: user.USR_ID,
-        }))
+      setGstSystems(
+        gstSystemOptions.filter((system: any) => system.value !== 1)
       );
     });
   }, []);
 
   const [subscriptionForEdit] = useState<Subscription>({
     ...subscription,
-    GST_CODE: subscription.GST_CODE,
-    SYSTEM_ID: "2",
+    GST_CODE: customerId,
+    SYSTEM_ID: subscription.SYSTEM_ID,
     SUBSCRIPTION_DATE: moment(subscription.SUBSCRIPTION_DATE).format(
       "YYYY-MM-DD"
     ),
@@ -104,6 +99,24 @@ const SubscriptionEditModalForm: FC<Props> = ({
       }
     },
   });
+
+  useEffect(() => {
+    getUserById(formik.values.GST_CODE).then((data: any) => {
+      const userOptions = data?.map((user: any) => ({
+        value: user.id,
+        label: user.USR_ID,
+      }));
+
+      setUsers(userOptions);
+
+      if (userOptions.length === 1) {
+        formik.setFieldValue("user_id", userOptions[0].value);
+        setIsUserFieldDisabled(true);
+      } else {
+        setIsUserFieldDisabled(false);
+      }
+    });
+  }, [formik.values.GST_CODE]);
 
   const renderField = (
     label: string,
@@ -240,13 +253,19 @@ const SubscriptionEditModalForm: FC<Props> = ({
                   data-kt-scroll-offset="300px"
                 >
                   {renderSelectField(
-                    "Select Customer",
-                    "GST_CODE",
-                    customers,
+                    "Select User",
+                    "user_id",
+                    users,
                     true,
-                    subscriptionForEdit.GST_CODE !== undefined
+                    isUserFieldDisabled
                   )}
-                  {renderSelectField("Select User", "user_id", users)}
+                  {renderSelectField(
+                    "Select System",
+                    "SYSTEM_ID",
+                    gstSystems,
+                    true,
+                    subscription.SYSTEM_ID !== undefined
+                  )}
                   {renderField(
                     "Subscription Date",
                     "SUBSCRIPTION_DATE",
