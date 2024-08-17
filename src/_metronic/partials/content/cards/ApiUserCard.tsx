@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import { KTIcon } from "../../../../_metronic/helpers";
 
 type Props = {
@@ -21,7 +22,12 @@ const ApiUserCard: FC<Props> = ({
   return (
     <div className="card border border-2 border-gray-300 border-hover">
       <div className="card-header border-0 pt-9 d-flex justify-content-between align-items-center">
-        USER - {user?.id}
+        <Link
+          to="#"
+          className="fs-3 fw-bolder text-hover-primary text-gray-900 mt-1"
+        >
+          USER - {user?.id}
+        </Link>
         <span>
           <button
             onClick={() => handleEditUser(user)}
@@ -40,10 +46,7 @@ const ApiUserCard: FC<Props> = ({
 
       <div className="card-body p-9">
         <div className="d-flex justify-content-between align-items-center">
-          <a
-            href={`mailto:${user?.USR_ID}`}
-            className="text-gray-500 fw-bold fs-5 mt-1 mb-7 text-truncate text-hover-primary"
-          >
+          <a href={`mailto:${user?.USR_ID}`} className="text-gray-500 fw-bold fs-5 mt-1 mb-7 text-truncate text-hover-primary">
             {user?.USR_ID}
           </a>
           <p className={`badge badge-light-${badgeColor} fw-bolder px-4 py-3`}>
@@ -52,9 +55,7 @@ const ApiUserCard: FC<Props> = ({
         </div>
         <div className="d-flex flex-wrap">
           <div className="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
-            <div className="fs-6 text-gray-800 fw-bolder">
-              {user?.CREATED_BY}
-            </div>
+            <div className="fs-6 text-gray-800 fw-bolder">{user?.CREATED_BY}</div>
             <div className="fw-bold text-gray-500">Created By</div>
           </div>
 
