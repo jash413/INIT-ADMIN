@@ -1,5 +1,4 @@
 import { Column } from "react-table";
-import { SubscriptionInfoCell } from "./SubscriptionInfoCell";
 import { SubscriptionActionsCell } from "./SubscriptionActionsCell";
 import { SubscriptionSelectionCell } from "./SubscriptionSelectionCell";
 import { SubscriptionCustomHeader } from "./SubscriptionCustomHeader";

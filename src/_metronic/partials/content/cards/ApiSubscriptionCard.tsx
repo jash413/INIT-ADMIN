@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
 import { KTIcon } from "../../../../_metronic/helpers";
 
 type Props = {
@@ -34,12 +33,7 @@ const ApiSubscriptionCard: FC<Props> = ({
   return (
     <div className="card border border-2 border-gray-300 border-hover">
       <div className="card-header border-0 pt-9 d-flex justify-content-between align-items-center">
-        <Link
-          to={`/api-user-profile/${subscription?.user_id}`}
-          className="fs-3 fw-bolder text-hover-primary text-gray-900 mt-1"
-        >
-          USER - {subscription?.user_id}
-        </Link>
+        USER - {subscription?.user_id}
         <span>
           <button
             onClick={() => handleEditSubscription(subscription)}

@@ -1,5 +1,4 @@
 import { Column } from "react-table";
-import { UserInfoCell } from "./UserInfoCell";
 import { UserActionsCell } from "./UserActionsCell";
 import { UserSelectionCell } from "./UserSelectionCell";
 import { UserCustomHeader } from "./UserCustomHeader";
