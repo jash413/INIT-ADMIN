@@ -3,7 +3,7 @@ import { PageTitle } from "../../../_metronic/layout/core";
 import {
   TablesWidget5,
   CardsWidget17,
-  ApiSubscriptionTable
+  ApiSubscriptionTable,
 } from "../../../_metronic/partials/widgets";
 import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
 import { Content } from "../../../_metronic/layout/components/content";
@@ -141,12 +141,14 @@ const DashboardWrapper: FC = () => {
 
   const fetchData = async (isIfas: boolean) => {
     try {
-      const users = isIfas ? await getAllUsers() : await getAllApiUsers();
+      // Fetch users and subscriptions data based on 'isIfas' flag
+      const users = isIfas ? await getAllEmployees() : await getAllApiUsers();
       const subscriptions = isIfas
         ? await getAllSubscriptions()
         : await getAllApiSubscriptions();
-      const entity = isIfas ? await getAllEmployees() : await getAllCustomers();
+      const customers = isIfas ? await getAllUsers() : await getAllCustomers();
 
+      // Initialize date ranges using moment.js
       const today = moment().startOf("day");
       const startOfWeek = moment().startOf("week");
       const startOfMonth = moment().startOf("month");
@@ -154,6 +156,7 @@ const DashboardWrapper: FC = () => {
       const endOfWeek = moment().endOf("week");
       const endOfMonth = moment().endOf("month");
 
+      // Filter active and inactive subscriptions based on 'isIfas' flag
       const activeSubscriptions = subscriptions.data.filter(
         (s: any) => (isIfas ? s.status : s.is_active) === 1
       );
@@ -161,6 +164,7 @@ const DashboardWrapper: FC = () => {
         (s: any) => (isIfas ? s.status : s.is_active) === 0
       );
 
+      // Count active subscriptions for today, week, and month
       setNoOfActiveToday(
         activeSubscriptions.filter((s: any) =>
           moment(s.CREATED_ON || s.CREATED_AT).isBetween(today, endOfToday)
@@ -179,6 +183,8 @@ const DashboardWrapper: FC = () => {
           )
         ).length
       );
+
+      // Count inactive subscriptions for today, week, and month
       setNoOfInactiveToday(
         inactiveSubscriptions.filter((s: any) =>
           moment(s.CREATED_ON || s.CREATED_AT).isBetween(today, endOfToday)
@@ -198,29 +204,39 @@ const DashboardWrapper: FC = () => {
         ).length
       );
 
+      // Set the total number of active and inactive subscriptions
       setNoOfActiveSubscriptions(activeSubscriptions.length);
       setNoOfInactiveSubscriptions(inactiveSubscriptions.length);
 
-      const activeEntity = entity.data.filter(
-        (e: any) => (isIfas ? e.EMP_ACTV : e.is_active) === (isIfas ? "1" : 1)
+      // Filter active and inactive customers based on 'isIfas' flag
+      const activeCustomers = customers.data.filter(
+        (c: any) => (isIfas ? c.is_active : c.is_active) === 1
       );
-      const inactiveEntity = entity.data.filter(
-        (e: any) =>
-          (isIfas ? e.EMP_ACTV : e.is_active) === (isIfas ? "0" : 0) ||
-          (isIfas && e.EMP_ACTV === null)
-      );
-
-      setNoOfActiveUsersOrEmployees(activeEntity.length);
-      setNoOfInactiveUsersOrEmployees(inactiveEntity.length);
-
-      const activeCustomers = users.data.filter((u: any) => u.is_active === 1);
-      const inactiveCustomers = users.data.filter(
-        (u: any) => u.is_active === 0 || u.is_active === null
+      const inactiveCustomers = customers.data.filter(
+        (c: any) =>
+          (isIfas ? c.is_active : c.is_active) === 0 ||
+          (isIfas && c.is_active === null)
       );
 
+      // Set the total number of active and inactive customers
       setNoOfActiveCustomers(activeCustomers.length);
       setNoOfInactiveCustomers(inactiveCustomers.length);
+
+      // Filter active and inactive users
+      const activeUsers = users.data.filter(
+        (u: any) => (isIfas ? u.EMP_ACTV : u.USR_ACTV) === (isIfas ? "1" : 1)
+      );
+      const inactiveUsers = users.data.filter(
+        (u: any) =>
+          (isIfas ? u.EMP_ACTV : u.USR_ACTV) === (isIfas ? "0" : 0) ||
+          (isIfas && u.EMP_ACTV === null)
+      );
+
+      // Set the total number of active and inactive users or employees
+      setNoOfActiveUsersOrEmployees(activeUsers.length);
+      setNoOfInactiveUsersOrEmployees(inactiveUsers.length);
     } catch (error) {
+      // Log an error message if data fetching fails
       console.error("Failed to fetch data", error);
     }
   };
