@@ -22,7 +22,6 @@ const usersColumns: ReadonlyArray<Column<User>> = [
   {
     Header: (props) => <UserCustomHeader tableProps={props} title="ID" />,
     accessor: "id",
-    Cell: ({ ...props }) => <UserInfoCell user={props.data[props.row.index]} />,
   },
   {
     Header: (props) => <UserCustomHeader tableProps={props} title="CUS NAME" />,

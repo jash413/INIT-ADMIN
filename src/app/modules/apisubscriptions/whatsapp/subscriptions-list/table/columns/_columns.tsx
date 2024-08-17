@@ -24,9 +24,6 @@ const subscriptionsColumns: ReadonlyArray<Column<Subscription>> = [
       <SubscriptionCustomHeader tableProps={props} title="ID" />
     ),
     accessor: "id",
-    Cell: ({ ...props }) => (
-      <SubscriptionInfoCell subscription={props.data[props.row.index]} />
-    ),
   },
   {
     Header: (props) => (
