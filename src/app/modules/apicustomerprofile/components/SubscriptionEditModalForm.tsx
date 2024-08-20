@@ -31,6 +31,7 @@ const editSubscriptionSchema = Yup.object().shape({
   user_id: Yup.string().required("User Id is required"),
   INV_DATE: Yup.string().required("Invoice Date is required"),
   INV_NO: Yup.string().required("Invoice Number is required"),
+  ALLOTED_CALLS: Yup.string().required("Alloted Calls is required"),
 });
 
 const SubscriptionEditModalForm: FC<Props> = ({
@@ -81,6 +82,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
     user_id: subscription.user_id,
     INV_DATE: moment(subscription.INV_DATE).format("YYYY-MM-DD"),
     INV_NO: subscription.INV_NO,
+    ALLOTED_CALLS: subscription.ALLOTED_CALLS,
   });
 
   const cancel = (withRefresh?: boolean) => {
@@ -290,6 +292,7 @@ const SubscriptionEditModalForm: FC<Props> = ({
                     "SUBSCRIPTION_DATE",
                     "date"
                   )}
+                  {renderField("Alloted Calls", "ALLOTED_CALLS")}
                   {renderField("Invoice Date", "INV_DATE", "date")}
                   {renderField("Invoice Number", "INV_NO")}
                   {renderField("Active", "is_active", "checkbox", false, true)}

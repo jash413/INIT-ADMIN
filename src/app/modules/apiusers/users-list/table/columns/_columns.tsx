@@ -27,10 +27,6 @@ const usersColumns: ReadonlyArray<Column<User>> = [
     accessor: "CUS_NAME",
   },
   {
-    Header: (props) => <UserCustomHeader tableProps={props} title="GST NO" />,
-    accessor: "GST_NMBR",
-  },
-  {
     Header: (props) => <UserCustomHeader tableProps={props} title="Email" />,
     accessor: "USR_ID",
   },

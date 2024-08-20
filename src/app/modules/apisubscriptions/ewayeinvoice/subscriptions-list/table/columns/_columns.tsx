@@ -32,12 +32,6 @@ const subscriptionsColumns: ReadonlyArray<Column<Subscription>> = [
   },
   {
     Header: (props) => (
-      <SubscriptionCustomHeader tableProps={props} title="GST No" />
-    ),
-    accessor: "GST_NMBR",
-  },
-  {
-    Header: (props) => (
       <SubscriptionCustomHeader tableProps={props} title="User Id" />
     ),
     accessor: "user_id",

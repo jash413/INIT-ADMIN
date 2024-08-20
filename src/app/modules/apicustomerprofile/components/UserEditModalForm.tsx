@@ -15,11 +15,11 @@ type Props = {
   user: User;
   onClose: () => void; // Add onClose prop to handle modal closure
   onUserSaved: () => void;
+  customerId: string;
 };
 
 const editUserSchema = Yup.object().shape({
   GST_CODE: Yup.string().required("GST Code is required"),
-  GST_NMBR: Yup.string().required("GST Number is required"),
   USR_ID: Yup.string()
     .email("Email is not valid")
     .required("Email is required"),
@@ -31,6 +31,7 @@ const UserEditModalForm: FC<Props> = ({
   isUserLoading,
   onClose,
   onUserSaved,
+  customerId,
 }) => {
   const { setItemIdForUpdate } = useListView();
   const { refetch } = useQueryResponse();
@@ -49,8 +50,7 @@ const UserEditModalForm: FC<Props> = ({
 
   const [userForEdit] = useState<User>({
     ...user,
-    GST_CODE: user.GST_CODE,
-    GST_NMBR: user.GST_NMBR,
+    GST_CODE: customerId,
     USR_ID: user.USR_ID,
     USR_PASS: user.USR_PASS,
     USR_ACTV: user.USR_ACTV || 0,
@@ -227,7 +227,6 @@ const UserEditModalForm: FC<Props> = ({
                     true,
                     userForEdit.GST_CODE !== undefined
                   )}
-                  {renderField("GST Number", "GST_NMBR")}
                   {renderField("Email", "USR_ID", "email")}
                   {renderField("Password", "USR_PASS", "password")}
                   {renderField("Active", "USR_ACTV", "checkbox", false, true)}

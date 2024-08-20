@@ -151,6 +151,7 @@ const Users: FC<UsersProps> = ({ id }) => {
           isUserLoading={false}
           onClose={handleCloseModal}
           onUserSaved={fetchUsers}
+          customerId={customer?.REG_CODE}
         />
       )}
     </Content>
