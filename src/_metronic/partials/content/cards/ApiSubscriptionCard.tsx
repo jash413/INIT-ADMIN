@@ -34,12 +34,12 @@ const ApiSubscriptionCard: FC<Props> = ({
   return (
     <div className="card border border-2 border-gray-300 border-hover">
       <div className="card-header border-0 pt-9 d-flex justify-content-between align-items-center text-truncate">
-        <Link
-          to="#"
-          className="fs-3 fw-bolder text-hover-primary text-gray-900 mt-1"
+        <a
+          href={`mailto:${subscription?.USR_ID}`}
+          className="fs-3 fw-bolder text-hover-primary text-gray-500 mt-1"
         >
           {subscription?.USR_ID}
-        </Link>
+        </a>
         <span>
           <button
             onClick={() => handleEditSubscription(subscription)}
