@@ -17,7 +17,7 @@ export type Subscription = {
   INV_DATE?: string;
   INV_NO?: string;
   CUS_NAME?: string;
-  is_verified?: boolean;
+  IS_VERIFIED?: boolean;
 };
 
 export type SubscriptionsQueryResponse = Response<Array<Subscription>>;

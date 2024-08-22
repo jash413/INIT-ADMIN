@@ -173,7 +173,7 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                         <input
                           type="checkbox"
                           className="form-check-input"
-                          checked={subscription.is_verified}
+                          checked={subscription.IS_VERIFIED}
                           onChange={async () => {
                             try {
                               await updateSubscription({
@@ -187,7 +187,7 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                                 INV_DATE: moment(subscription.INV_DATE).format(
                                   "YYYY-MM-DD"
                                 ),
-                                is_verified: !subscription.is_verified,
+                                IS_VERIFIED: !subscription.IS_VERIFIED,
                               });
                               fetchData();
                             } catch (error) {
