@@ -92,9 +92,6 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                       <span className="text-muted fw-bold">CUS NAME</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">GST NO</span>
-                    </th>
-                    <th className="p-0 min-w-150px text-center">
                       <span className="text-muted fw-bold">USER ID</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
@@ -142,9 +139,6 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                     <tr key={index}>
                       <td className="text-center text-muted fw-semibold">
                         {subscription.CUS_NAME}
-                      </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.GST_NMBR}
                       </td>
                       <td className="text-center text-muted fw-semibold">
                         {subscription.user_id}

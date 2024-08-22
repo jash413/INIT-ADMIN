@@ -177,17 +177,17 @@ const DashboardWrapper: FC = () => {
       // Count active subscriptions for today, week, and month
       setNoOfActiveToday(
         activeSubscriptions.filter((s: any) =>
-          moment(s.CREATED_ON || s.CREATED_AT).isBetween(today, endOfToday)
+          moment(s.created_on || s.CREATED_AT).isBetween(today, endOfToday)
         ).length
       );
       setNoOfActiveWeekly(
         activeSubscriptions.filter((s: any) =>
-          moment(s.CREATED_ON || s.CREATED_AT).isBetween(startOfWeek, endOfWeek)
+          moment(s.created_on || s.CREATED_AT).isBetween(startOfWeek, endOfWeek)
         ).length
       );
       setNoOfActiveMonthly(
         activeSubscriptions.filter((s: any) =>
-          moment(s.CREATED_ON || s.CREATED_AT).isBetween(
+          moment(s.created_on || s.CREATED_AT).isBetween(
             startOfMonth,
             endOfMonth
           )
@@ -197,17 +197,17 @@ const DashboardWrapper: FC = () => {
       // Count inactive subscriptions for today, week, and month
       setNoOfInactiveToday(
         inactiveSubscriptions.filter((s: any) =>
-          moment(s.CREATED_ON || s.CREATED_AT).isBetween(today, endOfToday)
+          moment(s.created_on || s.CREATED_AT).isBetween(today, endOfToday)
         ).length
       );
       setNoOfInactiveWeekly(
         inactiveSubscriptions.filter((s: any) =>
-          moment(s.CREATED_ON || s.CREATED_AT).isBetween(startOfWeek, endOfWeek)
+          moment(s.created_on || s.CREATED_AT).isBetween(startOfWeek, endOfWeek)
         ).length
       );
       setNoOfInactiveMonthly(
         inactiveSubscriptions.filter((s: any) =>
-          moment(s.CREATED_ON || s.CREATED_AT).isBetween(
+          moment(s.created_on || s.CREATED_AT).isBetween(
             startOfMonth,
             endOfMonth
           )
