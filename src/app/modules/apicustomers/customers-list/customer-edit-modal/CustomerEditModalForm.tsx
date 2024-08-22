@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { isNotEmpty } from "../../../../../_metronic/helpers";
@@ -47,8 +47,9 @@ const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
   const { refetch } = useQueryResponse();
 
   const [showUserForm, setShowUserForm] = useState(false);
+  const [copyCompanyName, setCopyCompanyName] = useState(false);
 
-  const [customerForEdit] = useState<Customer>({
+  const [customerForEdit, setCustomerForEdit] = useState<Customer>({
     ...customer,
     CUS_NAME: customer.CUS_NAME,
     CUS_ADDR: customer.CUS_ADDR,
@@ -97,6 +98,12 @@ const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (copyCompanyName) {
+      customerFormik.setFieldValue("CMP_NAME", customerFormik.values.CUS_NAME);
+    }
+  }, [copyCompanyName, customerFormik.values.CUS_NAME]);
+
   const userFormik = useFormik({
     initialValues: userForEdit,
     validationSchema: editUserSchema,
@@ -123,7 +130,8 @@ const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
     type = "text",
     isRequired = true,
     isToggleBtn = false,
-    formik: any
+    formik: any,
+    isDisabled = false
   ) => (
     <div className={clsx("fv-row mb-7", isToggleBtn && "col-md-6")}>
       <label className={clsx("fw-bold fs-6 mb-2", isRequired && "required")}>
@@ -156,7 +164,9 @@ const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
           )}
           autoComplete="off"
           disabled={
-            formik.isSubmitting || (formik === customerFormik && showUserForm)
+            formik.isSubmitting ||
+            (formik === customerFormik && showUserForm) ||
+            isDisabled
           }
         />
       )}
@@ -194,16 +204,47 @@ const CustomerEditModalForm: FC<CustomerEditModalFormProps> = ({
               customerFormik
             )}
             {renderField(
-              "Address",
-              "CUS_ADDR",
+              "Company Name",
+              "CMP_NAME",
               "text",
               true,
               false,
-              customerFormik
+              customerFormik,
+              copyCompanyName
             )}
+            <div className="form-check mb-7">
+              <input
+                type="checkbox"
+                id="copyCompanyName"
+                className="form-check-input"
+                checked={copyCompanyName}
+                onChange={() => {
+                  if (copyCompanyName) {
+                    customerFormik.setFieldValue("CMP_NAME", "");
+                    setCopyCompanyName(false);
+                  } else {
+                    if (!customerFormik.values.CUS_NAME) {
+                      alert("Please fill in the customer name first");
+                    } else {
+                      customerFormik.setFieldValue(
+                        "CMP_NAME",
+                        customerFormik.values.CUS_NAME
+                      );
+                      setCopyCompanyName(true);
+                    }
+                  }
+                }}
+              />
+              <label
+                className="form-check-label fw-bold fs-6"
+                htmlFor="copyCompanyName"
+              >
+                USE CUSTOMER NAME AS COMPANY NAME
+              </label>
+            </div>
             {renderField(
-              "Company Name",
-              "CMP_NAME",
+              "Address",
+              "CUS_ADDR",
               "text",
               true,
               false,
