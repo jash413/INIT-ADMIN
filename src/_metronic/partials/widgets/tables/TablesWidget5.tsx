@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { KTIcon } from "../../../helpers";
 import {
   getSubscriptionsByDateRange,
@@ -6,6 +6,8 @@ import {
 } from "../../../../app/modules/customerprofile/subscriptionCore/_requests";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
   className: string;
@@ -24,30 +26,58 @@ type Subscription = {
   LIC_USER: number;
 };
 
+const predefinedRanges = [
+  {
+    label: "Last 7 Days",
+    value: "7days",
+    range: [moment().subtract(7, "days"), moment()],
+  },
+  {
+    label: "Last 30 Days",
+    value: "30days",
+    range: [moment().subtract(30, "days"), moment()],
+  },
+  {
+    label: "This Month",
+    value: "thisMonth",
+    range: [moment().startOf("month"), moment().endOf("month")],
+  },
+  {
+    label: "Last Month",
+    value: "lastMonth",
+    range: [
+      moment().subtract(1, "month").startOf("month"),
+      moment().subtract(1, "month").endOf("month"),
+    ],
+  },
+  { label: "Custom Range", value: "custom" },
+];
+
 const TablesWidget5: FC<Props> = ({ className }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [duration, setDuration] = useState<"Day" | "Week" | "Month">("Day");
+  const [dateRange, setDateRange] = useState("7days");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const fetchData = async () => {
-    let startDate: string;
-    let endDate: string = moment().endOf("day").format("YYYY-MM-DD");
+    let start, end;
 
-    switch (duration) {
-      case "Day":
-        startDate = moment().startOf("day").format("YYYY-MM-DD");
-        break;
-      case "Week":
-        startDate = moment().startOf("week").format("YYYY-MM-DD");
-        break;
-      case "Month":
-        startDate = moment().startOf("month").format("YYYY-MM-DD");
-        break;
-      default:
-        startDate = moment().startOf("month").format("YYYY-MM-DD");
+    if (dateRange === "custom" && startDate && endDate) {
+      start = moment(startDate).format("YYYY-MM-DD");
+      end = moment(endDate).format("YYYY-MM-DD");
+    } else {
+      const selectedRange = predefinedRanges.find((r) => r.value === dateRange);
+      if (selectedRange && selectedRange.range) {
+        start = selectedRange.range[0].format("YYYY-MM-DD");
+        end = selectedRange.range[1].format("YYYY-MM-DD");
+      } else {
+        start = moment().startOf("month").format("YYYY-MM-DD");
+        end = moment().endOf("day").format("YYYY-MM-DD");
+      }
     }
 
     try {
-      const data = await getSubscriptionsByDateRange(startDate, endDate);
+      const data = await getSubscriptionsByDateRange(start, end);
       if (data?.data) {
         setSubscriptions(data.data);
       }
@@ -58,7 +88,16 @@ const TablesWidget5: FC<Props> = ({ className }) => {
 
   useEffect(() => {
     fetchData();
-  }, [duration]);
+  }, [dateRange, startDate, endDate]);
+
+  const handleDateRangeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setDateRange(value);
+    if (value !== "custom") {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
 
   return (
     <div className={`card ${className}`}>
@@ -70,20 +109,32 @@ const TablesWidget5: FC<Props> = ({ className }) => {
           </span>
         </h3>
         <div className="card-toolbar">
-          <ul className="nav">
-            {["Month", "Week", "Day"].map((d) => (
-              <li className="nav-item" key={d}>
-                <a
-                  className={`nav-link btn btn-sm btn-color-muted btn-active btn-active-light-primary ${
-                    duration === d ? "active fw-bold" : ""
-                  } px-4 me-1`}
-                  onClick={() => setDuration(d as "Day" | "Week" | "Month")}
-                >
-                  {d}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="d-flex align-items-center">
+            <select
+              className="form-select form-select-sm me-2 text-gray-600 fw-bold fs-6 rounded-3 cursor-pointer shadow-none"
+              value={dateRange}
+              onChange={handleDateRangeChange}
+            >
+              {predefinedRanges.map((range) => (
+                <option key={range.value} value={range.value}>
+                  {range.label}
+                </option>
+              ))}
+            </select>
+            {dateRange === "custom" && (
+              <DatePicker
+                selectsRange={true}
+                startDate={startDate as Date}
+                endDate={endDate as Date}
+                onChange={(update: [Date | null, Date | null]) => {
+                  setStartDate(update[0]);
+                  setEndDate(update[1]);
+                }}
+                className="form-control form-control-sm me-2 text-center bg-light border-0 flex-grow-1 flex-basis-0 text-gray-600 fw-bold fs-6 p-0 pe-3 rounded-3 cursor-pointer shadow-none w-200px w-md-auto"
+                placeholderText="Select date range"
+              />
+            )}
+          </div>
         </div>
       </div>
       {/* end::Header */}
@@ -164,9 +215,7 @@ const TablesWidget5: FC<Props> = ({ className }) => {
                       <td className="text-center text-muted fw-semibold">
                         {subscription.SUB_ORDN}
                       </td>
-                      <td className="text-center">
-                       {subscription.LIC_USER}
-                      </td>
+                      <td className="text-center">{subscription.LIC_USER}</td>
                       <td className="text-center text-muted fw-semibold">
                         {moment(subscription.SUB_STDT).format("DD/MMM/YYYY")}
                       </td>
