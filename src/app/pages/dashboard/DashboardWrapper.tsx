@@ -3,6 +3,7 @@ import { PageTitle } from "../../../_metronic/layout/core";
 import {
   TablesWidget5,
   CardsWidget17,
+  TablesWidget1,
   ApiCard,
   ApiSubscriptionTable,
 } from "../../../_metronic/partials/widgets";
@@ -125,7 +126,10 @@ const DashboardPage: FC<DashboardPageProps> = ({
         {type === "API Users" ? (
           <ApiSubscriptionTable className="card-xxl-stretch mb-5 mb-xxl-8" />
         ) : (
+          <>
           <TablesWidget5 className="card-xxl-stretch mb-5 mb-xxl-8" />
+          <TablesWidget1 className="card-xxl-stretch mb-5 mb-xxl-8" />
+          </>
         )}
       </div>
     </Content>

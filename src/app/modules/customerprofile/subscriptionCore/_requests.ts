@@ -35,6 +35,40 @@ const getSubscriptions = (
     });
 };
 
+const getNearbyExpiringSubscriptions = (): Promise<SubscriptionsQueryResponse> => {
+  return axios
+    .get(`${GET_SUBSCRIPTIONS_URL}/expiring-soon`)
+    .then((d: AxiosResponse<SubscriptionsQueryResponse>) => d.data)
+    .catch((error) => {
+      toast.error(`${error.response.data.message}`);
+      throw error;
+    });
+}
+
+const sendWhatsAppReminder = (subscriptionId: ID): Promise<void> => {
+  return axios
+    .post(`${SUBSCRIPTION_URL}/whatsapp/${subscriptionId}`)
+    .then(() => {
+      toast.success("Reminder sent successfully");
+    })
+    .catch((error) => {
+      toast.error(`${error.response.data.message}`);
+      throw error;
+    });
+}
+
+const sendEmailReminder = (subscriptionId: ID): Promise<void> => {
+  return axios
+    .post(`${SUBSCRIPTION_URL}/email/${subscriptionId}`)
+    .then(() => {
+      toast.success("Reminder sent successfully");
+    })
+    .catch((error) => {
+      toast.error(`${error.response.data.message}`);
+      throw error;
+    });
+}
+
 const searchSubscriptions = (
   query: string,
   id: ID
@@ -192,4 +226,7 @@ export {
   getSubscriptionsByDateRange,
   getAdmins,
   getSubscriptionByIdAndQuery,
+  getNearbyExpiringSubscriptions,
+  sendWhatsAppReminder,
+  sendEmailReminder,
 };
