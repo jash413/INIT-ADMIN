@@ -1,4 +1,4 @@
-import { lazy, FC, Suspense, useEffect } from "react";
+import { lazy, FC, Suspense } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { MasterLayout } from "../../_metronic/layout/MasterLayout";
 import TopBarProgress from "react-topbar-progress-indicator";
@@ -25,6 +25,9 @@ const PrivateRoutes = () => {
   const EmployeeallotmentPage = lazy(
     () => import("../modules/employeeallotment/EmployeesPage")
   );
+  const EmployerPage = lazy(
+    () => import("../modules/jobportalemployer/EmployersPage")
+  );
   const CustomerProfilePage = lazy(
     () => import("../modules/customerprofile/ProfilePage")
   );
@@ -48,6 +51,7 @@ const PrivateRoutes = () => {
     () => import("../modules/apicustomerprofile/ProfilePage")
   );
 
+  console.log(loginType, "jjjj")
   return (
     <Routes>
       <Route element={<MasterLayout />}>
@@ -175,6 +179,21 @@ const PrivateRoutes = () => {
           </>
         )}
 
+        {/* JOBPORTAL Specific Routes */}
+        {loginType === "JOBPORTAL" && (
+          <>
+            <Route
+              path="/jobportal-employer-management/*"
+              element={
+                <SuspensedView>
+                  <EmployerPage />
+                </SuspensedView>
+              }
+            />
+          </>
+        )}
+
+        {/* Apps */}
         <Route
           path="apps/chat/*"
           element={
