@@ -112,7 +112,7 @@ export function Login(): JSX.Element {
     }
   };
 
-  const handleSelectDashboard = (type: "IFAS" | "API") => {
+  const handleSelectDashboard = (type: "IFAS" | "API" | "JOBPORTAL") => {
     authData.loginType = type;
     saveAuth(authData);
     setCurrentUser(currentUserData);
@@ -328,6 +328,25 @@ export function Login(): JSX.Element {
                 <h5 className="card-title">API SUBSCRIPTIONS</h5>
                 <p className="card-text text-muted">
                   Manage and track API subscriptions.
+                </p>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div className="d-flex justify-content-center">
+            <div
+              className="card mx-3 text-center"
+              style={{ width: "250px", cursor: "pointer" }}
+              onClick={() => handleSelectDashboard("JOBPORTAL")}
+            >
+              <div className="card-body">
+                <i
+                  className="fas fa-briefcase text-primary mb-4"
+                  style={{ fontSize: "3rem" }}
+                ></i>
+                <h5 className="card-title">JOB PORTAL MANAGEMENT</h5>
+                <p className="card-text text-muted">
+                  Manage job postings, applications, and more.
                 </p>
               </div>
             </div>

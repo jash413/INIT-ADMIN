@@ -90,6 +90,42 @@ const SidebarMenuMain = () => {
           </SidebarMenuItemWithSub>
         </>
       )}
+
+      {auth?.loginType === "JOBPORTAL" && (
+        <>
+          <div className="menu-item">
+            <div className="menu-content pt-8 pb-2">
+              <span className="menu-section text-muted text-uppercase fs-8 ls-1">
+                JOB PORTAL MANAGEMENT
+              </span>
+            </div>
+          </div>
+          <SidebarMenuItem
+            to="/dashboard"
+            icon="element-11"
+            title="Dashboard"
+            fontIcon="bi-app-indicator"
+          />
+          <SidebarMenuItem
+            to="/jobportal-job-post-management/job-posts"
+            title="Job Posts"
+            icon="profile-circle"
+            fontIcon="bi-person"
+          />
+          <SidebarMenuItem
+            to="/jobportal-candidate-management/candidates"
+            title="Candidates"
+            fontIcon="bi-sticky"
+            icon="user-tick"
+          />
+          <SidebarMenuItem
+            to="/jobportal-employer-management/employers"
+            title="Employers"
+            fontIcon="bi-sticky"
+            icon="user-tick"
+          />
+        </>
+      )}
     </>
   );
 };

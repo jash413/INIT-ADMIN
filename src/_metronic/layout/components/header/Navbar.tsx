@@ -54,6 +54,15 @@ const Navbar = () => {
                 API SUBSCRIPTIONS
               </a>
             </li>
+            <li>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => handleLoginTypeChange("JOBPORTAL")}
+              >
+                JOB PORTAL MANAGEMENT
+              </a>
+            </li>
           </ul>
         </div>
       </div>
