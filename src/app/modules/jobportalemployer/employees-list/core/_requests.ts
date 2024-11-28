@@ -66,7 +66,7 @@ const grantProfileAccess = (
     })
     .catch((error) => {
       toast.error(
-        `Failed to deny request: ${
+        `Failed to grant request: ${
           error?.response?.data?.message || error.message
         }`
       );
@@ -78,7 +78,7 @@ const revokeProfileAccess = (
   payload: GrantDenyAccessPayloadType
 ): Promise<void> => {
   return axios
-    .delete(`${REVOKE_PROFILE_ACCESS_REQ_URL}`, payload as any)
+    .post(`${REVOKE_PROFILE_ACCESS_REQ_URL}`, payload as any)
     .then((d) => {
       d.data;
     })

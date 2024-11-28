@@ -48,7 +48,7 @@ const Card6: FC<Props> = ({
                     </p>
                 </div>
                 <div className="card-toolbar mt-3">
-                    <span className="d-flex justify-content-end align-items-center">
+                    <span className="d-flex justify-content-start align-items-center">
                         {status !== "Approved" && (
                             <button
                                 onClick={() => {
