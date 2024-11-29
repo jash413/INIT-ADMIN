@@ -35,6 +35,7 @@ export type FilterType = {
   limit: number | null;
   search?: string | null;
   cmp_id?: number | null;
+  employerId?: number | null;
 };
 
 export type GrantDenyAccessPayloadType = {
