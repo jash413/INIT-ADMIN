@@ -29,10 +29,10 @@ const Card6: FC<Props> = ({
     const isGranted = (status === "Approved" || status === "Rejected")
     return (
         <div className="card border border-2 border-gray-300 border-hover">
-            <div className="card-header border-0 pt-9">
-                <div>
-                    <div className="fs-3 fw-bolder text-gray-900 mt-1">Company: {title}</div>
-                    <div className="fs-5 fw-bolder text-gray-700 mt-1">Candidate: {subTitle}</div>
+            <div className="card-header row border-0 pt-9 w-max">
+                <div className="">
+                    <div className="fs-3 fw-bolder text-gray-900 mt-1 text-truncate">Company: {title}</div>
+                    <div className="fs-5 fw-bolder text-gray-700 mt-1 text-truncate">Candidate: {subTitle}</div>
                 </div>
 
             </div>

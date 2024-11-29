@@ -25,8 +25,17 @@ const PrivateRoutes = () => {
   const EmployeeallotmentPage = lazy(
     () => import("../modules/employeeallotment/EmployeesPage")
   );
+  const JobPostPage = lazy(
+    () => import("../modules/jobportaljobpost/JobPostPage")
+  );
   const EmployerPage = lazy(
-    () => import("../modules/jobportalemployer/EmployersPage")
+    () => import("../modules/jobportalemployer/EmployerListPage")
+  );
+  const CandidatePage = lazy(
+    () => import("../modules/jobportalcandidate/CandidateListPage")
+  );
+  const EmployerProfilePage = lazy(
+    () => import("../modules/jobportalemployer/EmployerProfilePage")
   );
   const CustomerProfilePage = lazy(
     () => import("../modules/customerprofile/ProfilePage")
@@ -51,7 +60,6 @@ const PrivateRoutes = () => {
     () => import("../modules/apicustomerprofile/ProfilePage")
   );
 
-  console.log(loginType, "jjjj")
   return (
     <Routes>
       <Route element={<MasterLayout />}>
@@ -190,7 +198,32 @@ const PrivateRoutes = () => {
                 </SuspensedView>
               }
             />
+            <Route
+              path="jobportal-employer-profile/*"
+              element={
+                <SuspensedView>
+                  <EmployerProfilePage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="/jobportal-job-post-management/*"
+              element={
+                <SuspensedView>
+                  <JobPostPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path="/jobportal-candidate-management/*"
+              element={
+                <SuspensedView>
+                  <CandidatePage />
+                </SuspensedView>
+              }
+            />
           </>
+
         )}
 
         {/* Apps */}

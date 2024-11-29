@@ -1,22 +1,22 @@
 import { Route, Routes, Outlet, Navigate } from 'react-router-dom'
-import EmployersList from './employees-list/compoents/AccessRequestList'
+import JobPostList from '../jobportalemployer/employees-list/compoents/JobPostList'
 
-const EmployersPage = () => {
+const JobPostPage = () => {
     return (
         <Routes>
             <Route element={<Outlet />}>
                 <Route
-                    path='employers'
+                    path='job-posts'
                     element={
                         <>
-                            <EmployersList />
+                            <JobPostList showCompanyDetails />
                         </>
                     }
                 />
             </Route>
-            <Route index element={<Navigate to='/jobportal-employer-management/employers' />} />
+            <Route index element={<Navigate to='/jobportal-job-post-management/job-posts' />} />
         </Routes>
     )
 }
 
-export default EmployersPage
+export default JobPostPage
