@@ -7,8 +7,10 @@ import clsx from "clsx";
 import { Card6 } from "../../../../../_metronic/partials/content/cards/Card6";
 import { EmployersAccessRequestType, FilterType, PaginationType } from "../core/_models";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-const EmployersList = () => {
+const AccessRequestList = () => {
+    const { id } = useParams<{ id: string }>();
     const [employers, setEmployers] = useState<EmployersAccessRequestType[] | []>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [pagination, setPagination] = useState<PaginationType>({
@@ -21,7 +23,8 @@ const EmployersList = () => {
     const [filters, setFilters] = useState<FilterType>({
         page: 1,
         limit: 10,
-        search: ""
+        search: "",
+        employerId: (id && parseInt(id)) || null,
     });
 
 
@@ -72,21 +75,16 @@ const EmployersList = () => {
 
     const generatePaginationLinks = () => {
         const links = [];
-        for (let i = 1; i <= pagination.totalPages; i++) {
-            links.push({
-                label: `${i}`,
-                page: i,
-            });
+        if (pagination.hasPreviousPage) {
+            links.push({ label: 'Previous', page: (filters.page || 1) - 1 });
         }
-        return [
-            { label: "&laquo; Previous", page: pagination.currentPage - 1 },
-            ...links,
-            { label: "Next &raquo;", page: pagination.currentPage + 1 },
-        ].filter(
-            (link) =>
-                (link.page > 0 && link.page <= pagination.totalPages) ||
-                ["&laquo; Previous", "Next &raquo;"].includes(link.label)
-        );
+        for (let i = 1; i <= pagination.totalPages; i++) {
+            links.push({ label: `${i}`, page: i });
+        }
+        if (pagination.hasNextPage) {
+            links.push({ label: 'Next', page: (filters.page || 1) + 1 });
+        }
+        return links;
     };
 
     const paginationLinks = generatePaginationLinks();
@@ -147,7 +145,7 @@ const EmployersList = () => {
                         type="text"
                         data-kt-user-table-filter="search"
                         className="form-control form-control-solid w-250px ps-14"
-                        placeholder="Search Employee..."
+                        placeholder="Search Employer..."
                         value={filters.search || ""}
                         onChange={handleSearchChange}
                     />
@@ -204,7 +202,7 @@ const EmployersList = () => {
                                     key={link.label}
                                     className={clsx("page-item", {
                                         active: pagination.currentPage === link.page,
-                                        disabled: loading,
+                                        disabled: loading || (link.label === 'Previous' && !pagination.hasPreviousPage) || (link.label === 'Next' && !pagination.hasNextPage),
                                     })}
                                 >
                                     <a
@@ -234,4 +232,4 @@ const EmployersList = () => {
     );
 };
 
-export default EmployersList;
+export default AccessRequestList;
