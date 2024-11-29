@@ -27,7 +27,7 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
         page: 1,
         limit: 10,
         // search: "",
-        employerId: id ? parseInt(id) : undefined,
+        cmp_id: id ? parseInt(id) : undefined,
     });
 
 
