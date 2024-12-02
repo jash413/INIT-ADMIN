@@ -1,6 +1,7 @@
-import { Route, Routes, Outlet, Navigate } from 'react-router-dom'
+import { Route, Routes, Outlet, Navigate, useParams } from 'react-router-dom'
 import { PageLink, PageTitle } from '../../../_metronic/layout/core'
 import CandidateListContent from './CandidateListContent'
+import { ProfileHeader } from './ProfileHeader';
 
 const EmployerBreadcrumbs: Array<PageLink> = [
     {
@@ -16,6 +17,26 @@ const EmployerBreadcrumbs: Array<PageLink> = [
         isActive: false,
     },
 ]
+interface RouteWithParamsProps {
+    Component: React.ComponentType<{ id: string }>;
+    pageTitle: string;
+}
+
+const RouteWithParams: React.FC<RouteWithParamsProps> = ({
+    Component,
+    pageTitle,
+}) => {
+    const { id } = useParams<{ id: string }>();
+    if (!id) {
+        return <Navigate to="/jobportal-employer-management/employers" replace />;
+    }
+    return (
+        <>
+            <PageTitle breadcrumbs={EmployerBreadcrumbs}>{pageTitle}</PageTitle>
+            <Component id={id} />
+        </>
+    );
+};
 
 const CandidateListPage = () => {
     return (
@@ -28,6 +49,15 @@ const CandidateListPage = () => {
                             <PageTitle breadcrumbs={EmployerBreadcrumbs}>Candidates list</PageTitle>
                             <CandidateListContent />
                         </>
+                    }
+                />
+                <Route
+                    path=":id/candidate"
+                    element={
+                        <RouteWithParams
+                            Component={ProfileHeader}
+                            pageTitle="Employer Details"
+                        />
                     }
                 />
             </Route>

@@ -8,6 +8,7 @@ import { FilterType, IJobPost, PaginationType, UpdateJobStatusPayload } from "..
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Card7 } from "../../../../../_metronic/partials/content/cards/Card7";
+import ManageAccessModal from "./ManageAccessModal";
 
 type Props = {
     showCompanyDetails?: boolean;
@@ -16,6 +17,10 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
     const { id } = useParams<{ id: string }>();
     const [employers, setEmployers] = useState<IJobPost[] | []>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [isManageOpen, setIsManageOpen] = useState<{
+        data: any;
+        show: boolean;
+    }>({ data: null, show: false });
     const [pagination, setPagination] = useState<PaginationType>({
         totalItems: 0,
         totalPages: 0,
@@ -163,6 +168,12 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
                                     handleStatusChange={handleStatusChange}
                                     showCompanyDetails={showCompanyDetails}
                                     data={employee}
+                                    handleManage={() => {
+                                        setIsManageOpen({
+                                            data: employee,
+                                            show: true,
+                                        });
+                                    }}
                                 />
                             </div>
                         ))
@@ -198,16 +209,13 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
                     </div>
                 </div>
             </div>
-            {/* {isModalOpen && (
-                <EmployeeEditModalForm
-                    employee={selectedEmployee || ({} as Employee)}
-                    isEmployeeLoading={false}
-                    onClose={handleCloseModal}
-                    onEmployeeSaved={fetchEmployees}
-                    customerId={customerId}
-                    subscriptionId={id}
+            {isManageOpen.show && (
+                <ManageAccessModal
+                    show={isManageOpen.show}
+                    data={isManageOpen.data}
+                    onClose={() => setIsManageOpen({ data: null, show: false })}
                 />
-            )} */}
+            )}
         </Content>
     );
 };

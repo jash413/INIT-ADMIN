@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { IJobPost } from "../../../../app/modules/jobportalemployer/employees-list/core/_models";
+import { Link } from "react-router-dom";
 
 type Props = {
     badgeColor: string;
@@ -16,6 +17,7 @@ type Props = {
     date: string;
     showCompanyDetails?: boolean;
     handleStatusChange?: any;
+    handleManage?: any;
     data?: IJobPost;
 };
 
@@ -28,6 +30,7 @@ const Card7: FC<Props> = ({
     date,
     showCompanyDetails = false,
     handleStatusChange,
+    handleManage,
     data,
 }) => {
 
@@ -43,7 +46,6 @@ const Card7: FC<Props> = ({
     //     "status": "inactive"
     // }
 
-    console.log("data", data);
     const handleToggle = () => {
         const newStatus = isActive ? "inactive" : "active";
         setIsActive(!isActive);
@@ -60,7 +62,7 @@ const Card7: FC<Props> = ({
 
     return (
         <div className="card border border-2 border-gray-300 border-hover">
-            <div className="card-header row border-0 pt-9 w-max">
+            <div className="card-header row border-0 pt-9 w-max" >
                 <div className="w-100">
                     <div className="fs-3 fw-bolder text-gray-900 mt-1 text-truncate">
                         Job Title: {jobTitle}
@@ -86,33 +88,46 @@ const Card7: FC<Props> = ({
                                     type="checkbox"
                                     id={`toggle-${data?.job_id}`}
                                     checked={isActive}
-                                    onChange={handleToggle}
+                                    onChange={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleToggle()
+                                    }}
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="card-toolbar mt-3">
+                <Link to={`/jobportal-employer-profile/${data?.cmp_id}/access-request/`} className="card-toolbar mt-3">
                     {showCompanyDetails && (
                         <div className="mt-4">
-                            <div className="text-gray-800 fw-bold">
+                            <div className="text-gray-800 fw-bold text-truncate">
                                 <strong>Company Name:</strong> {companyDetails.cmp_name}
                             </div>
-                            <div className="text-gray-800 fw-bold">
+                            <div className="text-gray-800 fw-bold text-truncate">
                                 <strong>Email:</strong> {companyDetails.cmp_email}
                             </div>
-                            <div className="text-gray-800 fw-bold">
+                            <div className="text-gray-800 fw-bold text-truncate">
                                 <strong>Phone:</strong> {companyDetails.cmp_mobn}
                             </div>
-                            <div className="text-gray-800 fw-bold">
+                            <div className="text-gray-800 fw-bold text-truncate">
                                 <strong>Location:</strong> {companyDetails.emp_loca}
                             </div>
-                            <div className="text-gray-800 fw-bold">
+                            <div className="text-gray-800 fw-bold text-truncate">
                                 <strong>Address:</strong> {companyDetails.emp_addr}
                             </div>
                         </div>
                     )}
+                </Link>
+                <div className="mt-5">
+                    <button onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleManage()
+                    }} className="btn btn-primary px-4 py-2 w-100">
+                        Manage
+                    </button>
                 </div>
             </div>
         </div>
