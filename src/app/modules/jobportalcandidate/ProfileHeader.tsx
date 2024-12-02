@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { KTIcon } from "../../../../_metronic/helpers";
-import { Content } from "../../../../_metronic/layout/components/content";
-import { useGetEmployer } from "../employees-list/core/useGetEmployer";
+import { useNavigate } from "react-router-dom";
+import { useGetEmployer } from "../jobportalemployer/employees-list/core/useGetEmployer";
+import { Content } from "../../../_metronic/layout/components/content";
+import { KTIcon } from "../../../_metronic/helpers";
 
 
 interface ProfileHeaderProps {
@@ -10,9 +10,7 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
-    const location = useLocation();
     const navigate = useNavigate();
-    const { pathname } = location;
     const { data, isLoading } = useGetEmployer({
         id,
     })
@@ -24,17 +22,15 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
     return (
         <>
             <Content>
-                {pathname.includes("/employer-job-posts") && (
-                    <div className="d-flex align-items-center mb-4">
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="btn btn-outline-secondary me-3"
-                        >
-                            <KTIcon iconName="left" className="me-2" />
-                            Back
-                        </button>
-                    </div>
-                )}
+                <div className="d-flex align-items-center mb-4">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="btn btn-outline-secondary me-3"
+                    >
+                        <KTIcon iconName="left" className="me-2" />
+                        Back
+                    </button>
+                </div>
                 <div className="card mb-5 mb-xl-10">
                     <div className="card-body pt-9 pb-0">
                         <div className="d-flex flex-wrap flex-sm-nowrap mb-3">
@@ -126,37 +122,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {!pathname.includes("/employer-job-posts") && (
-                            <div className="d-flex overflow-auto h-55px">
-                                <ul className="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap">
-                                    <li className="nav-item">
-                                        <Link
-                                            className={
-                                                `nav-link text-active-primary me-6 ` +
-                                                (pathname === `/jobportal-employer-profile/${id}/access-request` &&
-                                                    "active")
-                                            }
-                                            to={`/jobportal-employer-profile/${id}/access-request`}
-                                        >
-                                            Access Request
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link
-                                            className={
-                                                `nav-link text-active-primary me-6 ` +
-                                                (pathname === `/jobportal-employer-profile/${id}/job-post` &&
-                                                    "active")
-                                            }
-                                            to={`/jobportal-employer-profile/${id}/job-post`}
-                                        >
-                                            Job Post
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
                     </div>
                 </div>
             </Content>

@@ -7,6 +7,7 @@ import { EmployerListResponse } from './employees-list/core/_models';
 import { Link } from 'react-router-dom';
 import { updateUserApprovalStatus } from './employees-list/core/_requests';
 import { toast } from 'react-toastify';
+import ManageCandidateAccessModal from './employees-list/compoents/ManageCandidateAccessModal';
 
 const EmployesListContent = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +15,10 @@ const EmployesListContent = () => {
     const [sortBy, setSortBy] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC' | ''>('');
     const [statusUpdates, setStatusUpdates] = useState<Record<number, number>>({});
-
+    const [isManageOpen, setIsManageOpen] = useState<{
+        data: any;
+        show: boolean;
+    }>({ data: null, show: false });
     const { data, isLoading, refetch } = useGetEmployersList({
         page: currentPage,
         limit: 10,
@@ -204,6 +208,16 @@ const EmployesListContent = () => {
                                                         </label>
                                                     </div>
                                                 </td>
+                                                <td>
+                                                    <button onClick={() => {
+                                                        setIsManageOpen({
+                                                            data: record.cmp_code,
+                                                            show: true,
+                                                        })
+                                                    }} className="btn btn-primary px-4 py-2 w-100">
+                                                        Manage
+                                                    </button>
+                                                </td>
                                             </tr>
                                         )
                                     })}
@@ -249,6 +263,13 @@ const EmployesListContent = () => {
                     </div>
                 </KTCardBody>
             </KTCard>
+            {isManageOpen.show && (
+                <ManageCandidateAccessModal
+                    show={isManageOpen.show}
+                    data={isManageOpen.data}
+                    onClose={() => setIsManageOpen({ data: null, show: false })}
+                />
+            )}
         </div>
     );
 };

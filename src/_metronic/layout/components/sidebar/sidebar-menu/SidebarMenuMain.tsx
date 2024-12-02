@@ -100,12 +100,12 @@ const SidebarMenuMain = () => {
               </span>
             </div>
           </div>
-          <SidebarMenuItem
+          {/* <SidebarMenuItem
             to="/dashboard"
             icon="element-11"
             title="Dashboard"
             fontIcon="bi-app-indicator"
-          />
+          /> */}
           <SidebarMenuItem
             to="/jobportal-job-post-management/job-posts"
             title="Job Posts"

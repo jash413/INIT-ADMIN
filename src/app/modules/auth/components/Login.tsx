@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { getUserByToken, login } from "../core/_requests";
 import { useAuth } from "../core/Auth";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_APP_THEME_API_URL;
 
@@ -28,6 +29,7 @@ const initialValues = {
 };
 
 export function Login(): JSX.Element {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [generatedOtp, setGeneratedOtp] = useState("");
@@ -116,6 +118,9 @@ export function Login(): JSX.Element {
     authData.loginType = type;
     saveAuth(authData);
     setCurrentUser(currentUserData);
+    if (type === "JOBPORTAL") {
+      navigate("/jobportal-job-post-management/job-posts");
+    }
   };
 
   return (
@@ -280,8 +285,8 @@ export function Login(): JSX.Element {
                   {authMethod === "email"
                     ? "Continue"
                     : otpSent
-                    ? "Verify OTP"
-                    : "Send OTP"}
+                      ? "Verify OTP"
+                      : "Send OTP"}
                 </span>
               ) : (
                 <span
