@@ -14,7 +14,7 @@ interface CadidateInfoHeaderProps {
 
 const CadidateInfoHeader: FC<CadidateInfoHeaderProps> = ({ id }) => {
     const navigate = useNavigate();
-    const [profileImage, setProfileImage] = useState<string | undefined>(null);
+    const [profileImage, setProfileImage] = useState<string | null>(null);
     const { data, isLoading } = useGetCNDById({
         page: 1,
         limit: 10,
