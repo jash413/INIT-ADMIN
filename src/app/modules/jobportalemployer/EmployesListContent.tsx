@@ -268,6 +268,7 @@ const EmployesListContent = () => {
                     show={isManageOpen.show}
                     data={isManageOpen.data}
                     onClose={() => setIsManageOpen({ data: null, show: false })}
+                    refetchEmployersList={refetch}
                 />
             )}
         </div>

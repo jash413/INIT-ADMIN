@@ -1,8 +1,12 @@
 const API_URL = "https://job-portal-backend-production.up.railway.app";
 
-const UPDATE_JOB_POST_STATUS = (id: number) =>
+const DOWNLOAD_CANDIDATE_RESUME = (id: number) =>
   `${API_URL}/api/v1/candidates/${id}/resume`;
+const DOWNLOAD_CANDIDATE_PROFILE_IMAGE = (id: number) =>
+  `${API_URL}/api/v1/candidates/${id}/profile-image`;
 
 export const REQ = {
-  UPDATE_JOB_POST_STATUS: (id: number) => UPDATE_JOB_POST_STATUS(id),
+  DOWNLOAD_CANDIDATE_RESUME: (id: number) => DOWNLOAD_CANDIDATE_RESUME(id),
+  DOWNLOAD_CANDIDATE_PROFILE_IMAGE: (id: number) =>
+    DOWNLOAD_CANDIDATE_PROFILE_IMAGE(id),
 };

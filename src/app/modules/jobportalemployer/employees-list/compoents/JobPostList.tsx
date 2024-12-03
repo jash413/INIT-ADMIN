@@ -214,6 +214,7 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
                     show={isManageOpen.show}
                     data={isManageOpen.data}
                     onClose={() => setIsManageOpen({ data: null, show: false })}
+                    refetchJobPosts={fetchEmployers}
                 />
             )}
         </Content>
