@@ -91,7 +91,7 @@ const CandidateListContent = () => {
     const handleDownload = async (id: number, fileName: string) => {
         try {
             const response = await axios.get(
-                REQ.UPDATE_JOB_POST_STATUS(id),
+                REQ.DOWNLOAD_CANDIDATE_RESUME(id),
                 {
                     responseType: "blob",
                 }
@@ -111,6 +111,7 @@ const CandidateListContent = () => {
         }
     };
 
+    console.log(records, "jjjj")
     return (
         <div className="p-10">
             <KTCard>
@@ -138,6 +139,17 @@ const CandidateListContent = () => {
                             >
                                 <thead>
                                     <tr className="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                                        <th onClick={() => handleSort('can_code')}>ID
+                                            {' '}
+                                            {sortBy === 'can_code' && (
+                                                <i
+                                                    className={clsx('bi', {
+                                                        'bi-chevron-up': sortOrder === 'ASC',
+                                                        'bi-chevron-down': sortOrder === 'DESC',
+                                                    })}
+                                                ></i>
+                                            )}
+                                        </th>
                                         <th onClick={() => handleSort('can_name')}>Candidate Name
                                             {' '}
                                             {sortBy === 'can_name' && (
@@ -196,6 +208,11 @@ const CandidateListContent = () => {
                                             record.Login?.user_approval_status;
                                         return (
                                             <tr key={record.login_id}>
+                                                <td>
+                                                    <Link className='text-gray-800 text-hover-primary mb-1' to={`/jobportal-candidate-management/${record.can_code}/candidate`}>
+                                                        {record.can_code}
+                                                    </Link>
+                                                </td>
                                                 <td>{record.can_name}</td>
                                                 <td>{record.can_email}</td>
                                                 <td>{record.can_mobn}</td>

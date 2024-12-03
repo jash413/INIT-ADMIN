@@ -9,6 +9,7 @@ interface ManageAccessModalProps {
     onClose: () => void;
     title?: string;
     data?: any;
+    refetchJobPosts?: any;
 }
 
 interface Candidate {
@@ -20,7 +21,7 @@ interface Candidate {
     };
 }
 
-const ManageAccessModal: React.FC<ManageAccessModalProps> = ({ show, onClose, title, data }) => {
+const ManageAccessModal: React.FC<ManageAccessModalProps> = ({ show, onClose, title, data, refetchJobPosts }) => {
     const { data: CandidateData, isLoading } = useGetCNDWithAccess({
         page: 1,
         limit: 1000,
@@ -42,6 +43,7 @@ const ManageAccessModal: React.FC<ManageAccessModalProps> = ({ show, onClose, ti
                 },
                 {
                     onSuccess: () => {
+                        refetchJobPosts();
                         toast.success('Access updated successfully.');
                         onClose();
                     },
@@ -54,11 +56,11 @@ const ManageAccessModal: React.FC<ManageAccessModalProps> = ({ show, onClose, ti
 
     useEffect(() => {
         if (CandidateData?.records) {
-            const accessed = CandidateData.records.filter((item: Candidate) =>
-                item.candidateId.toString()?.includes(data?.profileAccess)
-            );
-            const unaccessed = CandidateData.records.filter(
+            const accessed = CandidateData.records.filter(
                 (item: Candidate) => !item.candidateId.toString()?.includes(data?.profileAccess)
+            );
+            const unaccessed = CandidateData.records.filter((item: Candidate) =>
+                item.candidateId.toString()?.includes(data?.profileAccess)
             );
             setAccessibleCandidates(accessed);
             setUnaccessedCandidates(unaccessed);

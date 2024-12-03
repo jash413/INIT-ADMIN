@@ -1,7 +1,7 @@
 import { Route, Routes, Outlet, Navigate, useParams } from 'react-router-dom'
 import { PageLink, PageTitle } from '../../../_metronic/layout/core'
 import CandidateListContent from './CandidateListContent'
-import { ProfileHeader } from './ProfileHeader';
+import { CadidateInfoHeader } from './CadidateInfoHeader';
 
 const EmployerBreadcrumbs: Array<PageLink> = [
     {
@@ -55,8 +55,8 @@ const CandidateListPage = () => {
                     path=":id/candidate"
                     element={
                         <RouteWithParams
-                            Component={ProfileHeader}
-                            pageTitle="Employer Details"
+                            Component={CadidateInfoHeader}
+                            pageTitle="Candidate Details"
                         />
                     }
                 />
