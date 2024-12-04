@@ -24,7 +24,7 @@ const ManageCandidateAccessModal: React.FC<ManageAccessModalProps> = ({ show, on
     const [sortBy, setSortBy] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC' | ''>('');
 
-    const { data: CandidateData, isLoading } = useGetNotAccessableCNDs({
+    const { data: CandidateData, isLoading, refetch } = useGetNotAccessableCNDs({
         page: currentPage,
         limit: 10,
         sortBy: sortOrder.trim() !== "" ? sortBy : undefined,
@@ -47,6 +47,7 @@ const ManageCandidateAccessModal: React.FC<ManageAccessModalProps> = ({ show, on
                 {
                     onSuccess: () => {
                         refetchEmployersList();
+                        refetch();
                         toast.success('Access updated successfully.');
                         onClose();
                     },

@@ -4,12 +4,13 @@ import { useGetEmployersList } from './employees-list/core/useGetEmployersList';
 import moment from 'moment'; // For formatting the date
 import clsx from 'clsx';
 import { EmployerListResponse } from './employees-list/core/_models';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { updateUserApprovalStatus } from './employees-list/core/_requests';
 import { toast } from 'react-toastify';
 import ManageCandidateAccessModal from './employees-list/compoents/ManageCandidateAccessModal';
 
 const EmployesListContent = () => {
+    const { pathname } = useLocation();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState<string>('');
@@ -25,6 +26,7 @@ const EmployesListContent = () => {
         search: searchTerm,
         sortBy: sortOrder.trim() !== "" ? sortBy : undefined,
         sortOrder: sortOrder.trim() !== "" ? sortOrder : undefined,
+        user_approval_status: pathname === "/dashboard" ? 0 : undefined,
     });
 
     const records = data?.records || [];
