@@ -1,7 +1,7 @@
 import { Route, Routes, Outlet, Navigate, useParams } from 'react-router-dom'
 import JobPostList from '../jobportalemployer/employees-list/compoents/JobPostList'
-import { ProfileHeader } from '../jobportalemployer/component/ProfileHeader'
 import { PageTitle } from '../../../_metronic/layout/core';
+import JobPostApplications from './JobPostApplications';
 
 interface PageWithIdProps {
     Component: React.ComponentType<{ id: string }>;
@@ -56,10 +56,10 @@ const JobPostPage = () => {
                     }
                 />
                 <Route
-                    path='job-posts/:id/employer-job-posts'
+                    path=':id/job-applications'
                     element={
                         <>
-                            <RouteWithParams Component={ProfileHeader} pageTitle="Profile" />
+                            <RouteWithParams Component={JobPostApplications} pageTitle="Profile" />
                             <Outlet />
                         </>
                     }

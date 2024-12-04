@@ -7,22 +7,21 @@ interface CandidateParams {
     sortBy?: string;
     sortOrder?: string;
     search?: string;
-    user_approval_status?: number;
-    open_to_job?: number;
+    job_id: number;
 }
 const API_URL = "https://job-portal-backend-production.up.railway.app";
 const GET_EMPLOYERS_LIST = `${API_URL}/api/v1/admin/candidates`;
 
-const fetchCandidates = async (params: CandidateParams) => {
+const fetchJobApplicationById = async (params: CandidateParams) => {
 
     const { data } = await axios.post(GET_EMPLOYERS_LIST, params);
     return data;
 };
 
-export const useGetCandidatesList = (params: CandidateParams) => {
+export const useGetJobApplicationsByJobId = (params: CandidateParams) => {
     return useQuery(
-        ['candidates', params.page, params.limit, params.sortBy, params.sortOrder, params.search, params.user_approval_status, params.open_to_job],
-        () => fetchCandidates(params),
+        ['job-applications', params.page, params.limit, params.sortBy, params.sortOrder, params.search, params.job_id],
+        () => fetchJobApplicationById(params),
         {
             keepPreviousData: true,
             staleTime: 300000,

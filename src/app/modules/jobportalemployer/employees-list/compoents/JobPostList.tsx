@@ -2,11 +2,11 @@ import { FC, useEffect, useState } from "react";
 import moment from "moment";
 import { Content } from "../../../../../_metronic/layout/components/content";
 import { KTIcon } from "../../../../../_metronic/helpers";
-import { getEmployersJobPost, updateJobPostStatus } from "../core/_requests";
+import { getEmployersJobPost, getEmployersJobPostWithoutAccess, updateJobPostStatus } from "../core/_requests";
 import clsx from "clsx";
 import { FilterType, IJobPost, PaginationType, UpdateJobStatusPayload } from "../core/_models";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Card7 } from "../../../../../_metronic/partials/content/cards/Card7";
 import ManageAccessModal from "./ManageAccessModal";
 
@@ -15,8 +15,10 @@ type Props = {
 };
 const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
     const { id } = useParams<{ id: string }>();
+    const { pathname } = useLocation();
     const [employers, setEmployers] = useState<IJobPost[] | []>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingIds, setLoadingIds] = useState<number[]>([]);
     const [isManageOpen, setIsManageOpen] = useState<{
         data: any;
         show: boolean;
@@ -36,10 +38,12 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
     });
 
 
-    const fetchEmployers = async () => {
+    const fetchEmployersJobPost = async () => {
         setLoading(true);
         try {
-            const data = await getEmployersJobPost(filters);
+            const data = pathname === "/dashboard" ?
+                await getEmployersJobPostWithoutAccess(filters) :
+                await getEmployersJobPost(filters);
             setEmployers(data?.records || []);
             setPagination({
                 totalItems: data?.pagination?.totalItems || 0,
@@ -68,7 +72,7 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
 
 
     useEffect(() => {
-        fetchEmployers();
+        fetchEmployersJobPost();
     }, [filters]);
 
     const updatePage = (page: number) => {
@@ -99,11 +103,14 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
 
     const handleStatusChange = (id: number, payload: UpdateJobStatusPayload) => {
         const previousEmployers = [...employers];
+
         setEmployers((prev) =>
             prev.map((job) =>
                 job.job_id === id ? { ...job, status: payload.status } : job
             )
         );
+
+        setLoadingIds((prev) => [...prev, id]);
 
         updateJobPostStatus(id, payload)
             .then(() => {
@@ -114,8 +121,13 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
                     `Failed to update job post status: ${error?.response?.data?.message || error.message}`
                 );
                 setEmployers(previousEmployers);
+            })
+            .finally(() => {
+                setLoadingIds((prev) => prev.filter((jobId) => jobId !== id));
             });
     };
+
+    const isLoadingStatus = (id: number) => loadingIds.includes(id);
 
 
 
@@ -174,6 +186,7 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
                                             show: true,
                                         });
                                     }}
+                                    isLoadingStatus={isLoadingStatus}
                                 />
                             </div>
                         ))
@@ -214,7 +227,7 @@ const JobPostList: FC<Props> = ({ showCompanyDetails = false }) => {
                     show={isManageOpen.show}
                     data={isManageOpen.data}
                     onClose={() => setIsManageOpen({ data: null, show: false })}
-                    refetchJobPosts={fetchEmployers}
+                    refetchJobPosts={fetchEmployersJobPost}
                 />
             )}
         </Content>

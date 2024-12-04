@@ -11,6 +11,7 @@ import {
 const API_URL = "https://job-portal-backend-production.up.railway.app";
 const GET_EMPLOYERS_ACCESS_REQ_URL = `${API_URL}/api/v1/admin/access-requests`;
 const GET_EMPLOYERS_JOB_POST_URL = `${API_URL}/api/v1/admin/job-posts`;
+const GET_EMPLOYERS_JOB_POST_WITHOUT_ACCESS_URL = `${API_URL}/api/v1/admin/get-job-posts-with-no-access-granted-to-candidates`;
 const UPDATE_ACCESS_REQ_URL = `${API_URL}/api/v1/admin/access-requests`;
 const GRANT_PROFILE_ACCESS_REQ_URL = `${API_URL}/api/v1/admin/grant-profile-access`;
 const REVOKE_PROFILE_ACCESS_REQ_URL = `${API_URL}/api/v1/admin/revoke-profile-access`;
@@ -18,6 +19,8 @@ const UPDATE_JOB_POST_STATUS = (id: number) =>
   `${API_URL}/api/v1/job-posts/${id}`;
 const UPDATE_USER_APPROVAL_STATUS = (id: number) =>
   `${API_URL}/api/v1/admin/users/${id}/approval-status`;
+const UPDATE_OPEN_TO_STATUS = (id: number) =>
+  `${API_URL}/api/v1/admin/candidates/${id}/open-to-job`;
 
 const getEmployersAccessReq = (filters: FilterType): Promise<any> => {
   return axios
@@ -36,6 +39,21 @@ const getEmployersAccessReq = (filters: FilterType): Promise<any> => {
 const getEmployersJobPost = (filters: FilterType): Promise<any> => {
   return axios
     .post(`${GET_EMPLOYERS_JOB_POST_URL}`, filters)
+    .then((d: AxiosResponse<any>) => d.data)
+    .catch((error) => {
+      toast.error(
+        `Failed to get employers: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+      throw error;
+    });
+};
+const getEmployersJobPostWithoutAccess = (
+  filters: FilterType
+): Promise<any> => {
+  return axios
+    .post(`${GET_EMPLOYERS_JOB_POST_WITHOUT_ACCESS_URL}`, filters)
     .then((d: AxiosResponse<any>) => d.data)
     .catch((error) => {
       toast.error(
@@ -136,6 +154,27 @@ const updateUserApprovalStatus = (
     });
 };
 
+const updateOpenToJobStatus = (
+  canId: number,
+  status: number
+): Promise<void> => {
+  return axios
+    .put(UPDATE_OPEN_TO_STATUS(canId), {
+      open_to_job: status,
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      toast.error(
+        `Failed to update user open to job status: ${
+          error?.response?.data?.message || error.message
+        }`
+      );
+      throw error;
+    });
+};
+
 const updateJobPostStatus = (
   id: number,
   payload: UpdateJobStatusPayload
@@ -158,7 +197,9 @@ const updateJobPostStatus = (
 export {
   getEmployersAccessReq,
   getEmployersJobPost,
+  getEmployersJobPostWithoutAccess,
   approveAccessRequest,
+  updateOpenToJobStatus,
   denyAccessRequest,
   grantProfileAccess,
   revokeProfileAccess,

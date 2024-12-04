@@ -1,16 +1,25 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { KTCard, KTCardBody, KTIcon } from '../../../_metronic/helpers';
 import moment from 'moment'; // For formatting the date
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 // import { updateUserApprovalStatus } from './employees-list/core/_requests';
 import { toast } from 'react-toastify';
 import { useGetCandidatesList } from './core/useGetCandidatesList';
-import { updateUserApprovalStatus } from '../jobportalemployer/employees-list/core/_requests';
+import { updateOpenToJobStatus, updateUserApprovalStatus } from '../jobportalemployer/employees-list/core/_requests';
 import axios from 'axios';
 import { REQ } from './core/_.request';
 
-const CandidateListContent = () => {
+interface CandidateListContentProps {
+    showWithoutApproval?: boolean;
+    showOpenToJob?: boolean;
+}
+
+const CandidateListContent: FC<CandidateListContentProps> = ({
+    showWithoutApproval = false,
+    showOpenToJob = false,
+}) => {
+    const { pathname } = useLocation();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState<string>('');
@@ -23,6 +32,8 @@ const CandidateListContent = () => {
         search: searchTerm,
         sortBy: sortOrder.trim() !== "" ? sortBy : undefined,
         sortOrder: sortOrder.trim() !== "" ? sortOrder : undefined,
+        user_approval_status: (pathname === "/dashboard" && showWithoutApproval) ? 0 : undefined,
+        open_to_job: (pathname === "/dashboard" && showOpenToJob) ? 1 : undefined
     });
 
     const records = data?.records || [];
@@ -88,6 +99,29 @@ const CandidateListContent = () => {
         }
     };
 
+    const handleOpenToStatusChange = async (candId: number, isEnabled: boolean) => {
+        const newStatus = isEnabled ? 1 : 0;
+
+        const updatedRecords = records.map((record: any) =>
+            record.can_code === candId ? { ...record, open_to_job: isEnabled } : record
+        );
+
+        data.records = updatedRecords;
+
+        try {
+            await updateOpenToJobStatus(candId, newStatus);
+            toast.success('User open to status updated successfully.');
+            refetch();
+        } catch (error) {
+            toast.error('Failed to update user open to job status.');
+            // Revert the change on error
+            data.records = records.map((record: any) =>
+                record.can_code === candId ? { ...record, open_to_job: !newStatus } : record
+            );
+        }
+    };
+
+
     const handleDownload = async (id: number, fileName: string) => {
         try {
             const response = await axios.get(
@@ -111,7 +145,6 @@ const CandidateListContent = () => {
         }
     };
 
-    console.log(records, "jjjj")
     return (
         <div className="p-10">
             <KTCard>
@@ -198,6 +231,7 @@ const CandidateListContent = () => {
                                                 ></i>
                                             )}</th>
                                         <th>Resume</th>
+                                        <th className='text-truncate'>Open to job</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -230,6 +264,22 @@ const CandidateListContent = () => {
                                                     ) : (
                                                         <span className="text-muted">No resume</span>
                                                     )}
+                                                </td>
+                                                <td>
+                                                    <div className="form-check form-switch">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            id={`switch-${record.login_id}`}
+                                                            checked={record?.open_to_job}
+                                                            onChange={(e) =>
+                                                                handleOpenToStatusChange(
+                                                                    record.can_code,
+                                                                    e.target.checked
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <div className="form-check form-switch">

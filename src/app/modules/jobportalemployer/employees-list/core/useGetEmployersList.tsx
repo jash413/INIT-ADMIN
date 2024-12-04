@@ -7,6 +7,7 @@ interface EmployerData {
     sortBy?: string;
     sortOrder?: string;
     search?: string;
+    user_approval_status?: number;
 }
 const API_URL = "https://job-portal-backend-production.up.railway.app";
 const GET_EMPLOYERS_LIST = `${API_URL}/api/v1/admin/employers`;
@@ -19,7 +20,7 @@ const fetchEmployers = async (params: EmployerData) => {
 
 export const useGetEmployersList = (params: EmployerData) => {
     return useQuery(
-        ['employers', params.page, params.limit, params.sortBy, params.sortOrder, params.search],
+        ['employers', params.page, params.limit, params.sortBy, params.sortOrder, params.search, params.user_approval_status],
         () => fetchEmployers(params),
         {
             keepPreviousData: true,

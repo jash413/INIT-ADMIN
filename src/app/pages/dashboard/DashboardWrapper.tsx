@@ -17,6 +17,9 @@ import { useAuth } from "../../modules/auth/core/Auth";
 import { getAllCustomers } from "../../modules/apicustomers/customers-list/core/_requests";
 import { getAllApiUsers } from "../../modules/apiusers/users-list/core/_requests";
 import { getAllApiSubscriptions } from "../../modules/apisubscriptions/ewayeinvoice/subscriptions-list/core/_requests";
+import CandidateListContent from "../../modules/jobportalcandidate/CandidateListContent";
+import EmployesListContent from "../../modules/jobportalemployer/EmployesListContent";
+import JobPostList from "../../modules/jobportalemployer/employees-list/compoents/JobPostList";
 
 interface DashboardPageProps {
   noOfActiveSubscriptions: number;
@@ -52,86 +55,110 @@ const DashboardPage: FC<DashboardPageProps> = ({
   <>
     <ToolbarWrapper />
     <Content>
-      {/* begin::Row */}
-      <div className="row gy-5 g-xl-8">
-        <div className="col-xl-4">
-          <CardsWidget17
-            active={noOfActiveSubscriptions}
-            inactive={noOfInactiveSubscriptions}
-            type="Subscriptions"
-            chartName="NO OF SUBSCRIPTIONS"
-            className="card-xxl-stretch mb-5 mb-xl-8"
-          />
-        </div>
-        <div className="col-xl-4">
-          {type === "IFAS" ? (
-            <CardsWidget17
-              active={noOfActiveCustomers}
-              inactive={noOfInactiveCustomers}
-              type="Customers"
-              chartName="NO OF CUSTOMERS"
-              className="card-xxl-stretch mb-5 mb-xl-8"
-            />
-          ) : (
-            <ApiCard
-              className="card-xxl-stretch mb-5 mb-xl-8"
-              customers={noOfActiveCustomers}
-              type="Customers"
-              chartName="NO OF CUSTOMERS"
-            />
-          )}
-        </div>
-        <div className="col-xl-4">
-          <CardsWidget17
-            active={noOfActiveUsersOrEmployees}
-            inactive={noOfInactiveUsersOrEmployees}
-            type={type}
-            chartName={`NO OF ${type.toUpperCase()}`}
-            className="card-xxl-stretch mb-5 mb-xl-8"
-          />
-        </div>
-      </div>
-      <div className="row gy-5 g-xl-8">
-        <div className="col-xl-4">
-          <CardsWidget17
-            active={noOfActiveToday}
-            inactive={noOfInactiveToday}
-            type="Subscriptions"
-            chartName="TODAY'S SUBSCRIPTIONS"
-            className="card-xxl-stretch mb-5 mb-xl-8"
-          />
-        </div>
-        <div className="col-xl-4">
-          <CardsWidget17
-            active={noOfActiveWeekly}
-            inactive={noOfInactiveWeekly}
-            type="Subscriptions"
-            chartName="WEEKLY SUBSCRIPTIONS"
-            className="card-xxl-stretch mb-5 mb-xl-8"
-          />
-        </div>
-        <div className="col-xl-4">
-          <CardsWidget17
-            active={noOfActiveMonthly}
-            inactive={noOfInactiveMonthly}
-            type="Subscriptions"
-            chartName="MONTHLY SUBSCRIPTIONS"
-            className="card-xxl-stretch mb-5 mb-xl-8"
-          />
-        </div>
-      </div>
-      {/* end::Row */}
+      {type !== "Job portal" && (
+        <>
+          {/* begin::Row */}
+          <div className="row gy-5 g-xl-8">
+            <div className="col-xl-4">
+              <CardsWidget17
+                active={noOfActiveSubscriptions}
+                inactive={noOfInactiveSubscriptions}
+                type="Subscriptions"
+                chartName="NO OF SUBSCRIPTIONS"
+                className="card-xxl-stretch mb-5 mb-xl-8"
+              />
+            </div>
+            <div className="col-xl-4">
+              {type === "IFAS" ? (
+                <CardsWidget17
+                  active={noOfActiveCustomers}
+                  inactive={noOfInactiveCustomers}
+                  type="Customers"
+                  chartName="NO OF CUSTOMERS"
+                  className="card-xxl-stretch mb-5 mb-xl-8"
+                />
+              ) : (
+                <ApiCard
+                  className="card-xxl-stretch mb-5 mb-xl-8"
+                  customers={noOfActiveCustomers}
+                  type="Customers"
+                  chartName="NO OF CUSTOMERS"
+                />
+              )}
+            </div>
+            <div className="col-xl-4">
+              <CardsWidget17
+                active={noOfActiveUsersOrEmployees}
+                inactive={noOfInactiveUsersOrEmployees}
+                type={type}
+                chartName={`NO OF ${type.toUpperCase()}`}
+                className="card-xxl-stretch mb-5 mb-xl-8"
+              />
+            </div>
+          </div>
+          <div className="row gy-5 g-xl-8">
+            <div className="col-xl-4">
+              <CardsWidget17
+                active={noOfActiveToday}
+                inactive={noOfInactiveToday}
+                type="Subscriptions"
+                chartName="TODAY'S SUBSCRIPTIONS"
+                className="card-xxl-stretch mb-5 mb-xl-8"
+              />
+            </div>
+            <div className="col-xl-4">
+              <CardsWidget17
+                active={noOfActiveWeekly}
+                inactive={noOfInactiveWeekly}
+                type="Subscriptions"
+                chartName="WEEKLY SUBSCRIPTIONS"
+                className="card-xxl-stretch mb-5 mb-xl-8"
+              />
+            </div>
+            <div className="col-xl-4">
+              <CardsWidget17
+                active={noOfActiveMonthly}
+                inactive={noOfInactiveMonthly}
+                type="Subscriptions"
+                chartName="MONTHLY SUBSCRIPTIONS"
+                className="card-xxl-stretch mb-5 mb-xl-8"
+              />
+            </div>
+          </div>
+          {/* end::Row */}
 
-      <div className="row g-5 gx-xxl-8">
-        {type === "API Users" ? (
-          <ApiSubscriptionTable className="card-xxl-stretch mb-5 mb-xxl-8" />
-        ) : (
-          <>
-          <TablesWidget5 className="card-xxl-stretch mb-5 mb-xxl-8" />
-          <TablesWidget1 className="card-xxl-stretch mb-5 mb-xxl-8" />
-          </>
-        )}
-      </div>
+          <div className="row g-5 gx-xxl-8">
+            {type === "API Users" ? (
+              <ApiSubscriptionTable className="card-xxl-stretch mb-5 mb-xxl-8" />
+            ) : (
+              <>
+                <TablesWidget5 className="card-xxl-stretch mb-5 mb-xxl-8" />
+                <TablesWidget1 className="card-xxl-stretch mb-5 mb-xxl-8" />
+              </>
+            )}
+          </div>
+        </>
+      )}
+      {type === "Job portal" && (
+        <>
+          <div>
+            <h6>Candidates without approval</h6>
+            <CandidateListContent showWithoutApproval />
+          </div>
+          <div>
+            <h6>Employers without approval</h6>
+            <EmployesListContent />
+          </div>
+          <div>
+            <h6>Candidates open to job</h6>
+            <CandidateListContent showOpenToJob />
+          </div>
+          <div className="mb-5">
+            <h6>Job post without access grant</h6>
+            <JobPostList />
+          </div>
+        </>
+      )}
     </Content>
   </>
 );
@@ -266,12 +293,12 @@ const DashboardWrapper: FC = () => {
     fetchData(isIfas);
   }, [auth]);
 
-  const type = auth?.loginType === "IFAS" ? "Employees" : "API Users";
+  const type = auth?.loginType === "IFAS" ? "Employees" : auth?.loginType === "API" ? "API Users" : "Job portal";
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>
-        {auth?.loginType === "IFAS" ? "IFAS Dashboard" : "API Dashboard"}
+        {auth?.loginType === "IFAS" ? "IFAS Dashboard" : auth?.loginType === "API" ? "API Dashboard" : "Job Portal Dashboard"}
       </PageTitle>
       <DashboardPage
         noOfActiveSubscriptions={noOfActiveSubscriptions}
