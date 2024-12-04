@@ -57,10 +57,11 @@ const ManageAccessModal: React.FC<ManageAccessModalProps> = ({ show, onClose, ti
     useEffect(() => {
         if (CandidateData?.records) {
             const accessed = CandidateData.records.filter((item: Candidate) =>
-                item.candidateId.toString()?.includes(data?.profileAccess)
+                data?.profileAccess.includes(item.candidateId)
             );
-            const unaccessed = CandidateData.records.filter(
-                (item: Candidate) => !item.candidateId.toString()?.includes(data?.profileAccess)
+
+            const unaccessed = CandidateData.records.filter((item: Candidate) =>
+                !data?.profileAccess.includes(item.candidateId)
             );
             setAccessibleCandidates(accessed);
             setUnaccessedCandidates(unaccessed);
