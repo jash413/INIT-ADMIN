@@ -20,6 +20,7 @@ import { getAllApiSubscriptions } from "../../modules/apisubscriptions/ewayeinvo
 import CandidateListContent from "../../modules/jobportalcandidate/CandidateListContent";
 import EmployesListContent from "../../modules/jobportalemployer/EmployesListContent";
 import JobPostList from "../../modules/jobportalemployer/employees-list/compoents/JobPostList";
+import LoginListContent from "../../modules/jobportallogin/LoginListContent";
 
 interface DashboardPageProps {
   noOfActiveSubscriptions: number;
@@ -141,6 +142,10 @@ const DashboardPage: FC<DashboardPageProps> = ({
       )}
       {type === "Job portal" && (
         <>
+          <div>
+            <h6>Login data</h6>
+            <LoginListContent />
+          </div>
           <div>
             <h6>Candidates without approval</h6>
             <CandidateListContent showWithoutApproval />
