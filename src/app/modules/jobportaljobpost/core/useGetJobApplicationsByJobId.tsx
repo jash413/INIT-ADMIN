@@ -10,7 +10,7 @@ interface CandidateParams {
     job_id: number;
 }
 const API_URL = "https://job-portal-backend-production.up.railway.app";
-const GET_EMPLOYERS_LIST = `${API_URL}/api/v1/admin/candidates`;
+const GET_EMPLOYERS_LIST = `${API_URL}/api/v1/job-applications/for-each-job-post`;
 
 const fetchJobApplicationById = async (params: CandidateParams) => {
 
@@ -20,7 +20,7 @@ const fetchJobApplicationById = async (params: CandidateParams) => {
 
 export const useGetJobApplicationsByJobId = (params: CandidateParams) => {
     return useQuery(
-        ['job-applications', params.page, params.limit, params.sortBy, params.sortOrder, params.search, params.job_id],
+        ['job-applications-by-id', params.page, params.limit, params.sortBy, params.sortOrder, params.search, params.job_id],
         () => fetchJobApplicationById(params),
         {
             keepPreviousData: true,
