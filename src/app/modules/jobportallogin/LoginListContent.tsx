@@ -28,7 +28,7 @@ const LoginListContent = () => {
 
     const { data, isLoading, refetch } = useGetLoginList({
         page: currentPage,
-        limit: 10,
+        limit: 5,
         search: searchTerm,
         sortBy: sortOrder.trim() !== "" ? sortBy : undefined,
         sortOrder: sortOrder.trim() !== "" ? sortOrder : undefined,

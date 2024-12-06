@@ -118,9 +118,6 @@ export function Login(): JSX.Element {
     authData.loginType = type;
     saveAuth(authData);
     setCurrentUser(currentUserData);
-    if (type === "JOBPORTAL") {
-      navigate("/jobportal-job-post-management/job-posts");
-    }
   };
 
   return (
