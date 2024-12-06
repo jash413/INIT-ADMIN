@@ -21,6 +21,7 @@ import CandidateListContent from "../../modules/jobportalcandidate/CandidateList
 import EmployesListContent from "../../modules/jobportalemployer/EmployesListContent";
 import JobPostList from "../../modules/jobportalemployer/employees-list/compoents/JobPostList";
 import LoginListContent from "../../modules/jobportallogin/LoginListContent";
+import AccessRequestList from "../../modules/jobportalemployer/employees-list/compoents/AccessRequestList";
 
 interface DashboardPageProps {
   noOfActiveSubscriptions: number;
@@ -142,26 +143,43 @@ const DashboardPage: FC<DashboardPageProps> = ({
       )}
       {type === "Job portal" && (
         <>
-          <div>
-            <h6>Login data</h6>
-            <LoginListContent />
-          </div>
-          <div>
-            <h6>Candidates without approval</h6>
-            <CandidateListContent showWithoutApproval />
-          </div>
-          <div>
-            <h6>Employers without approval</h6>
-            <EmployesListContent />
-          </div>
-          <div>
-            <h6>Candidates open to job</h6>
-            <CandidateListContent showOpenToJob />
-          </div>
           <div className="mb-5">
-            <h6>Job post without access grant</h6>
-            <JobPostList />
+            <h4 className="fw-bold mb-3 text-primary">Login Data</h4>
+            <div className="card shadow-sm p-4">
+              <LoginListContent />
+            </div>
           </div>
+          <br />
+
+          <div className="mb-5">
+            <h4 className="fw-bold mb-3 text-primary">
+              Candidates Open To Job
+            </h4>
+            <div className="card shadow-sm p-4">
+              <CandidateListContent showOpenToJob />
+            </div>
+          </div>
+          <br />
+
+          <div className="mb-5">
+            <h4 className="fw-bold mb-3 text-primary">
+              Access Requests From Employers
+            </h4>
+            <div className="card shadow-sm p-4">
+              <AccessRequestList showAll={true} />
+            </div>
+          </div>
+          <br />
+
+          <div className="mb-5">
+            <h4 className="fw-bold mb-3 text-primary">
+              Job Posts Without Access Granted To Candidates
+            </h4>
+            <div className="card shadow-sm p-4">
+              <JobPostList />
+            </div>
+          </div>
+          <br />
         </>
       )}
     </Content>
@@ -298,12 +316,21 @@ const DashboardWrapper: FC = () => {
     fetchData(isIfas);
   }, [auth]);
 
-  const type = auth?.loginType === "IFAS" ? "Employees" : auth?.loginType === "API" ? "API Users" : "Job portal";
+  const type =
+    auth?.loginType === "IFAS"
+      ? "Employees"
+      : auth?.loginType === "API"
+      ? "API Users"
+      : "Job portal";
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>
-        {auth?.loginType === "IFAS" ? "IFAS Dashboard" : auth?.loginType === "API" ? "API Dashboard" : "Job Portal Dashboard"}
+        {auth?.loginType === "IFAS"
+          ? "IFAS Dashboard"
+          : auth?.loginType === "API"
+          ? "API Dashboard"
+          : "Job Portal Dashboard"}
       </PageTitle>
       <DashboardPage
         noOfActiveSubscriptions={noOfActiveSubscriptions}
