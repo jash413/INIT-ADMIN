@@ -134,7 +134,7 @@ const PrivateRoutes = () => {
         )}
 
         {/* API Specific Routes */}
-        {loginType !== "IFAS" && (
+        {loginType === "API" && (
           <>
             <Route
               path="api-customer-management/*"
@@ -223,7 +223,6 @@ const PrivateRoutes = () => {
               }
             />
           </>
-
         )}
 
         {/* Apps */}
