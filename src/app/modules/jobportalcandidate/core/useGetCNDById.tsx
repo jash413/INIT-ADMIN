@@ -6,7 +6,7 @@ interface CandidateParams {
     limit: number;
     can_code: number;
 }
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GET_EMPLOYERS_LIST = `${API_URL}/api/v1/admin/candidates`;
 
 const fetchCandidatesById = async (params: CandidateParams) => {

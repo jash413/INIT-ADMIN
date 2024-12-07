@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const DELETE_USER_FROM_ID = (id: number) =>
   `${API_URL}/api/v1/admin/login-data/${id}`;
 const UPDATE_USER_APPROVAL_STATUS = (id: number) =>

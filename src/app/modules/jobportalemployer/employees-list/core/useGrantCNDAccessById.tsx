@@ -6,7 +6,7 @@ interface MutationPayload {
     candidateId: number;
 }
 
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GRANT_CND_ACCESS = `${API_URL}/api/v1/admin/grant-profile-access`;
 
 const grantCNDAccessById = async (payload: MutationPayload) => {

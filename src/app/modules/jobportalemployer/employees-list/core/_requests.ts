@@ -8,7 +8,7 @@ import {
   UpdateJobStatusPayload,
 } from "./_models";
 
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GET_EMPLOYERS_ACCESS_REQ_URL = `${API_URL}/api/v1/admin/access-requests`;
 const GET_EMPLOYERS_JOB_POST_URL = `${API_URL}/api/v1/admin/job-posts`;
 const GET_EMPLOYERS_JOB_POST_WITHOUT_ACCESS_URL = `${API_URL}/api/v1/admin/get-job-posts-with-no-access-granted-to-candidates`;

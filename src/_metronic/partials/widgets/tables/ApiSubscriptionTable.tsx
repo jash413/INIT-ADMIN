@@ -144,12 +144,6 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                       <span className="text-muted fw-bold">CUS NAME</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">USER ID</span>
-                    </th>
-                    <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">SUB ID</span>
-                    </th>
-                    <th className="p-0 min-w-150px text-center">
                       <span className="text-muted fw-bold">SUB DATE</span>
                     </th>
                     <th className="p-0 min-w-150px text-center">
@@ -160,15 +154,6 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                     </th>
                     <th className="p-0 min-w-140px text-center">
                       <span className="text-muted fw-bold">INV NO</span>
-                    </th>
-                    <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">ALLOTED CALLS</span>
-                    </th>
-                    <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">USED CALLS</span>
-                    </th>
-                    <th className="p-0 min-w-150px text-center">
-                      <span className="text-muted fw-bold">PENDING CALLS</span>
                     </th>
                     <th className="p-0 min-w-50px text-center">
                       <span className="text-muted fw-bold">Verified</span>
@@ -192,12 +177,6 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                       <td className="text-center text-muted fw-semibold">
                         {subscription.CUS_NAME}
                       </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.user_id}
-                      </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.SUBSCRIPTION_ID}
-                      </td>
                       <td className="text-center">
                         {moment(subscription.SUBSCRIPTION_DATE).format(
                           "DD/MMM/YYYY"
@@ -211,15 +190,6 @@ const ApiSubscriptionTable: FC<Props> = ({ className }) => {
                       </td>
                       <td className="text-center text-muted fw-semibold">
                         {subscription.INV_NO}
-                      </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.ALLOTED_CALLS}
-                      </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.USED_CALLS}
-                      </td>
-                      <td className="text-center text-muted fw-semibold">
-                        {subscription.PENDING_CALLS}
                       </td>
                       <td className="text-center">
                         <input

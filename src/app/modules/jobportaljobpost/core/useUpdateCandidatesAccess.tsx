@@ -7,7 +7,7 @@ interface MutationPayload {
     jobPostId: string;
 }
 
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const POST_ACCESS_UPDATE = `${API_URL}/api/v1/admin/update-job-post-access`;
 
 const updateCandidatesAccess = async (payload: MutationPayload) => {

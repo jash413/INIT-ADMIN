@@ -13,7 +13,7 @@ interface LoginData {
   email_ver_status?: number;
   login_type?: string;
 }
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GET_USERS_LIST = `${API_URL}/api/v1/admin/get-login-data`;
 
 const fetchAllUsersDetails = async (params: LoginData) => {

@@ -9,7 +9,7 @@ interface CandidateParams {
     search?: string;
     job_id: number;
 }
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GET_EMPLOYERS_LIST = `${API_URL}/api/v1/job-applications/for-each-job-post`;
 
 const fetchJobApplicationById = async (params: CandidateParams) => {

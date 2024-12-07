@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 interface EmployerParams {
     id: string;
 }
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GET_EMPLOYERS_LIST = (id: string) => `${API_URL}/api/v1/admin/employers/${id}`;
 
 const fetchEmployer = async (params: EmployerParams) => {

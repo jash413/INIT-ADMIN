@@ -8,7 +8,7 @@ interface CandidateWithoutAccess {
     sortOrder?: string;
     employerId?: number;
 }
-const API_URL = "https://job-portal-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_APP_JOB_PORTAL_API;
 const GET_NOT_ACCESABLE_CNDS_LIST = `${API_URL}/api/v1/admin/get-not-accessible-candidates`;
 
 const fetchNotAccessableCNDs = async (params: CandidateWithoutAccess) => {
