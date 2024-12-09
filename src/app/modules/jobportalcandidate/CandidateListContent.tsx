@@ -126,18 +126,28 @@ const CandidateListContent: FC<CandidateListContentProps> = ({
 
   const handleDownload = async (id: number, fileName: string) => {
     try {
+      // Fetching the file as a binary blob
       const response = await axios.get(REQ.DOWNLOAD_CANDIDATE_RESUME(id), {
-        responseType: "blob",
+        responseType: "blob", // Ensures we receive binary data as a Blob
       });
-      const url = window.URL.createObjectURL(response as any);
+
+      // Create a blob URL from the binary data
+      const url = window.URL.createObjectURL(response.data);
+
+      // Create a link element for the download
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", `${fileName}_resume.pdf`);
+
+      // Append link to the body, trigger the download, and clean up
       document.body.appendChild(link);
       link.click();
       link.remove();
-    } catch {
-      console.error("Error downloading the file.");
+
+      // Release the blob URL
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading the file:", error);
     }
   };
 
